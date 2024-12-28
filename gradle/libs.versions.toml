@@ -10,6 +10,7 @@ material = "1.10.0"
 activity = "1.8.0"
 constraintlayout = "2.1.4"
 modelmapper = "3.1.1"
+gridlayout = "1.0.0"
 
 [libraries]
 androidx-camera-camera-extensions = { module = "androidx.camera:camera-extensions", version = "1.4.0" }
@@ -27,6 +28,7 @@ material = { group = "com.google.android.material", name = "material", version.r
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 modelmapper = { module = "org.modelmapper:modelmapper", version.ref = "modelmapper" }
+androidx-gridlayout = { group = "androidx.gridlayout", name = "gridlayout", version.ref = "gridlayout" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

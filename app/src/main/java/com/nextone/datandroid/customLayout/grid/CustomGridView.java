@@ -1,10 +1,8 @@
-package com.nextone.dat.customLayout.grid;
+package com.nextone.datandroid.customLayout.grid;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.widget.GridView;
-import com.nextone.datandroid.R;
 
 public class CustomGridView extends GridView {
     public CustomGridView(Context context) {

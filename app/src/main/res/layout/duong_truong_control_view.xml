@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.gridlayout.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/duongTruongControl"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/rounded_panel"
+    app:columnCount="4"
+    app:rowCount="2">
+    <com.nextone.datandroid.customLayout.impConstrainLayout.widget.MyImageLabel
+        android:id="@+id/lbXp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:layout_margin="4dp"
+        app:layout_columnWeight="1"
+        app:layout_rowWeight="1" />
+    <com.nextone.datandroid.customLayout.impConstrainLayout.widget.MyImageLabel
+        android:id="@+id/lbTT"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:layout_margin="4dp"
+        app:layout_columnWeight="1"
+        app:layout_rowWeight="1" />
+    <com.nextone.datandroid.customLayout.impConstrainLayout.widget.MyImageLabel
+        android:id="@+id/lbGt"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:layout_margin="4dp"
+        app:layout_columnWeight="1"
+        app:layout_rowWeight="1" />
+    <com.nextone.datandroid.customLayout.impConstrainLayout.widget.MyImageLabel
+        android:id="@+id/lbKt"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:layout_margin="4dp"
+        app:layout_columnWeight="1"
+        app:layout_rowWeight="1" />
+
+    <Button
+        android:id="@+id/btXp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:layout_margin="8dp"
+        android:text="XP"
+        app:layout_columnWeight="1"
+        app:layout_rowWeight="1"
+        tools:ignore="HardcodedText" />
+    <Button
+        android:id="@+id/btTT"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:layout_margin="8dp"
+        android:text="TT"
+        app:layout_columnWeight="1"
+        app:layout_rowWeight="1"
+        tools:ignore="HardcodedText" />
+    <Button
+        android:id="@+id/btGT"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:layout_margin="8dp"
+        android:text="GT"
+        app:layout_columnWeight="1"
+        app:layout_rowWeight="1"
+        tools:ignore="HardcodedText" />
+    <Button
+        android:id="@+id/btKT"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:layout_margin="8dp"
+        android:text="KT"
+        app:layout_columnWeight="1"
+        app:layout_rowWeight="1"
+        tools:ignore="HardcodedText" />
+
+</androidx.gridlayout.widget.GridLayout>

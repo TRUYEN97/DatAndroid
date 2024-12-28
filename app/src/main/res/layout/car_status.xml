@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.gridlayout.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/carStatus"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/rounded_panel"
+    app:columnCount="2"
+    app:rowCount="5">
+
+    <com.nextone.datandroid.customLayout.impConstrainLayout.widget.MyImageLabel
+        android:id="@+id/nt"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:layout_margin="1dp"
+        app:layout_columnWeight="1"
+        app:layout_rowWeight="1" />
+
+    <com.nextone.datandroid.customLayout.impConstrainLayout.widget.MyImageLabel
+        android:id="@+id/np"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:layout_margin="1dp"
+        app:layout_columnWeight="1"
+        app:layout_rowWeight="1" />
+
+    <com.nextone.datandroid.customLayout.impConstrainLayout.widget.MyImageLabel
+        android:id="@+id/at"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:layout_margin="1dp"
+        app:layout_columnWeight="1"
+        app:layout_rowWeight="1" />
+
+    <com.nextone.datandroid.customLayout.impConstrainLayout.widget.MyImageLabel
+        android:id="@+id/cm"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:layout_margin="1dp"
+        app:layout_columnWeight="1"
+        app:layout_rowWeight="1" />
+
+    <com.nextone.datandroid.customLayout.impConstrainLayout.widget.MyImageLabel
+        android:id="@+id/pt"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:layout_margin="1dp"
+        app:layout_columnWeight="1"
+        app:layout_rowWeight="1" />
+
+    <com.nextone.datandroid.customLayout.impConstrainLayout.widget.MyImageLabel
+        android:id="@+id/grear"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:layout_margin="1dp"
+        app:layout_columnWeight="1"
+        app:layout_rowWeight="1" />
+
+    <com.nextone.datandroid.customLayout.impConstrainLayout.widget.MyImageLabel
+        android:id="@+id/s1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:layout_margin="1dp"
+        app:layout_columnWeight="1"
+        app:layout_rowWeight="1" />
+
+    <com.nextone.datandroid.customLayout.impConstrainLayout.widget.MyImageLabel
+        android:id="@+id/s2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:layout_margin="1dp"
+        app:layout_columnWeight="1"
+        app:layout_rowWeight="1" />
+
+    <com.nextone.datandroid.customLayout.impConstrainLayout.widget.MyImageLabel
+        android:id="@+id/s3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:layout_margin="1dp"
+        app:layout_columnWeight="1"
+        app:layout_rowWeight="1" />
+
+    <com.nextone.datandroid.customLayout.impConstrainLayout.widget.MyImageLabel
+        android:id="@+id/s4"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:layout_margin="1dp"
+        app:layout_columnWeight="1"
+        app:layout_rowWeight="1" />
+</androidx.gridlayout.widget.GridLayout>

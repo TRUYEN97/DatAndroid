@@ -1,14 +1,16 @@
 package com.nextone.datandroid.impActivity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.WindowManager;
 
 import androidx.activity.EdgeToEdge;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import com.nextone.datandroid.MyActivity;
+
 import com.nextone.controller.Core;
+import com.nextone.datandroid.MyActivity;
 import com.nextone.datandroid.R;
 import com.nextone.model.MyContextManagement;
 
@@ -17,7 +19,6 @@ public class MainActivity extends MyActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MyContextManagement.getInstance().setAplicationContext(getApplicationContext());
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.MainLayout), (v, insets) -> {
@@ -25,12 +26,14 @@ public class MainActivity extends MyActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        MyContextManagement.getInstance().setAplicationContext(getApplicationContext());
         Core.getInstance().start(this);
     }
 
+    @SuppressLint("MissingSuperCall")
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.i("Main","Destroy");
+    public void onBackPressed() {
+        moveTaskToBack(true);
     }
 }

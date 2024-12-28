@@ -1,4 +1,4 @@
-package com.nextone.dat.customLayout.grid;
+package com.nextone.datandroid.customLayout.grid;
 
 import android.content.Context;
 import android.view.LayoutInflater;
