@@ -35,11 +35,17 @@ public class CameraModule extends Fragment {
     private CameraSelector cameraSelector;
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
     private boolean isStreaming = false;
-    public CameraModule(Context ct,LifecycleOwner lc,PreviewView pv) {
+
+    public CameraModule() {
+    }
+
+    public void init(Context ct, LifecycleOwner lc, PreviewView pv) {
+        if (isStreaming) {
+            return;
+        }
         context = ct;
         lifecycle = lc;
         previewView = pv;
-
         if (!allPermissionsGranted()) {
             ActivityCompat.requestPermissions((Activity) context, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS);
         }
@@ -47,16 +53,17 @@ public class CameraModule extends Fragment {
         preview = new Preview
                 .Builder()
                 .setTargetResolution(new Size(320, 240))
-                .setTargetFrameRate(new Range<>(10,30))
+                .setTargetFrameRate(new Range<>(5, 10))
                 .build();
         preview.setSurfaceProvider(previewView.getSurfaceProvider());
 
         cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA;
 
         imageCapture = new ImageCapture.Builder()
-                .setTargetResolution(new Size(1920, 1080)) // Đặt độ phân giải chụp ảnh
+                .setTargetResolution(new Size(1280, 720)) // Đặt độ phân giải chụp ảnh
                 .build();
     }
+
 
     public void stop() {
         if (isStreaming) {
@@ -75,8 +82,9 @@ public class CameraModule extends Fragment {
             }, ContextCompat.getMainExecutor(context));
         }
     }
+
     public void start() {
-        if(!isStreaming){
+        if (!isStreaming) {
             cameraProviderFuture = ProcessCameraProvider.getInstance(context);
 
             cameraProviderFuture.addListener(() -> {
@@ -88,18 +96,19 @@ public class CameraModule extends Fragment {
                             cameraSelector,
                             imageCapture,
                             preview);
-                    Log.i("Camera", "Camera started with resolution : "+ preview.getResolutionInfo().toString() );
+                    Log.i("Camera", "Camera started with resolution : " + preview.getResolutionInfo().toString());
                     isStreaming = true;
 
                 } catch (Exception e) {
                     Log.d("CAMERA_MODULE", "can't start camera stream: " + e.getMessage());
                 }
             }, ContextCompat.getMainExecutor(context));
-        }else{
+        } else {
             Log.d("CAMERA_MODULE", "Camera stream already running.");
         }
 
     }
+
     public void takePhoto() {
         // Lấy đối tượng OutputFileOptions để chỉ định nơi lưu ảnh
         File photoFile = new File(context.getExternalFilesDir(null), "photo_" + System.currentTimeMillis() + ".jpg");
@@ -133,6 +142,7 @@ public class CameraModule extends Fragment {
         }
         return true;
     }
+
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_CODE_PERMISSIONS) {

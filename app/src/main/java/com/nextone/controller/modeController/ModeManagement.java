@@ -4,10 +4,14 @@
  */
 package com.nextone.controller.modeController;
 
+import android.util.Log;
+
 import com.nextone.mode.AbsTestMode;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import lombok.Getter;
 
 /**
  * @author Admin
@@ -15,10 +19,9 @@ import java.util.List;
 public class ModeManagement {
 
     public static String DEFAULT_MODE;
-    //    private final ViewMain viewMain;
+    @Getter
     private final List<AbsTestMode> modes;
     private final ModeHandle modeHandle;
-
     private static ModeManagement instance;
 
     private ModeManagement() {
@@ -44,46 +47,32 @@ public class ModeManagement {
         return testMode == null || !testMode.isOnline();
     }
 
-    public List<AbsTestMode> getModes() {
-        return modes;
-    }
-
     public boolean isMode(String modeName, String rank) {
         AbsTestMode currMode = this.modeHandle.getTestMode();
         return currMode != null && currMode.isMode(modeName, rank);
     }
 
-    public boolean updateMode(String modeName, String rank) {
-        for (AbsTestMode mode : modes) {
-            if (mode != null && mode.isMode(modeName, rank)) {
-                return updateMode(mode);
+    public void updateMode(AbsTestMode testMode) {
+        if (testMode == null) return;
+        new Thread(() -> {
+            AbsTestMode currMode = this.modeHandle.getTestMode();
+            if (currMode != null && currMode.equals(testMode)) {
+                return;
             }
-        }
-        return false;
-    }
-
-    public boolean updateMode(AbsTestMode testMode) {
-        AbsTestMode currMode = this.modeHandle.getTestMode();
-        if (currMode != null && currMode.equals(testMode)) {
-            return true;
-        }
-        try {
-            this.modeHandle.setWait(true);
-            if (this.modeHandle.isRunning()) {
-                this.modeHandle.stop();
+            try {
+                this.modeHandle.setWait(true);
+                if (this.modeHandle.isRunning()) {
+                    this.modeHandle.stop();
+                }
+                if (this.modeHandle.setTestMode(testMode)) {
+                    this.modeHandle.start();
+                }
+            } catch (Exception e) {
+                Log.e(this.getClass().getSimpleName(), "updateMode", e);
+            } finally {
+                this.modeHandle.setWait(false);
             }
-            if (this.modeHandle.setTestMode(testMode)) {
-                this.modeHandle.start();
-//                CameraRunner.getInstance().setTestModeView(testMode.getView());
-                return true;
-            }
-            return false;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            this.modeHandle.setWait(false);
-        }
+        }).start();
     }
 
     public AbsTestMode getCurrentMode() {

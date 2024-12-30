@@ -6,7 +6,7 @@ package com.nextone.contest.impContest.dtB2;
 
 import com.nextone.common.ConstKey;
 import com.nextone.contest.AbsContest;
-
+import com.nextone.datandroid.R;
 /**
  *
  * @author Admin
@@ -19,12 +19,12 @@ public class TangToc extends AbsContest {
     private boolean hasChaged;
 
     public TangToc() {
-        this(ConstKey.CONTEST_NAME.TANG_TOC);
-        this.hasChaged = false;
+        this(ConstKey.CONTEST_NAME.TANG_TOC, R.raw.ts_b2);
     }
 
-    public TangToc(String name) {
-        super(name, name + "_B2", true, false, true, 2000);
+    public TangToc(String name, int soundId) {
+        super(name, soundId, true, false, true, 2000);
+        this.hasChaged = false;
     }
 
     @Override

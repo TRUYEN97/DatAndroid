@@ -12,11 +12,8 @@ import com.nextone.contest.AbsContest;
  */
 public abstract class AbsSaHinhContest extends AbsContest {
 
-    public AbsSaHinhContest(String name, boolean soundIn, int timeout) {
-        super(name, name, true, soundIn, true, timeout);
-    }
-    public AbsSaHinhContest(String name, String soundName, boolean soundIn, int timeout) {
-        super(name, soundName, true, soundIn, true, timeout);
+    public AbsSaHinhContest(String name, int soundNameId, boolean soundIn, int timeout) {
+        super(name, soundNameId, true, soundIn, true, timeout);
     }
     
     @Override

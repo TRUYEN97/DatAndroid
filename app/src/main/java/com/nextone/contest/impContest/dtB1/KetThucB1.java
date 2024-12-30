@@ -6,7 +6,7 @@ package com.nextone.contest.impContest.dtB1;
 
 import com.nextone.common.ConstKey;
 import com.nextone.contest.AbsContest;
-
+import com.nextone.datandroid.R;
 /**
  *
  * @author Admin
@@ -14,11 +14,11 @@ import com.nextone.contest.AbsContest;
 public class KetThucB1 extends AbsContest {
 
     public KetThucB1() {
-        this(ConstKey.CONTEST_NAME.KET_THUC);
+        this(ConstKey.CONTEST_NAME.KET_THUC, R.raw.kt);
     }
 
-    public KetThucB1(String name) {
-        super(name, name, true, false, true, 2000);
+    public KetThucB1(String name, int soundId) {
+        super(name, soundId, true, false, true, 2000);
     }
     private long oldMill;
     private boolean isStop = false;

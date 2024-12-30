@@ -18,9 +18,8 @@ import com.nextone.contest.impContest.shB2.VetBanhXe;
 import com.nextone.contest.impContest.shB2.XuatPhat;
 import com.nextone.datandroid.customLayout.impConstrainLayout.modeView.AbsModeView;
 import com.nextone.mode.AbsSaHinhMode;
-import com.nextone.pretreatment.IKeyEvent;
+
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 /**
@@ -34,7 +33,7 @@ public class SH_B_MODE<V  extends AbsModeView> extends AbsSaHinhMode<V> {
     }
 
     @Override
-    protected void creadContestList() {
+    protected void createContestList() {
         contests.clear();
         int rd = new Random().nextInt(3);
         contests.add(new XuatPhat(speedLimit));
@@ -64,14 +63,6 @@ public class SH_B_MODE<V  extends AbsModeView> extends AbsSaHinhMode<V> {
         contests.add(new NgaTu(4, yardModelHandle.getYardModel(),
                 yardRankConfig.getNgaTu4(), speedLimit));
         contests.add(new KetThuc(speedLimit));
-    }
-
-    @Override
-    protected void createPrepareKeyEvents(Map<String, IKeyEvent> events) {
-    }
-
-    @Override
-    protected void createTestKeyEvents(Map<String, IKeyEvent> events) {
     }
 
 }

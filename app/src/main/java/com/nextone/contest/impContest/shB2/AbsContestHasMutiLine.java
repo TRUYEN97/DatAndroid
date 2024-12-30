@@ -20,8 +20,8 @@ public abstract class AbsContestHasMutiLine extends AbsSaHinhContest {
     private final double intoDis;
     private int index = -1;
 
-    public AbsContestHasMutiLine(String name, int timeout, List<ContestConfig> contestConfigs) {
-        super(name, false, timeout);
+    public AbsContestHasMutiLine(String name,int soundId, int timeout, List<ContestConfig> contestConfigs) {
+        super(name, soundId,false, timeout);
         this.distanceIntoContest = new CheckDistanceIntoContest(contestConfigs);
         this.intoDis = 3;
     }

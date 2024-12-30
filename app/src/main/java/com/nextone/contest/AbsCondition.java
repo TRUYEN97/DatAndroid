@@ -9,6 +9,8 @@ import com.nextone.input.serial.MCUSerialHandler;
 import com.nextone.model.input.CarModel;
 import com.nextone.model.modelTest.contest.ContestDataModel;
 
+import lombok.Setter;
+
 /**
  *
  * @author Admin
@@ -16,8 +18,10 @@ import com.nextone.model.modelTest.contest.ContestDataModel;
 public abstract class AbsCondition {
 
     protected final CarModel carModel;
+    @Setter
     protected ContestDataModel contestDataModel;
     private final ErrorcodeHandle codeHandle;
+    @Setter
     protected boolean important;
     protected boolean stop;
     protected boolean hasFail;
@@ -28,14 +32,6 @@ public abstract class AbsCondition {
         this.important = false;
         this.stop = true;
         this.hasFail = false;
-    }
-
-    public void setContestDataModel(ContestDataModel contestDataModel) {
-        this.contestDataModel = contestDataModel;
-    }
-
-    public void setImporttant(boolean st) {
-        this.important = st;
     }
 
     public void start() {

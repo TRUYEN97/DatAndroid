@@ -8,7 +8,6 @@ import com.nextone.common.ConstKey;
 import com.nextone.common.Util;
 import com.nextone.contest.AbsContest;
 import com.nextone.input.serial.MCUSerialHandler;
-
 /**
  *
  * @author Admin
@@ -23,8 +22,7 @@ public class KhanCap extends AbsContest {
     private final MCUSerialHandler uSerialHandler;
 
     public KhanCap(double distanceBegin) {
-        super(ConstKey.CONTEST_NAME.KHAN_CAP,
-                ConstKey.CONTEST_NAME.KHAN_CAP, false, false, false, 1200);
+        super(ConstKey.CONTEST_NAME.KHAN_CAP, -1, false, false, false, 1200);
         this.distanceBegin = distanceBegin;
         this.uSerialHandler = MCUSerialHandler.getInstance();
         this.warningSoundPlayer = new WarningSoundPlayer();
@@ -86,7 +84,7 @@ public class KhanCap extends AbsContest {
 
     @Override
     protected boolean isIntoContest() {
-        if (getDetaDistance(oldDistance) >= distanceBegin) {
+        if (getDeltaDistance(oldDistance) >= distanceBegin) {
             firstDone = false;
             success = false;
             this.warningSoundPlayer.start();

@@ -7,9 +7,9 @@ package com.nextone.contest.impContest.shB1;
 import com.nextone.common.ConstKey;
 import com.nextone.contest.impContest.shB2.AbsConstestJustOneLine;
 import com.nextone.model.yardConfigMode.ContestConfig;
+import com.nextone.datandroid.R;
 
 /**
- *
  * @author Admin
  */
 public class TangTocDuongThangB1 extends AbsConstestJustOneLine {
@@ -17,7 +17,7 @@ public class TangTocDuongThangB1 extends AbsConstestJustOneLine {
     private final int speed;
 
     public TangTocDuongThangB1(int speed, ContestConfig contestConfig) {
-        super(ConstKey.CONTEST_NAME.THAY_DOI_SO, 120, contestConfig);
+        super(ConstKey.CONTEST_NAME.THAY_DOI_SO, R.raw.tdstdb, 120, contestConfig);
         this.speed = speed;
     }
 

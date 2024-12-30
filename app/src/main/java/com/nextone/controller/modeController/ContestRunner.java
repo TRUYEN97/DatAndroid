@@ -13,7 +13,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 /**
- *
  * @author Admin
  */
 public class ContestRunner implements Runnable {
@@ -40,7 +39,7 @@ public class ContestRunner implements Runnable {
         AbsContest currContest;
         while (this.testMode != null && !this.testDone) {
             currContest = this.testMode.peekContests();
-            if (this.testMode == null || testMode.isTestCondisionsFailed()) {
+            if (this.testMode == null || testMode.isTestConditionsFailed()) {
                 stop();
                 break;
             }
@@ -61,30 +60,36 @@ public class ContestRunner implements Runnable {
     }
 
     private void runPart(Runnable runnable, AbsContest currContest) {
-        Future future = this.threadPool.submit(runnable);
+        Future<?> future = this.threadPool.submit(runnable);
         while (!future.isDone() && !this.testDone) {
-            if (currContest.isTestCondisionsFailed()) {
-                stop();
+            if (currContest.isTestConditionsFailed()) {
+                stop(currContest);
                 break;
             }
-            if (testMode == null || testMode.isTestCondisionsFailed()) {
-                stop();
+            if (testMode == null || testMode.isTestConditionsFailed()) {
+                stop(currContest);
                 break;
             }
         }
         while (!future.isDone()) {
             currContest.stop();
             future.cancel(true);
-            if (currContest.isTestCondisionsFailed()) {
-                stop();
-                break;
+            if (currContest.isTestConditionsFailed()) {
+                stop(currContest);
+//                break;
             }
-            if (testMode == null || testMode.isTestCondisionsFailed()) {
-                stop();
-                break;
+            if (testMode == null || testMode.isTestConditionsFailed()) {
+                stop(currContest);
+//                break;
             }
             Util.delay(100);
         }
+    }
+
+    private void stop(AbsContest currContest) {
+        if (currContest == null) return;
+        currContest.stop();
+        stop();
     }
 
     public void stop() {

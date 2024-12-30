@@ -6,7 +6,7 @@ package com.nextone.contest.impContest.shB2;
 
 import com.nextone.common.ConstKey;
 import com.nextone.model.yardConfigMode.ContestConfig;
-
+import com.nextone.datandroid.R;
 
 /**
  *
@@ -15,7 +15,7 @@ import com.nextone.model.yardConfigMode.ContestConfig;
 public class DuongTau extends DungXe{
 
     public DuongTau(ContestConfig contestConfig, int speedLimit) {
-        super(ConstKey.CONTEST_NAME.DUONG_TAU, contestConfig, speedLimit);
+        super(ConstKey.CONTEST_NAME.DUONG_TAU, R.raw.qdt, contestConfig, speedLimit);
     }
 
  

@@ -41,14 +41,14 @@ public class SH_OFF<V  extends AbsModeView> extends AbsSaHinhMode<V> {
             UserModel userModel = new UserModel();
             userModel.setId("0");
             userModel.setExamId("0");
-            this.processlHandle.setUserModel(userModel);
+            this.processHandle.setUserModel(userModel);
             return true;
         }
         return false;
     }
 
     @Override
-    protected void creadContestList() {
+    protected void createContestList() {
     }
 
     @Override
@@ -62,6 +62,7 @@ public class SH_OFF<V  extends AbsModeView> extends AbsSaHinhMode<V> {
 //            }
 //            carModel.setRemoteValue(val);
 //        });
+        super.createPrepareKeyEvents(events);
         events.put(ConstKey.KEY_BOARD.VK_1, (key) -> {
             if (!contests.isEmpty()) {
                 return;
@@ -186,8 +187,5 @@ public class SH_OFF<V  extends AbsModeView> extends AbsSaHinhMode<V> {
         });
     }
 
-    @Override
-    protected void createTestKeyEvents(Map<String, IKeyEvent> events) {
-    }
 
 }

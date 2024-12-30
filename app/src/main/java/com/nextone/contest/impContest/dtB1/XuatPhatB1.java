@@ -8,7 +8,7 @@ import com.nextone.common.ConstKey;
 import com.nextone.contest.AbsContest;
 import com.nextone.contest.impCondition.timerCondition.CheckTimeOut;
 import com.nextone.input.serial.MCUSerialHandler;
-
+import com.nextone.datandroid.R;
 /**
  *
  * @author Admin
@@ -18,13 +18,13 @@ public class XuatPhatB1 extends AbsContest {
     private final CheckTimeOut timeOut30s;
 
     public XuatPhatB1() {
-        this(ConstKey.CONTEST_NAME.XUAT_PHAT);
+        this(ConstKey.CONTEST_NAME.XUAT_PHAT, R.raw.xp);
     }
 
-    public XuatPhatB1(String name) {
-        super(name, name, false, false, true, 2000);
+    public XuatPhatB1(String name, int soundId) {
+        super(name, soundId, false, false, true, 2000);
         this.timeOut30s = new CheckTimeOut(importantError, 30, ConstKey.ERR.OVER_30S_TO_START);
-        this.conditionIntoHandle.addConditon(timeOut30s);
+        this.conditionRunningHandle.addCondition(timeOut30s);
     }
 
     private boolean firstCheck = true;

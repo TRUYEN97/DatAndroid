@@ -7,15 +7,16 @@ package com.nextone.common.communication.socket.Unicast.Client;
 import android.util.Log;
 
 import com.nextone.common.communication.socket.Unicast.commons.Interface.IIsConnect;
-import java.net.Socket;
+import com.nextone.common.communication.socket.Unicast.commons.Interface.IReceiver;
 import com.nextone.common.communication.socket.Unicast.commons.Interface.Idisconnect;
 import com.nextone.common.communication.socket.Unicast.commons.Keywords;
+
 import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.io.Closeable;
 import java.io.IOException;
-import com.nextone.common.communication.socket.Unicast.commons.Interface.IReceiver;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -64,7 +65,6 @@ public class SocketClient implements Runnable, Idisconnect, IIsConnect, Closeabl
             this.connect = true;
             return true;
         } catch (Exception e) {
-            Log.e(TAG, "Error disconnecting: " + e.getMessage(), e);
             return false;
         }
     }

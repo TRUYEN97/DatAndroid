@@ -6,11 +6,13 @@ package com.nextone.mode.imp;
 
 import com.nextone.common.ConstKey;
 import com.nextone.contest.impCondition.timerCondition.CheckSo3;
+import com.nextone.contest.impContest.dtB2.XuatPhat;
 import com.nextone.contest.impContest.dtB2.GiamToc;
 import com.nextone.contest.impContest.dtB2.KetThuc;
 import com.nextone.contest.impContest.dtB2.TangToc;
 import com.nextone.datandroid.customLayout.impConstrainLayout.modeView.AbsModeView;
 import com.nextone.mode.AbsDuongTruongMode;
+import com.nextone.model.input.UserModel;
 import com.nextone.pretreatment.IKeyEvent;
 import java.util.List;
 import java.util.Map;
@@ -27,16 +29,28 @@ public class DT_B_MODE<V extends AbsModeView> extends AbsDuongTruongMode<V> {
 
     public DT_B_MODE(V truongView, String name, List<String> ranks, boolean isOnline) {
         super(truongView, name, ranks, isOnline);
-        this.conditionHandle.addConditon(new CheckSo3());
+        this.conditionHandle.addCondition(new CheckSo3());
+    }
+
+    @Override
+    protected void createPrepareKeyEvents(Map<String, IKeyEvent> maps) {
+        super.createPrepareKeyEvents(maps);
+        maps.put(ConstKey.KEY_BOARD.CONTEST.XP, (key) -> {
+            if (hasXp || !runnable || this.carModel.getStatus() != ConstKey.CAR_ST.STOP) {
+                return;
+            }
+            UserModel userModel = new UserModel();
+            userModel.setId("0");
+            userModel.setName("Chế độ luyện tập");
+            userModel.setExamId("0");
+            this.processHandle.setUserModel(userModel);
+            addContest(new XuatPhat());
+            hasXp = true;
+        });
     }
 
     @Override
     protected void createTestKeyEvents(Map<String, IKeyEvent> events) {
-        events.put(ConstKey.ERR.SWERVED_OUT_OF_LANE, this.errorcodeHandle::addBaseErrorCode);
-        events.put(ConstKey.ERR.IGNORED_INSTRUCTIONS, this.errorcodeHandle::addBaseErrorCode);
-        events.put(ConstKey.ERR.VIOLATION_TRAFFIC_RULES, this.errorcodeHandle::addBaseErrorCode);
-        events.put(ConstKey.ERR.HEAVY_SHAKING, this.errorcodeHandle::addBaseErrorCode);
-        events.put(ConstKey.ERR.CAUSED_AN_ACCIDENT, this.errorcodeHandle::addBaseErrorCode);
         events.put(ConstKey.KEY_BOARD.CONTEST.TS, (key) -> {
             if (this.carModel.getGearBoxValue() >= 5) {
                 return;
@@ -47,7 +61,7 @@ public class DT_B_MODE<V extends AbsModeView> extends AbsDuongTruongMode<V> {
             if (!hasXp || hasKt) {
                 return;
             }
-            addContest(new TangToc(ConstKey.CONTEST_NAME.TANG_TOC));
+            addContest(new TangToc());
             hasTs = true;
         });
         events.put(ConstKey.KEY_BOARD.CONTEST.GS, (key) -> {
@@ -60,7 +74,7 @@ public class DT_B_MODE<V extends AbsModeView> extends AbsDuongTruongMode<V> {
             if (!hasXp || hasKt) {
                 return;
             }
-            addContest(new GiamToc(ConstKey.CONTEST_NAME.GIAM_TOC));
+            addContest(new GiamToc());
             hasGs = true;
         });
         events.put(ConstKey.KEY_BOARD.CONTEST.KT, (key) -> {
@@ -75,7 +89,7 @@ public class DT_B_MODE<V extends AbsModeView> extends AbsDuongTruongMode<V> {
             if (!hasXp || !hasTs || !hasGs || hasKt) {
                 return;
             }
-            addContest(new KetThuc(ConstKey.CONTEST_NAME.KET_THUC));
+            addContest(new KetThuc());
             hasKt = true;
         });
     }

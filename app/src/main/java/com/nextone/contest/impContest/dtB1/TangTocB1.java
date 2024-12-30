@@ -6,7 +6,7 @@ package com.nextone.contest.impContest.dtB1;
 
 import com.nextone.common.ConstKey;
 import com.nextone.contest.AbsContest;
-
+import com.nextone.datandroid.R;
 /**
  *
  * @author Admin
@@ -17,11 +17,11 @@ public class TangTocB1 extends AbsContest {
     private double oldV = 0;
 
     public TangTocB1() {
-        this(ConstKey.CONTEST_NAME.TANG_TOC);
+        this(ConstKey.CONTEST_NAME.TANG_TOC, R.raw.ts);
     }
 
-    public TangTocB1(String name) {
-        super(name, name, true, false, true, 2000);
+    public TangTocB1(String name, int soundId) {
+        super(name, soundId, true, false, true, 2000);
     }
 
     @Override

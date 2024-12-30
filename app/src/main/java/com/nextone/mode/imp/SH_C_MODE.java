@@ -17,9 +17,8 @@ import com.nextone.contest.impContest.shB2.VetBanhXe;
 import com.nextone.contest.impContest.shB2.XuatPhat;
 import com.nextone.datandroid.customLayout.impConstrainLayout.modeView.AbsModeView;
 import com.nextone.mode.AbsSaHinhMode;
-import com.nextone.pretreatment.IKeyEvent;
+
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 /**
@@ -32,17 +31,8 @@ public class SH_C_MODE<V  extends AbsModeView> extends AbsSaHinhMode<V> {
         super(hinhView, 20, 1200, MODEL_RANK_NAME.RANK_C, List.of("C"), isOnline);
     }
 
-
     @Override
-    protected void createPrepareKeyEvents(Map<String, IKeyEvent> events) {
-    }
-
-    @Override
-    protected void createTestKeyEvents(Map<String, IKeyEvent> events) {
-    }
-
-    @Override
-    protected void creadContestList() {
+    protected void createContestList() {
         contests.clear();
         int rd = new Random().nextInt(3);
         System.out.println(rd);

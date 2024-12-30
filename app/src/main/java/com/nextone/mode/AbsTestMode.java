@@ -4,15 +4,19 @@
  */
 package com.nextone.mode;
 
+import android.util.Log;
+
 import com.nextone.common.ConstKey;
 import com.nextone.common.Setting;
 import com.nextone.common.Util;
 import com.nextone.common.communication.IgetName;
 import com.nextone.contest.AbsContest;
+import com.nextone.contest.impCondition.ImportantError;
 import com.nextone.controller.CheckConditionHandle;
 import com.nextone.controller.ErrorcodeHandle;
 import com.nextone.controller.ProcessModelHandle;
 import com.nextone.controller.modeController.ModeHandle;
+import com.nextone.datandroid.customLayout.impConstrainLayout.modeView.AbsModeView;
 import com.nextone.input.serial.MCUSerialHandler;
 import com.nextone.model.input.CarModel;
 import com.nextone.model.modelTest.process.ProcessModel;
@@ -20,19 +24,19 @@ import com.nextone.output.SoundPlayer;
 import com.nextone.pretreatment.IKeyEvent;
 import com.nextone.pretreatment.KeyEventManagement;
 import com.nextone.pretreatment.KeyEventsPackage;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+
 import lombok.Getter;
 import lombok.Setter;
-import com.nextone.datandroid.customLayout.impConstrainLayout.modeView.AbsModeView;
 
 /**
- *
- * @author Admin
  * @param <V> view
+ * @author Admin
  */
 @Getter
 @Setter
@@ -46,13 +50,14 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
     protected final CarModel carModel;
     protected final ProcessModel processModel;
     protected final SoundPlayer soundPlayer;
-    protected final ProcessModelHandle processlHandle;
+    protected final ProcessModelHandle processHandle;
     protected final Queue<AbsContest> contests;
     protected final KeyEventsPackage prepareEventsPackage;
     protected final KeyEventsPackage testEventsPackage;
     protected final ErrorcodeHandle errorcodeHandle;
     protected final CheckConditionHandle conditionHandle;
     protected final MCUSerialHandler mCUSerialHandler;
+    protected final ImportantError importantError;
     private ModeHandle modeHandle;
     private boolean cancel;
     protected final boolean isOnline;
@@ -75,8 +80,8 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
         this.cancel = false;
         this.scoreSpec = scoreSpec;
         this.carModel = MCUSerialHandler.getInstance().getModel();
-        this.processlHandle = ProcessModelHandle.getInstance();
-        this.processModel = this.processlHandle.getProcessModel();
+        this.processHandle = ProcessModelHandle.getInstance();
+        this.processModel = this.processHandle.getProcessModel();
         this.soundPlayer = SoundPlayer.getInstance();
         this.contests = new LinkedList<>();
         this.errorcodeHandle = ErrorcodeHandle.getInstance();
@@ -84,6 +89,8 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
         this.testEventsPackage = initTestKeyEventPackage(prepareEventsPackage);
         this.conditionHandle = new CheckConditionHandle();
         this.mCUSerialHandler = MCUSerialHandler.getInstance();
+        this.importantError = new ImportantError();
+        this.conditionHandle.addCondition(importantError);
     }
 
     private String creareFullName(List<String> ranks) {
@@ -129,29 +136,29 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
     }
 
     public void begin() {
-        try {
-            this.cancel = false;
-            this.processlHandle.setTesting(false);
-            KeyEventManagement.getInstance().addKeyEventBackAge(prepareEventsPackage);
+        this.importantError.reset();
+        this.cancel = false;
+        this.processHandle.setTesting(false);
+        KeyEventManagement.getInstance().addKeyEventBackAge(prepareEventsPackage);
+        this.errorcodeHandle.clear();
+        this.processHandle.resetModel();
+        this.mCUSerialHandler.sendReset();
+        this.carModel.setDistance(0);
+        this.mCUSerialHandler.sendLedOff();
+        while (!loopCheckCanTest() && !this.cancel) {
+            Util.delay(1000);
+        }
+        KeyEventManagement.getInstance().remove(prepareEventsPackage);
+        if (!cancel) {
             this.errorcodeHandle.clear();
-            this.processlHandle.resetModel();
+            this.processHandle.resetModel();
             this.mCUSerialHandler.sendReset();
             this.carModel.setDistance(0);
-            this.mCUSerialHandler.sendLedOff();
-            while (!loopCheckCanTest() && !this.cancel) {
-                Util.delay(1000);
-            }
-            KeyEventManagement.getInstance().remove(prepareEventsPackage);
-            if (!cancel) {
-                this.errorcodeHandle.clear();
-                this.processlHandle.resetModel();
-                this.mCUSerialHandler.sendReset();
-                this.carModel.setDistance(0);
-                this.processlHandle.startTest();
-                KeyEventManagement.getInstance().addKeyEventBackAge(testEventsPackage);
-                this.mCUSerialHandler.sendLedGreenOn();
-                this.conditionHandle.start();
-                updateLog();
+            this.processHandle.startTest();
+            KeyEventManagement.getInstance().addKeyEventBackAge(testEventsPackage);
+            this.mCUSerialHandler.sendLedGreenOn();
+            this.conditionHandle.start();
+            updateLog();
 //                if (isOnline) {
 //                    new Thread(() -> {
 //                        TestStatusLogger.getInstance().setTestStatus(
@@ -160,15 +167,12 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
 //                        upTestDataToServer();
 //                    }).start();
 //                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
     public void endContest() {
         try {
-            this.processlHandle.update();
+            this.processHandle.update();
             updateLog();
 //            if (isOnline) {
 //                new Thread(() -> {
@@ -177,7 +181,7 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
 //            }
             contestDone();
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(this.getClassName(), "endContest", e);
         }
     }
 
@@ -204,13 +208,6 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
 
     private KeyEventsPackage initPrepareKeyEventPackage() {
         Map<String, IKeyEvent> events = new HashMap<>();
-//        events.put(ConstKey.KEY_BOARD.SHOW_ERROR, (key) -> {
-//            if (this.showErrorcode.isVisible()) {
-//                this.showErrorcode.dispose();
-//            } else {
-//                this.showErrorcode.display();
-//            }
-//        });
         KeyEventsPackage epg = new KeyEventsPackage(name + "Prepare");
         createPrepareKeyEvents(events);
         epg.putEvents(events);
@@ -226,8 +223,8 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
         return epg;
     }
 
-    public boolean isTestCondisionsFailed() {
-        if (this.conditionHandle.isTestCondisionsFailed()) {
+    public boolean isTestConditionsFailed() {
+        if (this.conditionHandle.isTestConditionsFailed()) {
             return true;
         }
         String id = this.processModel.getId();
@@ -235,12 +232,12 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
         if (id != null && id.equals("0")) {
             score = 20;
         }
-        return this.processlHandle.getProcessModel().getScore() < score;
+        return this.processHandle.getProcessModel().getScore() < score;
     }
 
     public void cancelTest() {
+        this.importantError.setIsImportantError();
         this.cancel = true;
-        this.modeEndInit();
     }
 
     public boolean isMode(String modeName, String rank) {
@@ -258,9 +255,9 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
     }
 
     public void modeInit() {
-//        if (this.view != null) {
-//            this.view.start();
-//        }
+        if (this.view != null) {
+            this.view.start();
+        }
         if (this.name != null) {
             if (this.name.equalsIgnoreCase(ConstKey.MODE_NAME.DUONG_TRUONG)) {
                 Setting.getInstance().setDuongTruongMode();
@@ -271,9 +268,10 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
     }
 
     public void modeEndInit() {
-//        if (this.view != null) {
-//            this.view.stop();
-//        }
+        cancelTest();
+        if (this.view != null) {
+            this.view.stop();
+        }
     }
 
     public void clearContest() {

@@ -7,7 +7,7 @@ package com.nextone.contest.impContest.shB2;
 import com.nextone.common.ConstKey;
 import com.nextone.contest.impCondition.OnOffImp.CheckOverSpeedLimit;
 import com.nextone.contest.impContest.AbsSaHinhContest;
-
+import com.nextone.datandroid.R;
 /**
  *
  * @author Admin
@@ -15,8 +15,8 @@ import com.nextone.contest.impContest.AbsSaHinhContest;
 public class KetThuc extends AbsSaHinhContest {
 
     public KetThuc(int speedLimit) {
-        super(ConstKey.CONTEST_NAME.KET_THUC, false, 2000);
-        this.conditionBeginHandle.addConditon(new CheckOverSpeedLimit(speedLimit));
+        super(ConstKey.CONTEST_NAME.KET_THUC, R.raw.kt, false, 2000);
+        this.conditionBeginHandle.addCondition(new CheckOverSpeedLimit(speedLimit));
     }
 
     @Override

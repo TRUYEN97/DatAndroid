@@ -4,16 +4,20 @@
  */
 package com.nextone.controller.modeController;
 
+import android.util.Log;
+
 import com.nextone.common.Util;
 import com.nextone.interfaces.IStarter;
 import com.nextone.controller.ProcessModelHandle;
 import com.nextone.mode.AbsTestMode;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import lombok.Getter;
+
 /**
- *
  * @author Admin
  */
 public class ModeHandle implements IStarter, Runnable {
@@ -21,7 +25,9 @@ public class ModeHandle implements IStarter, Runnable {
     private final ProcessModelHandle processModelHandle;
     private final ContestRunner contestRunner;
     private final ExecutorService threadPool;
+    @Getter
     private AbsTestMode testMode;
+    @Getter
     private boolean running = false;
     private boolean stop = false;
     private Future testFuture;
@@ -44,23 +50,19 @@ public class ModeHandle implements IStarter, Runnable {
             this.contestRunner.setTestMode(testMode);
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("ModeHandle", "setTestMode", e);
             return false;
         }
     }
 
-    public AbsTestMode getTestMode() {
-        return testMode;
-    }
-
     @Override
     public void run() {
-        try {
-            if (isRunning() || this.testMode == null) {
-                return;
-            }
-            wait = false;
-            while (true) {
+        if (isRunning() || this.testMode == null) {
+            return;
+        }
+        wait = false;
+        while (true) {
+            try {
                 while (wait) {
                     Util.delay(1000);
                 }
@@ -69,20 +71,16 @@ public class ModeHandle implements IStarter, Runnable {
                     test();
                     end();
                 }
+            } catch (Exception e) {
+                Log.e("ModelHandle", "run: ", e);
+                this.running = false;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            this.running = false;
         }
     }
 
     @Override
     public boolean isStarted() {
         return this.testFuture != null && !this.testFuture.isDone();
-    }
-
-    public boolean isRunning() {
-        return running;
     }
 
     private void begin() {
@@ -111,7 +109,7 @@ public class ModeHandle implements IStarter, Runnable {
         this.stop = true;
         this.contestRunner.stop();
         if (this.testMode != null) {
-            this.testMode.cancelTest();
+            this.testMode.modeEndInit();
         }
     }
 

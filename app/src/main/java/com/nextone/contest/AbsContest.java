@@ -4,6 +4,8 @@
  */
 package com.nextone.contest;
 
+import android.util.Log;
+
 import com.nextone.common.Util;
 import com.nextone.contest.impCondition.ImportantError;
 import com.nextone.contest.impCondition.timerCondition.TimeOutContest;
@@ -17,6 +19,8 @@ import com.nextone.model.modelTest.contest.ContestDataModel;
 import com.nextone.model.input.CarModel;
 import com.nextone.output.SoundPlayer;
 
+import lombok.Getter;
+
 public abstract class AbsContest implements IgetTime {
 
     public static final int WAIT = 0;
@@ -25,6 +29,7 @@ public abstract class AbsContest implements IgetTime {
     private final ProcessModelHandle processlHandle;
     protected final MCUSerialHandler mcuSerialHandler;
     protected final CarModel carModel;
+    @Getter
     protected final ContestDataModel contestModel;
     protected final SoundPlayer soundPlayer;
     protected final ContestModelHandle contestModelHandle;
@@ -32,21 +37,22 @@ public abstract class AbsContest implements IgetTime {
     protected final boolean playSoundWhenIn;
     protected final boolean playSoundWhenOut;
     protected final CheckConditionHandle conditionBeginHandle;
-    protected final CheckConditionHandle conditionIntoHandle;
-    private final TimeOutContest timeOutContest;
-    protected final String nameSound;
+    protected final CheckConditionHandle conditionRunningHandle;
+    @Getter
+    protected final int nameSoundId;
     protected final ImportantError importantError;
+    @Getter
     protected int status;
     protected boolean stop;
     protected int timeOut;
     private final boolean sayContestName;
 
-    public AbsContest(String name, String nameSound,
+    public AbsContest(String name, int nameSoundId,
             boolean sayContestName, boolean soundIn,
             boolean soundOut, int timeout) {
         this.timeOut = Math.max(timeout, 0);
         this.sayContestName = sayContestName;
-        this.nameSound = nameSound;
+        this.nameSoundId = nameSoundId;
         this.mcuSerialHandler = MCUSerialHandler.getInstance();
         this.processlHandle = ProcessModelHandle.getInstance();
         this.carModel = MCUSerialHandler.getInstance().getModel();
@@ -57,49 +63,34 @@ public abstract class AbsContest implements IgetTime {
         this.contestModel = new ContestDataModel(name);
         this.contestModelHandle = new ContestModelHandle(contestModel);
         this.conditionBeginHandle = new CheckConditionHandle(this.contestModel);
-        this.conditionIntoHandle = new CheckConditionHandle(this.contestModel);
-        this.timeOutContest = new TimeOutContest(this);
+        this.conditionRunningHandle = new CheckConditionHandle(this.contestModel);
+        TimeOutContest timeOutContest = new TimeOutContest(this);
         this.importantError = new ImportantError();
-        this.conditionBeginHandle.addConditon(importantError);
-        this.conditionIntoHandle.addConditon(importantError);
-        this.conditionIntoHandle.addConditon(timeOutContest);
+        this.conditionBeginHandle.addCondition(importantError);
+        this.conditionRunningHandle.addCondition(importantError);
+        this.conditionRunningHandle.addCondition(timeOutContest);
         this.status = DONE;
         this.stop = false;
     }
 
-    protected double getDetaDistance(double oldDistance) {
+    protected double getDeltaDistance(double oldDistance) {
         return this.carModel.getDistance() - oldDistance;
-    }
-
-    public String getNameSound() {
-        return nameSound;
     }
 
     protected void addErrorCode(String errorKey) {
         this.errorcodeHandle.addContestErrorCode(errorKey, contestModel);
     }
 
-    public boolean isTestCondisionsFailed() {
-        boolean st = false;
-        if (this.conditionBeginHandle.isTestCondisionsFailed()) {
-            st = true;
-        }
-        if (this.conditionIntoHandle.isTestCondisionsFailed()) {
+    public boolean isTestConditionsFailed() {
+        boolean st = this.conditionBeginHandle.isTestConditionsFailed();
+        if (this.conditionRunningHandle.isTestConditionsFailed()) {
             st = true;
         }
         return st;
     }
 
-    public ContestDataModel getContestModel() {
-        return contestModel;
-    }
-
     public final String getName() {
         return this.contestModel.getContestName();
-    }
-
-    public int getStatus() {
-        return status;
     }
 
     protected abstract void init();
@@ -129,19 +120,19 @@ public abstract class AbsContest implements IgetTime {
                 init();
                 this.conditionBeginHandle.start();
                 if (this.sayContestName) {
-                    this.soundPlayer.contestName(nameSound, isFisrtContest);
+                    this.soundPlayer.contestName(nameSoundId, isFisrtContest);
                 }
                 while (!isIntoContest() && !stop) {
                     Util.delay(10);
                 }
-                this.conditionIntoHandle.start();
+                this.conditionRunningHandle.start();
                 if (this.playSoundWhenIn) {
                     this.soundPlayer.startContest();
                 }
                 this.contestModelHandle.start();
                 this.status = RUNNING;
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e("AbsContest", "begin",e);
             }
         };
     }
@@ -155,7 +146,7 @@ public abstract class AbsContest implements IgetTime {
                 }
                 status = DONE;
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e("AbsContest", "test",e);
             }
         };
     }
@@ -164,8 +155,8 @@ public abstract class AbsContest implements IgetTime {
         try {
             this.conditionBeginHandle.stop();
             this.conditionBeginHandle.clear();
-            this.conditionIntoHandle.stop();
-            this.conditionIntoHandle.clear();
+            this.conditionRunningHandle.stop();
+            this.conditionRunningHandle.clear();
             status = DONE;
             this.contestModelHandle.end();
             if (this.playSoundWhenOut) {
@@ -173,7 +164,7 @@ public abstract class AbsContest implements IgetTime {
             }
             this.processlHandle.setContest(null);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("AbsContest", "end", e);
         }
     }
 

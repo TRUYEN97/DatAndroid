@@ -9,6 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  *
  * @author Admin
@@ -17,7 +20,10 @@ public class KeyEventsPackage {
 
     protected final List<IKeyEvent> anyKeyEvents;
     protected final Map<String, IKeyEvent> keyEvents;
+    @Setter
+    @Getter
     private boolean justMe;
+    @Getter
     private final String name;
 
     public KeyEventsPackage(String name) {
@@ -70,18 +76,6 @@ public class KeyEventsPackage {
             }
             this.keyEvents.put(key, modeKeyEvents.get(key));
         }
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setJustMe(boolean justMe) {
-        this.justMe = justMe;
-    }
-
-    public boolean isJustMe() {
-        return justMe;
     }
 
     public void attack(String key) {

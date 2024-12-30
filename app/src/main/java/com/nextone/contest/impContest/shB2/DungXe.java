@@ -7,7 +7,7 @@ package com.nextone.contest.impContest.shB2;
 import com.nextone.common.ConstKey;
 import com.nextone.contest.impCondition.OnOffImp.CheckOverSpeedLimit;
 import com.nextone.model.yardConfigMode.ContestConfig;
-
+import com.nextone.datandroid.R;
 /**
  *
  * @author Admin
@@ -15,12 +15,12 @@ import com.nextone.model.yardConfigMode.ContestConfig;
 public class DungXe extends AbsConstestJustOneLine {
 
     public DungXe(ContestConfig contestConfig, int speedLimit) {
-        this(ConstKey.CONTEST_NAME.DUNG_XE_CNDB, contestConfig, speedLimit);
+        this(ConstKey.CONTEST_NAME.DUNG_XE_CNDB, R.raw.dxcndb, contestConfig, speedLimit);
     }
 
-    public DungXe(String name, ContestConfig contestConfig, int speedLimit) {
-        super(name, 200, contestConfig);
-        this.conditionBeginHandle.addConditon(new CheckOverSpeedLimit(speedLimit));
+    public DungXe(String name, int soundId, ContestConfig contestConfig, int speedLimit) {
+        super(name, soundId, 200, contestConfig);
+        this.conditionBeginHandle.addCondition(new CheckOverSpeedLimit(speedLimit));
     }
 
     @Override

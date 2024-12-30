@@ -7,10 +7,11 @@ package com.nextone.contest.impContest.shB2;
 import com.nextone.common.ConstKey;
 import com.nextone.contest.impCondition.CheckWheelCrossedLine;
 import com.nextone.contest.impCondition.OnOffImp.CheckOverSpeedLimit;
+import com.nextone.datandroid.R;
 import com.nextone.model.input.yard.YardRankModel;
 import com.nextone.model.yardConfigMode.ContestConfig;
-import java.util.List;
 
+import java.util.List;
 /**
  *
  * @author Admin
@@ -21,15 +22,15 @@ public class VetBanhXe extends AbsContestHasMutiLine {
     private final CheckWheelCrossedLine crossedPath;
 
     public VetBanhXe(YardRankModel yardModel, List<ContestConfig> vetBanhXeConfigs, int speedLimit) {
-        super(ConstKey.CONTEST_NAME.VET_BANH_XE, 120, vetBanhXeConfigs);
+        super(ConstKey.CONTEST_NAME.VET_BANH_XE, R.raw.qvbx, 120, vetBanhXeConfigs);
         this.crossedLine = new CheckWheelCrossedLine(5, () -> {
             return getWheelCrosserLineStatus(yardModel.getRoadZs1());
         });
         this.crossedPath = new CheckWheelCrossedLine(5, () -> {
             return getWheelCrosserLineStatus(yardModel.getRoadZs());
         });
-        this.conditionBeginHandle.addConditon(new CheckOverSpeedLimit(speedLimit));
-        this.conditionIntoHandle.addConditon(this.crossedPath);
+        this.conditionBeginHandle.addCondition(new CheckOverSpeedLimit(speedLimit));
+        this.conditionRunningHandle.addCondition(this.crossedPath);
     }
 
     @Override

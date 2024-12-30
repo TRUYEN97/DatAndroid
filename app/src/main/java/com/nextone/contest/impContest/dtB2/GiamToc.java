@@ -6,7 +6,7 @@ package com.nextone.contest.impContest.dtB2;
 
 import com.nextone.common.ConstKey;
 import com.nextone.contest.AbsContest;
-
+import com.nextone.datandroid.R;
 /**
  *
  * @author Admin
@@ -19,11 +19,11 @@ public class GiamToc extends AbsContest {
     private boolean hasChaged;
 
     public GiamToc() {
-        this(ConstKey.CONTEST_NAME.GIAM_TOC);
+        this(ConstKey.CONTEST_NAME.GIAM_TOC, R.raw.gs_b2);
     }
 
-    public GiamToc(String name) {
-        super(name, name + "_B2", true, false, true, 2000);
+    public GiamToc(String name, int soundNameId) {
+        super(name, soundNameId, true, false, true, 2000);
     }
 
     @Override

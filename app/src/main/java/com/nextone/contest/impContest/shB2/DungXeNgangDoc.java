@@ -8,7 +8,7 @@ import com.nextone.common.ConstKey;
 import com.nextone.contest.impCondition.OnOffImp.CheckOverSpeedLimit;
 import com.nextone.contest.impCondition.timerCondition.CheckTimeOut;
 import com.nextone.model.yardConfigMode.ContestConfig;
-
+import com.nextone.datandroid.R;
 /**
  *
  * @author Admin
@@ -21,9 +21,9 @@ public class DungXeNgangDoc extends AbsConstestJustOneLine {
     private final CheckTimeOut checkTimeOut30s;
 
     public DungXeNgangDoc(ContestConfig contestConfig, int speedLimit) {
-        super(ConstKey.CONTEST_NAME.DUNG_XE_ND, 120, contestConfig);
+        super(ConstKey.CONTEST_NAME.DUNG_XE_ND, R.raw.dxnd, 120, contestConfig);
         this.checkTimeOut30s = new CheckTimeOut(importantError, 30, ConstKey.ERR.OVER_30S_TO_START);
-        this.conditionBeginHandle.addConditon(new CheckOverSpeedLimit(speedLimit));
+        this.conditionBeginHandle.addCondition(new CheckOverSpeedLimit(speedLimit));
     }
 
     @Override
@@ -39,7 +39,7 @@ public class DungXeNgangDoc extends AbsConstestJustOneLine {
     @Override
     protected boolean loop() {
         double d = this.carModel.getDistance();
-        if (!rollBack && hasStop && getDetaDistance(distanceWhenStop) < -0.5) {
+        if (!rollBack && hasStop && getDeltaDistance(distanceWhenStop) < -0.5) {
             addErrorCode(ConstKey.ERR.ROLLED_BACK_OVER_50M);
             rollBack = true;
         }

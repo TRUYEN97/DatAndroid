@@ -10,7 +10,7 @@ import com.nextone.contest.impCondition.timerCondition.CheckTimeOut;
 import com.nextone.model.input.yard.TrafficLightModel;
 import com.nextone.model.input.yard.YardModel;
 import com.nextone.model.yardConfigMode.ContestConfig;
-
+import com.nextone.datandroid.R;
 /**
  *
  * @author Admin
@@ -23,7 +23,7 @@ public class NgaTu extends AbsConstestJustOneLine {
     private final int times;
 
     public NgaTu(int times, YardModel yardModel, ContestConfig contestConfig, int speedLimit) {
-        super(ConstKey.CONTEST_NAME.NGAT_TU, 120, contestConfig);
+        super(ConstKey.CONTEST_NAME.NGAT_TU, R.raw.qnt, 120, contestConfig);
         this.times = times;
         this.checkTimeOut30s = new CheckTimeOut(importantError, 30, ConstKey.ERR.FAILED_PASS_INTERSECTION_OVER_30S);
         this.checkTimeOut20s = new CheckTimeOut(null, 20, ConstKey.ERR.FAILED_PASS_INTERSECTION_OVER_20S, false);
@@ -32,7 +32,7 @@ public class NgaTu extends AbsConstestJustOneLine {
         } else {
             this.trafficLightModel = yardModel.getTrafficLightModel();
         }
-        this.conditionBeginHandle.addConditon(new CheckOverSpeedLimit(speedLimit));
+        this.conditionBeginHandle.addCondition(new CheckOverSpeedLimit(speedLimit));
     }
 
     private boolean hasStop = false;

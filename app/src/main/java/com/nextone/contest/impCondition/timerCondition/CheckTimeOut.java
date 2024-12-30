@@ -22,7 +22,7 @@ public class CheckTimeOut extends AbsTimerCondition {
 
     public CheckTimeOut(ImportantError importantError, int time, String errName, boolean isImporttant) {
         super(importantError, time, true);
-        setImporttant(isImporttant);
+        setImportant(isImporttant);
         this.errName = errName;
     }
 

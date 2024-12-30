@@ -4,45 +4,35 @@
  */
 package com.nextone.model.modelTest;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  *
  * @author Admin
  */
 
+@Getter
 public class Errorcode {
+    @Setter
     protected String errKey;
+    @Setter
     protected int errPoint;
+    @Setter
     protected String errName;
+    @Getter
+    private int soundId = -1;
 
     public Errorcode() {
     }
 
-    public void setErrKey(String errKey) {
-        this.errKey = errKey;
-    }
 
-    public void setErrPoint(int errPoint) {
-        this.errPoint = errPoint;
-    }
-
-    public String getErrName() {
-        return errName;
-    }
-    
-
-    public Errorcode(String errKey, int errPoint, String errName) {
+    public Errorcode(String errKey, int errPoint, String errName, int soundId) {
         this.errKey = errKey;
         this.errPoint = errPoint;
         this.errName = errName;
+        this.soundId = soundId;
     }
 
-    public String getErrKey() {
-        return errKey;
-    }
 
-    public int getErrPoint() {
-        return errPoint;
-    }
-    
-    
 }

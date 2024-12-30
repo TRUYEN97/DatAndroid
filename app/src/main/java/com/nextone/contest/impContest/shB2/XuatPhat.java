@@ -8,7 +8,7 @@ import com.nextone.common.ConstKey;
 import com.nextone.contest.impCondition.OnOffImp.CheckOverSpeedLimit;
 import com.nextone.contest.impCondition.timerCondition.CheckTimeOut;
 import com.nextone.contest.impContest.AbsSaHinhContest;
-
+import com.nextone.datandroid.R;
 /**
  *
  * @author Admin
@@ -20,10 +20,10 @@ public class XuatPhat extends AbsSaHinhContest {
     private boolean firstCheck = true;
 
     public XuatPhat(int speedLimit) {
-        super(ConstKey.CONTEST_NAME.XUAT_PHAT, "begin", true, 60);
+        super(ConstKey.CONTEST_NAME.XUAT_PHAT, R.raw.begin, true, 60);
         this.timeOut30s = new CheckTimeOut(importantError, 30, ConstKey.ERR.OVER_30S_TO_START);
         this.timeOut20s = new CheckTimeOut(null, 20, ConstKey.ERR.OVER_20S_TO_START, false);
-        this.conditionBeginHandle.addConditon(new CheckOverSpeedLimit(speedLimit));
+        this.conditionBeginHandle.addCondition(new CheckOverSpeedLimit(speedLimit));
     }
 
     @Override

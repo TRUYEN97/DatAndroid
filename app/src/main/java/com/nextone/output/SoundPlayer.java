@@ -6,8 +6,8 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.nextone.model.MyContextManagement;
 import com.nextone.datandroid.R;
+import com.nextone.model.MyContextManagement;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -45,17 +45,17 @@ public class SoundPlayer {
 
     public void sayResultTest(int score, boolean isPass) {
         if (isPass) {
-            play(R.raw.congratulations);
+            playSequential(R.raw.congratulations);
         } else {
-            play(R.raw.congratulations1);
+            playSequential(R.raw.congratulations1);
         }
-        play(R.raw.the_score);
+        playSequential(R.raw.the_score);
         sayNumber(score);
-        play(R.raw.diem);
+        playSequential(R.raw.diem);
         if (isPass) {
-            play(R.raw.success);
+            playSequential(R.raw.success);
         } else {
-            play(R.raw.failure);
+            playSequential(R.raw.failure);
         }
     }
 
@@ -70,11 +70,6 @@ public class SoundPlayer {
             int size = nElems.size();
             for (int i = 0; i < size; i++) {
                 playSequential(getNumberSoundId(nElems.pop()));
-                try {
-                    Thread.sleep(666);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
             }
         }
     }
@@ -101,13 +96,43 @@ public class SoundPlayer {
         });
     }
 
-    private void playSequential(int... resId) {
-        threadPool.execute(() -> {
+    private synchronized void playSequential(int... resId) {
+//        threadPool.execute(() -> {
             this.sequentialPlayer.addToQueue(resId);
-        });
+//        });
     }
 
-    public void contestName(String nameSound, boolean isFisrtContest) {
+    public void contestName(int soundId, boolean contestation) {
+        if (!contestation) {
+            this.play(R.raw.contest);
+        }
+        this.play(soundId);
+    }
+
+    public void welcomeCarId(String numString) {
+        if (numString == null || numString.isBlank()) {
+            return;
+        }
+        int num = Integer.parseInt(numString.trim());
+        playSequential(R.raw.carid);
+        sayNumber(num);
+    }
+
+    public void inputCarId() {
+        play(R.raw.input_car);
+    }
+
+    public void inputId() {
+        play(R.raw.input_id);
+    }
+
+    public void welcomeId(String numString) {
+        if (numString == null || numString.isBlank()) {
+            return;
+        }
+        int num = Integer.parseInt(numString.trim());
+        playSequential(R.raw.welcomeid);
+        sayNumber(num);
     }
 
     public void startContest() {
@@ -115,24 +140,27 @@ public class SoundPlayer {
     }
 
     public void endContest() {
-
+        play(R.raw.contest_finish);
     }
 
     public void begin() {
+        play(R.raw.begin);
     }
 
     public void nextId() {
+        playSequential(R.raw.next_id);
     }
 
-    public void sayErrorCode(String errKey) {
-
+    public void sayErrorCode(int soundId) {
+        play(soundId);
     }
 
     public void successSound() {
+        play(R.raw.success);
     }
 
     public void alarm() {
-
+        play(R.raw.warning);
     }
 
     public void sayWelcome() {
@@ -150,13 +178,12 @@ public class SoundPlayer {
             this.isPlaying = false;
         }
 
-        public void addToQueue(@NonNull int... resIds) {
-            if (resIds.length == 0) return;
-            for (int resId : resIds){
+        public synchronized void addToQueue(@NonNull int... resIds) {
+            for (int resId : resIds) {
                 audioQueue.add(resId);
-            }
-            if (!this.isPlaying) {
-                playNext();
+                if (!this.isPlaying) {
+                    playNext();
+                }
             }
         }
 

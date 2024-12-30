@@ -17,7 +17,7 @@
         app:layout_columnWeight="1"
         app:layout_rowWeight="1" />
     <com.nextone.datandroid.customLayout.impConstrainLayout.widget.MyImageLabel
-        android:id="@+id/lbTT"
+        android:id="@+id/lbTt"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:gravity="center"
@@ -45,38 +45,45 @@
         android:id="@+id/btXp"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:gravity="center"
         android:layout_margin="8dp"
+        android:backgroundTint="#2196F3"
+        android:gravity="center"
         android:text="XP"
         app:layout_columnWeight="1"
         app:layout_rowWeight="1"
         tools:ignore="HardcodedText" />
+
     <Button
         android:id="@+id/btTT"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:gravity="center"
         android:layout_margin="8dp"
+        android:backgroundTint="#2196F3"
+        android:gravity="center"
         android:text="TT"
         app:layout_columnWeight="1"
         app:layout_rowWeight="1"
         tools:ignore="HardcodedText" />
+
     <Button
         android:id="@+id/btGT"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:gravity="center"
         android:layout_margin="8dp"
+        android:backgroundTint="#2196F3"
+        android:gravity="center"
         android:text="GT"
         app:layout_columnWeight="1"
         app:layout_rowWeight="1"
         tools:ignore="HardcodedText" />
+
     <Button
         android:id="@+id/btKT"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:gravity="center"
         android:layout_margin="8dp"
+        android:backgroundTint="#2196F3"
+        android:gravity="center"
         android:text="KT"
         app:layout_columnWeight="1"
         app:layout_rowWeight="1"

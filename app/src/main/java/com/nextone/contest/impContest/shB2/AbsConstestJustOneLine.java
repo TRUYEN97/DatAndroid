@@ -17,8 +17,8 @@ public abstract class AbsConstestJustOneLine extends AbsSaHinhContest {
     protected final ContestConfig contestConfig;
     private final double intoDis;
 
-    public AbsConstestJustOneLine(String name, int timeout, ContestConfig contestConfig) {
-        super(name, true, timeout);
+    public AbsConstestJustOneLine(String name, int soundId, int timeout, ContestConfig contestConfig) {
+        super(name, soundId, true, timeout);
         this.contestConfig = contestConfig;
         this.intoDis = 3;
     }

@@ -22,4 +22,9 @@ public class ImportantError extends AbsCondition {
         this.hasFail = true;
     }
 
+    public void reset() {
+        this.important = false;
+        this.hasFail = false;
+    }
+
 }

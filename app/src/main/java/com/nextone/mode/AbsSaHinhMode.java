@@ -4,8 +4,9 @@
  */
 package com.nextone.mode;
 
+import android.util.Log;
+
 import com.nextone.common.ConstKey;
-import com.nextone.common.Util;
 import com.nextone.common.YardConfig;
 import com.nextone.contest.impCondition.ContainContestChecker;
 import com.nextone.contest.impCondition.OnOffImp.CheckCM;
@@ -19,9 +20,11 @@ import com.nextone.model.input.yard.YardRankModel;
 import com.nextone.model.modelTest.process.ProcessModel;
 import com.nextone.model.yardConfigMode.YardConfigModel;
 import com.nextone.model.yardConfigMode.YardRankConfig;
+import com.nextone.pretreatment.IKeyEvent;
 import com.nextone.pretreatment.KeyEventManagement;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Admin
@@ -42,11 +45,11 @@ public abstract class AbsSaHinhMode<V extends AbsModeView> extends AbsTestMode<V
                          MODEL_RANK_NAME modelRank, List<String> ranks, boolean isOnline) {
         super(hinhView, ConstKey.MODE_NAME.SA_HINH, ranks, isOnline);
         this.speedLimit = speedLimit;
-        this.conditionHandle.addConditon(new TatalTimeOut(timeOut, processModel));
-        this.conditionHandle.addConditon(new CheckCM());
-        this.conditionHandle.addConditon(new CheckRPM());
-        this.conditionHandle.addConditon(new ContainContestChecker(
-                ConstKey.CONTEST_NAME.KET_THUC, false, processlHandle));
+        this.conditionHandle.addCondition(new TatalTimeOut(timeOut, processModel));
+        this.conditionHandle.addCondition(new CheckCM());
+        this.conditionHandle.addCondition(new CheckRPM());
+        this.conditionHandle.addCondition(new ContainContestChecker(
+                ConstKey.CONTEST_NAME.KET_THUC, false, processHandle));
         this.yardModelHandle = YardModelHandle.getInstance();
         YardConfigModel yardConfig = YardConfig.getInstance().getYardConfigModel();
         switch (modelRank) {
@@ -73,48 +76,49 @@ public abstract class AbsSaHinhMode<V extends AbsModeView> extends AbsTestMode<V
 
     @Override
     protected boolean loopCheckCanTest() {
-        if (this.carModel.isNt() && this.carModel.getStatus() == ConstKey.CAR_ST.STOP) {
-            if (!st) {
-                st = true;
-                this.mCUSerialHandler.sendLedRedOn();
-            }
-//            if (isOnline) {
-//                UserModel userModel = this.apiService.checkCarPair(this.processModel.getCarId());
-//                if (userModel == null || userModel.getId() == null || userModel.getId().isBlank()) {
-//                    Util.delay(1000);
-//                    return false;
-//                }
-//                this.processlHandle.setUserModel(userModel);
-//                switch (this.apiService.checkRunnable(userModel.getId())) {
-//                    case ApiService.START -> {
-//                        this.mCUSerialHandler.sendLedRedOff();
-//                        creadContestList();
-//                        return true;
-//                    }
-//                    case ApiService.WAIT -> {
-//                        Util.delay(2000);
-//                    }
-//                    case ApiService.ID_INVALID -> {
-//                        soundPlayer.userIdInvalid();
-//                        Util.delay(2000);
-//                    }
-//                }
-//            } else {
-            UserModel userModel = new UserModel();
-            userModel.setId("0");
-            userModel.setExamId("0");
-            this.processlHandle.setUserModel(userModel);
-            creadContestList();
-            return true;
-//            }
-        } else if (st) {
-            st = false;
-            this.mCUSerialHandler.sendLedOff();
+//        if (this.carModel.isNt() && this.carModel.getStatus() == ConstKey.CAR_ST.STOP) {
+        if (!st) {
+            st = true;
+            this.mCUSerialHandler.sendLedRedOn();
         }
-        return false;
+        String id = this.processModel.getId();
+        if (id == null || id.isBlank()) {
+            return false;
+        }
+        createContestList();
+        return true;
+//        } else if (st) {
+//            st = false;
+//            this.mCUSerialHandler.sendLedOff();
+//        }
+//        return false;
     }
 
-    protected abstract void creadContestList();
+    @Override
+    protected void createPrepareKeyEvents(Map<String, IKeyEvent> maps) {
+        maps.put(ConstKey.KEY_BOARD.CONTEST.XP, (key) -> {
+            if (this.processHandle.isTesting() || this.carModel.getStatus() != ConstKey.CAR_ST.STOP) {
+                return;
+            }
+            UserModel userModel = new UserModel();
+            userModel.setId("0");
+            userModel.setName("Chế độ luyện tập");
+            userModel.setExamId("0");
+            this.processHandle.setUserModel(userModel);
+        });
+    }
+
+    @Override
+    protected void createTestKeyEvents(Map<String, IKeyEvent> maps) {
+        maps.put(ConstKey.KEY_BOARD.CONTEST.KT, (key) -> {
+            if (!this.processHandle.isTesting() || this.carModel.getStatus() != ConstKey.CAR_ST.STOP) {
+                return;
+            }
+            this.cancelTest();
+        });
+    }
+
+    protected abstract void createContestList();
 
     @Override
     public void end() {
@@ -123,12 +127,12 @@ public abstract class AbsSaHinhMode<V extends AbsModeView> extends AbsTestMode<V
             this.contests.clear();
             KeyEventManagement.getInstance().remove(prepareEventsPackage);
             KeyEventManagement.getInstance().remove(testEventsPackage);
-            Util.delay(2000);
             int score = this.processModel.getScore();
-            this.processModel.setContestsResult(score >= scoreSpec ? ProcessModel.PASS : ProcessModel.FAIL);
+            this.processModel.setContestsResult(score >= scoreSpec && !this.isCancel()?
+                    ProcessModel.PASS : ProcessModel.FAIL);
             updateLog();
-            this.soundPlayer.sayResultTest(score, this.processlHandle.isPass());
-            if (this.processlHandle.isPass()) {
+            this.soundPlayer.sayResultTest(score, this.processHandle.isPass());
+            if (this.processHandle.isPass()) {
                 MCUSerialHandler.getInstance().sendLedGreenOn();
             } else {
                 MCUSerialHandler.getInstance().sendLedRedOn();
@@ -151,10 +155,10 @@ public abstract class AbsSaHinhMode<V extends AbsModeView> extends AbsTestMode<V
 //                }
 //            }
             endTest();
-            this.processlHandle.setTesting(false);
+            this.processHandle.setTesting(false);
             this.processModel.setId("");
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(this.getClassName(), "end", e);
         }
     }
 
@@ -162,17 +166,6 @@ public abstract class AbsSaHinhMode<V extends AbsModeView> extends AbsTestMode<V
     protected void endTest() {
     }
 
-    @Override
-    public void modeInit() {
-        super.modeInit();
-        this.yardModelHandle.start();
-    }
-
-    @Override
-    public void modeEndInit() {
-        super.modeEndInit();
-        this.yardModelHandle.stop();
-    }
 
     @Override
     protected void contestDone() {

@@ -1,25 +1,29 @@
 package com.nextone.contest.impCondition;
 
-import android.os.Handler;
-
 import com.nextone.common.ConstKey;
 import com.nextone.contest.AbsCondition;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class CheckWheelCrossedLine extends AbsCondition {
 
-    private final Handler handler;
+    private Timer timer;
     private final ConditionActionListener actionListener;
-    private final Runnable timerRunnable;
     private final int interval; // Interval in milliseconds
 
-    private boolean running;
 
     public CheckWheelCrossedLine(int spec, ConditionActionListener actionListener) {
         this.actionListener = actionListener;
         this.interval = spec * 1000; // Convert seconds to milliseconds
-        this.handler = new Handler();
+    }
 
-        this.timerRunnable = new Runnable() {
+    private synchronized void startTimer() {
+        if (timer != null) {
+            return;
+        }
+        this.timer = new Timer();
+        this.timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 if (stop) {
@@ -28,31 +32,21 @@ public class CheckWheelCrossedLine extends AbsCondition {
                 }
                 setErrorcode(ConstKey.ERR.WHEEL_CROSSED_LINE);
             }
-        };
+        }, 0, interval); // Lặp lại mỗi giây
     }
 
-    @Override
-    public void start() {
-        super.start();
-        // Ensure the timer starts when the condition requires it
-        if (!stop && !running) {
-            startTimer();
-            setErrorcode(ConstKey.ERR.WHEEL_CROSSED_LINE);
-        }
-    }
 
     @Override
     public void stop() {
-        stopTimer();
         super.stop();
+        stopTimer();
     }
 
     @Override
     protected boolean checkCondition() {
         if (actionListener.activate()) {
-            if (!stop && !running) {
+            if (!stop && timer == null) {
                 startTimer();
-                setErrorcode(ConstKey.ERR.WHEEL_CROSSED_LINE);
             }
             return false;
         } else {
@@ -61,13 +55,10 @@ public class CheckWheelCrossedLine extends AbsCondition {
         return true;
     }
 
-    private void startTimer() {
-        handler.postDelayed(timerRunnable, interval);
-        this.running = true;
-    }
-
-    private void stopTimer() {
-        handler.removeCallbacks(timerRunnable);
-        this.running = false;
+    private synchronized void stopTimer() {
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
     }
 }

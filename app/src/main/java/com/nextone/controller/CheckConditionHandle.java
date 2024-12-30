@@ -27,7 +27,7 @@ public class CheckConditionHandle {
         this.contestDataModel = contestDataModel;
     }
 
-    public void addConditon(AbsCondition condition) {
+    public void addCondition(AbsCondition condition) {
         if (condition == null) {
             return;
         }
@@ -53,7 +53,7 @@ public class CheckConditionHandle {
         }
     }
 
-    public boolean isTestCondisionsFailed() {
+    public boolean isTestConditionsFailed() {
         for (AbsCondition condition : conditions) {
             if (condition.isTestCondisionsFailed()) {
                 return true;

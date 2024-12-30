@@ -43,22 +43,22 @@ public class CarStatusView extends AbsGridLayoutView {
     }
 
     private void init(){
-        super.init(2,5,R.layout.car_status,R.id.carStatus,android.R.color.holo_purple);
+        super.init(2,5,R.layout.car_status,R.id.carStatus,android.R.color.transparent);
         this.nt = findViewById(R.id.nt);
         this.nt.setImage(R.drawable.nt);
-        this.nt.setTextLabel("NT");
+        this.nt.setTextLabel("Xi nhan trái");
         this.np = findViewById(R.id.np);
         this.np.setImage(R.drawable.np);
-        this.np.setTextLabel("NP");
+        this.np.setTextLabel("Xi nhan phải");
         this.cm = findViewById(R.id.cm);
         this.cm.setImage(R.drawable.cm);
-        this.cm.setTextLabel("CM");
+        this.cm.setTextLabel("Chết máy");
         this.pt = findViewById(R.id.pt);
         this.pt.setImage(R.drawable.pt);
-        this.pt.setTextLabel("PT");
+        this.pt.setTextLabel("Phanh tay");
         this.at = findViewById(R.id.at);
         this.at.setImage(R.drawable.at);
-        this.at.setTextLabel("AT");
+        this.at.setTextLabel("Dây an toàn");
         this.s1 = findViewById(R.id.s1);
         this.s1.setImage(R.drawable.point);
         this.s1.setTextLabel("S1");

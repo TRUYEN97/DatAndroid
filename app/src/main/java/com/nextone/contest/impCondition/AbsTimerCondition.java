@@ -1,7 +1,5 @@
 package com.nextone.contest.impCondition;
 
-import android.os.Handler;
-
 import com.nextone.contest.AbsCondition;
 
 import java.util.Timer;
@@ -53,7 +51,9 @@ public abstract class AbsTimerCondition extends AbsCondition {
                             importantError.setIsImportantError();
                         }
                     }
-                    action();
+                    if (!stop) {
+                        action();
+                    }
                     if (justOneTime) {
                         stop();
                     }
@@ -62,7 +62,7 @@ public abstract class AbsTimerCondition extends AbsCondition {
                     resetTimer();
                 }
             }
-        }, 0, interval); // Lặp lại mỗi giây
+        }, interval, interval); // Lặp lại mỗi giây
     }
 
     @Override
@@ -71,7 +71,7 @@ public abstract class AbsTimerCondition extends AbsCondition {
         stopTimer();
     }
 
-    private void stopTimer() {
+    private synchronized void stopTimer() {
         if (timer != null) {
             timer.cancel();
             timer = null;

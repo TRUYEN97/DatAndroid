@@ -6,6 +6,9 @@ import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.GridLayout;
+
+import androidx.core.content.ContextCompat;
+
 import com.nextone.model.input.CarModel;
 import com.nextone.input.serial.MCUSerialHandler;
 import com.nextone.datandroid.customLayout.impConstrainLayout.modeView.interfaces.IStart;
@@ -52,10 +55,10 @@ public abstract class AbsGridLayoutView extends GridLayout implements IStart{
         setRowCount(rowCount);
         LayoutInflater.from(getContext()).inflate(layoutId, this, true);
         GradientDrawable background = (GradientDrawable) findViewById(layoutBackground).getBackground();
-        background.setColor(getResources().getColor(color));
+        background.setColor(ContextCompat.getColor(getContext(),color));
         this.runnable = () -> {
-            update();
             this.running = true;
+            this.update();
             this.handlerTimer.postDelayed(this.runnable, timeUpdate);
         };
     }

@@ -4,6 +4,8 @@
  */
 package com.nextone.pretreatment;
 
+import android.util.Log;
+
 import com.nextone.common.Util;
 import com.nextone.input.serial.MCUSerialHandler;
 import com.nextone.interfaces.IStarter;
@@ -65,8 +67,6 @@ public class KeyEventManagement implements IStarter {
                         continue;
                     }
                     key = keys.poll();
-                    System.out.println(key);
-
                     for (int i = this.keyEvensPackages.size() - 1; i >= 0; i--) {
                         evensPackage = this.keyEvensPackages.get(i);
                         if (evensPackage == null) {
@@ -78,7 +78,7 @@ public class KeyEventManagement implements IStarter {
                         }
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    Log.e("KeyEventManagement", "start", e);
                 }
             }
             running = false;
