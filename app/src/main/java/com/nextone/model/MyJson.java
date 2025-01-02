@@ -11,7 +11,7 @@ public class MyJson extends JSONObject {
         super(json);
     }
 
-    public MyJson() throws JSONException {
+    public MyJson(){
         super();
     }
 

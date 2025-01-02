@@ -6,6 +6,8 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
@@ -13,6 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.camera.view.PreviewView;
 
+import com.nextone.controller.ProcessModelHandle;
+import com.nextone.controller.SettingTab;
 import com.nextone.datandroid.R;
 import com.nextone.datandroid.customLayout.AbsCustomConstraintLayout;
 import com.nextone.datandroid.customLayout.impConstrainLayout.modeView.interfaces.IStart;
@@ -38,6 +42,8 @@ public class BaseModeLayout extends AbsCustomConstraintLayout implements IStart 
     @Getter
     private PreviewView previewView;
 
+    private SettingTab settingTab;
+
 
     public BaseModeLayout(@NonNull Context context) {
         super(context);
@@ -58,6 +64,15 @@ public class BaseModeLayout extends AbsCustomConstraintLayout implements IStart 
         this.socketAlam.setStatus(YardModelHandle.getInstance().isConnect());
         this.sensorAlam.setStatus(MCUSerialHandler.getInstance().isConnect());
         this.handler.postDelayed(this::update, 100);
+    }
+
+    public void setSettingTab(SettingTab settingTab) {
+        this.settingTab = settingTab;
+        findViewById(R.id.btSetting).setOnClickListener(v -> {
+            if (settingTab != null && !ProcessModelHandle.getInstance().isTesting()) {
+                addView(settingTab.getView());
+            }
+        });
     }
 
     private boolean running = false;
@@ -100,9 +115,6 @@ public class BaseModeLayout extends AbsCustomConstraintLayout implements IStart 
         lbSetting.setOnColorResource(android.R.color.holo_blue_dark);
         lbSetting.setOffColorResource(android.R.color.holo_blue_light);
         lbSetting.setButtonMode(true);
-        lbSetting.setOnClickListener(v -> {
-
-        });
         GradientDrawable background = new GradientDrawable();
         background.setColor(getResources().getColor(android.R.color.darker_gray, getContext().getTheme()));
         background.setCornerRadii(new float[]{
@@ -112,6 +124,19 @@ public class BaseModeLayout extends AbsCustomConstraintLayout implements IStart 
                 25f, 25f
         });
         findViewById(R.id.informationView).setBackground(background);
+    }
+
+    @Override
+    public void addView(View view) {
+        try {
+            if (view == null) {
+                return;
+            }
+            this.frameLayout.removeAllViews();
+            this.frameLayout.addView(view);
+        } catch (Exception e) {
+            Log.e(this.getClass().getSimpleName(), "addView", e);
+        }
     }
 
 }

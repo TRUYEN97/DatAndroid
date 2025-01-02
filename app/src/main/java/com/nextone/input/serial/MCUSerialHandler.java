@@ -195,7 +195,7 @@ public class MCUSerialHandler {
             }
             return this.serialHandler.send(config);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Log.e(getClass().getSimpleName(),"sendConfig", ex);
             return false;
         }
     }
@@ -205,9 +205,10 @@ public class MCUSerialHandler {
             if (config == null) {
                 return false;
             }
-            String configString = MyObjectMapper.writeValueAsString(config);
+            String configString = MyObjectMapper.toJsonString(config);
             return this.serialHandler.send(configString);
         } catch (Exception ex) {
+            Log.e(getClass().getSimpleName(),"sendConfig", ex);
             return false;
         }
     }

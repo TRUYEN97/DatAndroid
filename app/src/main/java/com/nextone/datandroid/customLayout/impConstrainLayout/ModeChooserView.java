@@ -33,7 +33,28 @@ public class ModeChooserView extends AbsCustomConstraintLayout {
         findViewById(R.id.btDT).setOnClickListener(listener);
     }
 
+    public void setBtDTB1Onclick(View.OnClickListener listener){
+        findViewById(R.id.btDTB1).setOnClickListener(listener);
+    }
+
+
     public void setBtShOnclick(View.OnClickListener listener){
         findViewById(R.id.btSh).setOnClickListener(listener);
     }
+
+    public void setBtShB1Onclick(View.OnClickListener listener){
+        findViewById(R.id.btShB1).setOnClickListener(listener);
+    }
+
+    public void setBtShCOnclick(View.OnClickListener listener){
+        findViewById(R.id.btShC).setOnClickListener(listener);
+    }
+
+    public void setBtShDOnclick(View.OnClickListener listener){
+        findViewById(R.id.btShD).setOnClickListener(listener);
+    }
+    public void setBtShEOnclick(View.OnClickListener listener){
+        findViewById(R.id.btShE).setOnClickListener(listener);
+    }
+
 }

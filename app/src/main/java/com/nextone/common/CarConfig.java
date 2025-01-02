@@ -3,7 +3,9 @@ package com.nextone.common;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.nextone.model.MyContextManagement;
+import com.nextone.model.MyJson;
 import com.nextone.model.config.MCU_CONFIG_MODEL;
 
 import org.json.JSONException;
@@ -13,7 +15,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
 public class CarConfig {
 
     private static final String MCU_KEY = "MCU";
@@ -25,12 +26,12 @@ public class CarConfig {
     private static final String YARD_PORT = "yardPort";
     private static final String MODE_INDEX = "modeIndex";
     private static final String CENTER_NAME = "centerName";
-    private static final String YARDUSERNAME = "yardusername";
-    private static final String YARDPASSWORD = "yardpassword";
+    private static final String YARD_USER_NAME = "yardusername";
+    private static final String YARD_PASS_WORD = "yardpassword";
     public static final String TAG = "CarConfig";
     private static volatile CarConfig instance;
 
-    private JSONObject jsonb;
+    private MyJson jsonb;
     private final String path;
 
     private CarConfig() {
@@ -44,7 +45,7 @@ public class CarConfig {
             }
             String data = readFile(file);
             if (data != null && !data.isBlank()) {
-                this.jsonb = new JSONObject(data);
+                this.jsonb = new MyJson(data);
             } else {
                 setDefaultConfig();
             }
@@ -77,7 +78,7 @@ public class CarConfig {
     }
 
     public String getExamId() {
-        return getString(EXAM_ID, "0");
+        return this.jsonb.getString(EXAM_ID, "0");
     }
 
     public String getTestStatusValue() {
@@ -106,9 +107,9 @@ public class CarConfig {
         }
     }
 
-    public void setExamId(String examid) {
+    public void setExamId(String examId) {
         try {
-            this.jsonb.put(EXAM_ID, examid == null ? "0" : examid);
+            this.jsonb.put(EXAM_ID, examId == null ? "0" : examId);
             update();
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -120,7 +121,7 @@ public class CarConfig {
             return;
         }
         try {
-            jsonb.put(MCU_KEY, MyObjectMapper.convertValue(mcu_config_model, JSONObject.class));
+            jsonb.put(MCU_KEY, new JSONObject(new Gson().toJson(mcu_config_model)));
             update();
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -131,7 +132,7 @@ public class CarConfig {
         try {
             if (jsonb.has(MCU_KEY)) {
                 JSONObject ob = jsonb.getJSONObject(MCU_KEY);
-                MCU_CONFIG_MODEL mcu_config_model = MyObjectMapper.map(ob, MCU_CONFIG_MODEL.class);
+                MCU_CONFIG_MODEL mcu_config_model = new Gson().fromJson(ob.toString(), MCU_CONFIG_MODEL.class);
                 if (mcu_config_model != null) {
                     return mcu_config_model;
                 }
@@ -180,16 +181,16 @@ public class CarConfig {
     }
 
     public String getYardPassword() {
-        return this.getString(YARDPASSWORD, "f3cea34ed1507b50f09c236045bb1067");
+        return this.jsonb.getString(YARD_PASS_WORD, "f3cea34ed1507b50f09c236045bb1067");
     }
 
     public String getYardUser() {
-        return this.getString(YARDUSERNAME, "client");
+        return this.jsonb.getString(YARD_USER_NAME, "client");
     }
 
     private void setDefaultConfig() {
         if (this.jsonb == null) {
-            this.jsonb = new JSONObject();
+            this.jsonb = new MyJson();
         }
         try {
             this.jsonb.put(MCU_KEY, new MCU_CONFIG_MODEL());
@@ -200,8 +201,8 @@ public class CarConfig {
             this.jsonb.put(YARD_IP, "192.168.137.1");
             this.jsonb.put(YARD_PORT, 6868);
             this.jsonb.put(MODE_INDEX, 0);
-            this.jsonb.put(YARDPASSWORD, "f3cea34ed1507b50f09c236045bb1067");
-            this.jsonb.put(YARDUSERNAME, "client");
+            this.jsonb.put(YARD_PASS_WORD, "f3cea34ed1507b50f09c236045bb1067");
+            this.jsonb.put(YARD_USER_NAME, "client");
             update();
         } catch (Exception e) {
             Log.e(TAG, "setDefaultConfig:", e);
@@ -217,7 +218,7 @@ public class CarConfig {
         }
     }
 
-    private void writeFile(String path, String content) throws IOException {
+    private void writeFile(String path, String content){
         try {
             File file = new File(path);
             if (!file.exists()) {
@@ -253,7 +254,7 @@ public class CarConfig {
     }
 
     public String getPassword() {
-        return getString(PASSWORD, "e10adc3949ba59abbe56e057f20f883e");
+        return this.jsonb.getString(PASSWORD, "e10adc3949ba59abbe56e057f20f883e");
     }
 
     public void setPassword(String pw) {
@@ -265,20 +266,11 @@ public class CarConfig {
         }
     }
 
-    public String getString(String key, String defaultValue) {
-        try {
-            return jsonb.has(key) ? jsonb.getString(key) : defaultValue;
-        } catch (JSONException e) {
-            return defaultValue;
-        }
-    }
-
     public String getYardIp() {
-        return getString(YARD_IP, "192.168.1.168");
+        return this.jsonb.getString(YARD_IP, "192.168.1.168");
     }
 
     public int getYardPort() {
-        return 6868;
+        return this.jsonb.getInt(YARD_PORT, 6868);
     }
-    // Các hàm getter/setter khác tương tự...
 }

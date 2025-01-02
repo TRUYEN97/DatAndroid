@@ -163,6 +163,13 @@ public class SoundPlayer {
         play(R.raw.welcome);
     }
 
+    public void changeSuccess() {
+        play(R.raw.change_sucess);
+    }
+    public void changeFault() {
+        play(R.raw.error);
+    }
+
     private static class SequentialAudioPlayer {
         private final Context context;
         private final Queue<Integer> audioQueue;

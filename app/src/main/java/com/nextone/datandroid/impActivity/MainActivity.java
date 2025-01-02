@@ -12,11 +12,13 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.nextone.controller.Core;
 import com.nextone.controller.ModeChooser;
+import com.nextone.controller.SettingTab;
 import com.nextone.datandroid.MyActivity;
 import com.nextone.datandroid.R;
 import com.nextone.datandroid.customLayout.impConstrainLayout.BaseModeLayout;
 import com.nextone.input.camera.CameraModule;
 import com.nextone.model.MyContextManagement;
+
 public class MainActivity extends MyActivity {
     private CameraModule cameraModule;
     @Override
@@ -33,9 +35,10 @@ public class MainActivity extends MyActivity {
         MyContextManagement.getInstance().setAplicationContext(getApplicationContext());
         Core.getInstance().start();
         BaseModeLayout baseModeLayout = findViewById(R.id.ModeView);
+        baseModeLayout.setSettingTab(new SettingTab(this));
         baseModeLayout.start();
         ModeChooser modeChooser = new ModeChooser();
-        modeChooser.setFrameLayout(baseModeLayout.getFrameLayout());
+        modeChooser.setFrameLayout(baseModeLayout);
         modeChooser.setBtMode(baseModeLayout.getBtMode());
         modeChooser.show();
         cameraModule = new CameraModule();

@@ -7,6 +7,7 @@ package com.nextone.common;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,10 +29,13 @@ public class MyObjectMapper {
 
     private final ObjectMapper objectMapper;
 
+    private final Gson gson;
+
     private MyObjectMapper() {
         mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         objectMapper = new ObjectMapper();
+        gson = new Gson();
 //        objectMapper.registerModules(new JavaTimeModule());
 //        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -71,12 +75,12 @@ public class MyObjectMapper {
         return objectMapper.objectMapper.convertValue(object, clazz);
     }
 
-    public static String writeValueAsString(Object object) throws JsonProcessingException {
+    public static String toJsonString(Object object) throws JsonProcessingException {
         if (object == null) {
             return null;
         }
         MyObjectMapper objectMapper = new MyObjectMapper();
-        return objectMapper.objectMapper.writeValueAsString(object);
+        return objectMapper.gson.toJson(object);
     }
 
     public static void update(final Object source, Object target) {

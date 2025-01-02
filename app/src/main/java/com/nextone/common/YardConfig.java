@@ -90,7 +90,7 @@ public class YardConfig {
 
     public synchronized final void update() {
         try {
-            this.writeFile(this.path, MyObjectMapper.writeValueAsString(this.yardConfigModel));
+            this.writeFile(this.path, MyObjectMapper.toJsonString(this.yardConfigModel));
         } catch (Exception e) {
             Log.e(getClass().getName(), "update:", e);
         }
