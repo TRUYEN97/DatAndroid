@@ -7,10 +7,13 @@ package com.nextone.model.yardConfigMode;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Getter;
+
 /**
  *
  * @author Admin
  */
+@Getter
 public class YardRankConfig {
 
     private final ContestConfig dungXeChoNg;
@@ -28,7 +31,7 @@ public class YardRankConfig {
     private final ContestConfig duongTau;
 
     public YardRankConfig() {
-        this.dungXeChoNg = new ContestConfig(4, 2.5, 0, 50);
+        this.dungXeChoNg = new ContestConfig(3.3, 2.5, 0, 50);
         this.dungXeNgangDoc = new ContestConfig(20, 2.5, 0, 50);
         this.ngaTu1 = new ContestConfig(25, 2.5, 0, 55);
         this.ngaTu2 = new ContestConfig(25, 2.5, 0, 35);
@@ -52,58 +55,6 @@ public class YardRankConfig {
         this.doXeDoc.add(new ContestConfig(5, 0, 36, 56, 8));
         this.doXeNgang.add(new ContestConfig(3, 0, 0, 110, 9));
         this.doXeNgang.add(new ContestConfig(3, 0, 110, 120, 10));
-    }
-
-    public ContestConfig getTangToc() {
-        return tangToc;
-    }
-
-    public ContestConfig getDungXeChoNg() {
-        return dungXeChoNg;
-    }
-
-    public ContestConfig getDungXeNgangDoc() {
-        return dungXeNgangDoc;
-    }
-
-    public ContestConfig getNgaTu1() {
-        return ngaTu1;
-    }
-
-    public ContestConfig getNgaTu2() {
-        return ngaTu2;
-    }
-
-    public ContestConfig getNgaTu3() {
-        return ngaTu3;
-    }
-
-    public ContestConfig getNgaTu4() {
-        return ngaTu4;
-    }
-
-    public ContestConfig getDuongTau() {
-        return duongTau;
-    }
-
-    public List<ContestConfig> getDuongVuongGoc() {
-        return duongVuongGoc;
-    }
-    
-    public List<ContestConfig> getVetBanhXe() {
-        return vetBanhXe;
-    }
-
-    public List<ContestConfig> getDuongS() {
-        return duongS;
-    }
-
-    public List<ContestConfig> getDoXeDoc() {
-        return doXeDoc;
-    }
-
-    public List<ContestConfig> getDoXeNgang() {
-        return doXeNgang;
     }
 
 }

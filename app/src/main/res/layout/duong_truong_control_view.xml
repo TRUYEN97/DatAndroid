@@ -5,7 +5,6 @@
     android:id="@+id/duongTruongControl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/rounded_panel"
     app:columnCount="4"
     app:rowCount="2">
     <com.nextone.datandroid.customLayout.impConstrainLayout.widget.MyImageLabel

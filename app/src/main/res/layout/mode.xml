@@ -28,12 +28,45 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="4dp"
         android:layout_marginBottom="4dp"
-        android:background="@drawable/rounded_panel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/boardModeView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.516"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/camera">
+
+            <com.nextone.datandroid.customLayout.impConstrainLayout.widget.MyImageLabel
+                android:id="@+id/sensorAlam"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_margin="4dp"
+                android:gravity="center" />
+
+            <com.nextone.datandroid.customLayout.impConstrainLayout.widget.MyImageLabel
+                android:id="@+id/socketAlam"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_margin="4dp"
+                android:gravity="center" />
+
+            <com.nextone.datandroid.customLayout.impConstrainLayout.widget.MyImageLabel
+                android:id="@+id/btSetting"
+                android:layout_width="61dp"
+                android:layout_height="match_parent"
+                android:layout_margin="4dp"
+                android:gravity="center" />
+        </LinearLayout>
 
         <androidx.camera.view.PreviewView
             android:id="@+id/camera"
@@ -51,12 +84,12 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/btMode"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
             android:backgroundTint="#2196F3"
             android:text="Mode"
             android:textSize="12sp"
@@ -64,34 +97,25 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+            app:layout_constraintVertical_bias="0.0" />
 
-        <com.nextone.datandroid.customLayout.impConstrainLayout.widget.MyImageLabel
-            android:id="@+id/sensorAlam"
-            android:layout_width="60dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+        <ImageView
+            android:id="@+id/imgViewLogo"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.25"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/camera"
-            app:layout_constraintVertical_bias="0.007" />
+            app:layout_constraintTop_toBottomOf="@+id/btMode"
+            app:layout_constraintVertical_bias="0.0"
+            app:srcCompat="@drawable/loading" />
 
-        <com.nextone.datandroid.customLayout.impConstrainLayout.widget.MyImageLabel
-            android:id="@+id/socketAlam"
-            android:layout_width="60dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/camera"
-            app:layout_constraintVertical_bias="0.007" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

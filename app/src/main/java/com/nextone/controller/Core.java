@@ -6,6 +6,7 @@ package com.nextone.controller;
 
 import com.nextone.controller.modeController.ModeManagement;
 import com.nextone.input.serial.MCUSerialHandler;
+import com.nextone.input.socket.YardModelHandle;
 import com.nextone.output.SoundPlayer;
 import com.nextone.pretreatment.KeyEventManagement;
 import com.nextone.pretreatment.KeyEventsPackage;
@@ -26,7 +27,6 @@ public class Core {
         this.modeManagement = ModeManagement.getInstance();
         this.eventManagement = KeyEventManagement.getInstance();
         this.eventsPackage = new KeyEventsPackage(getClass().getSimpleName());
-        addMode();
     }
 
     public static Core getInstance() {
@@ -42,15 +42,6 @@ public class Core {
         return ins;
     }
 
-    private void addMode() {
-//        this.modeManagement.addMode(new DT_B_MODE(null, false));
-//        this.modeManagement.addMode(new SH_B_MODE(null, false));
-//        this.modeManagement.addMode(new SH_B1_AUTO_MODE(hinhView));
-//        this.modeManagement.addMode(new SH_C_MODE(hinhView));
-//        this.modeManagement.addMode(new SH_D_MODE(hinhView));
-//        this.modeManagement.addMode(new SH_E_MODE(hinhView));
-    }
-
     private boolean first = true;
 
     public void start() {
@@ -60,6 +51,7 @@ public class Core {
         this.first = false;
         MCUSerialHandler.getInstance().start();
         SoundPlayer.getInstance().sayWelcome();
+        YardModelHandle.getInstance().start();
         KeyEventManagement.getInstance().start();
         this.eventManagement.start();
         this.eventManagement.addKeyEventBackAge(this.eventsPackage);

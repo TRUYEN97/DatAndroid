@@ -38,10 +38,9 @@ public abstract class AbsModeView extends AbsCustomConstraintLayout implements I
     @Override
     protected void init(int resource, boolean attachToRoot) {
         super.init(resource, attachToRoot);
-        this.runnable = ()->{
-            this.running =true;
+        this.runnable = () -> {
             this.updateUI();
-            this.handler.postDelayed(this.runnable,intervalMs);
+            this.handler.postDelayed(this.runnable, intervalMs);
         };
     }
 
@@ -53,13 +52,15 @@ public abstract class AbsModeView extends AbsCustomConstraintLayout implements I
 
     @Override
     public void start() {
+        if (this.running) return;
         this.handler.postDelayed(runnable, intervalMs);
+        this.running = true;
     }
 
     @Override
     public void stop() {
         this.handler.removeCallbacks(runnable);
-        this.running =false;
+        this.running = false;
     }
 
     @Override

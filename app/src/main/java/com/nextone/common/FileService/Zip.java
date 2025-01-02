@@ -4,6 +4,8 @@
  */
 package com.nextone.common.FileService;
 
+import android.util.Log;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -64,7 +66,7 @@ public class Zip {
                             Files.copy(path, zs);
                             zs.closeEntry();
                         } catch (IOException e) {
-                            System.err.println(e);
+                            Log.e(getClass().getName(), "zipFolder", e);
                         }
                     });
         }
@@ -90,7 +92,7 @@ public class Zip {
             }
             return true;
         } catch (IOException ex) {
-            ex.printStackTrace();
+            Log.e(getClass().getName(), "zipFile", ex);
             return false;
         }
     }
@@ -122,7 +124,7 @@ public class Zip {
             }
             return true;
         } catch (IOException ex) {
-            ex.printStackTrace();
+            Log.e(getClass().getName(), "unzip", ex);
             return false;
         }
     }

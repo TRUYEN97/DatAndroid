@@ -21,7 +21,6 @@ import com.nextone.model.modelTest.process.ProcessModel;
 import com.nextone.model.yardConfigMode.YardConfigModel;
 import com.nextone.model.yardConfigMode.YardRankConfig;
 import com.nextone.pretreatment.IKeyEvent;
-import com.nextone.pretreatment.KeyEventManagement;
 
 import java.util.List;
 import java.util.Map;
@@ -123,10 +122,7 @@ public abstract class AbsSaHinhMode<V extends AbsModeView> extends AbsTestMode<V
     @Override
     public void end() {
         try {
-            this.conditionHandle.stop();
-            this.contests.clear();
-            KeyEventManagement.getInstance().remove(prepareEventsPackage);
-            KeyEventManagement.getInstance().remove(testEventsPackage);
+            super.end();
             int score = this.processModel.getScore();
             this.processModel.setContestsResult(score >= scoreSpec && !this.isCancel()?
                     ProcessModel.PASS : ProcessModel.FAIL);
@@ -137,23 +133,6 @@ public abstract class AbsSaHinhMode<V extends AbsModeView> extends AbsTestMode<V
             } else {
                 MCUSerialHandler.getInstance().sendLedRedOn();
             }
-//            if (isOnline) {
-//                int rs = ApiService.FAIL;
-//                for (int i = 0; i < 3; i++) {
-//                    rs = upTestDataToServer();
-//                    if (rs == ApiService.PASS) {
-//                        break;
-//                    }
-//                }
-//                if (rs == ApiService.DISCONNECT) {
-//                    String id = processModel.getId();
-//                    this.soundPlayer.sendlostConnect();
-//                    this.fileTestService.saveBackupLog(id, processlHandle.toProcessModelJson().toString(),
-//                            CameraRunner.getInstance().getImage());
-//                } else if (rs == ApiService.FAIL) {
-//                    this.soundPlayer.sendResultFailed();
-//                }
-//            }
             endTest();
             this.processHandle.setTesting(false);
             this.processModel.setId("");

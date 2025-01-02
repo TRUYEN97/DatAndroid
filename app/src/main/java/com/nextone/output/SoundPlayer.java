@@ -4,8 +4,6 @@ import android.content.Context;
 import android.media.MediaPlayer;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
 import com.nextone.datandroid.R;
 import com.nextone.model.MyContextManagement;
 
@@ -96,10 +94,8 @@ public class SoundPlayer {
         });
     }
 
-    private synchronized void playSequential(int... resId) {
-//        threadPool.execute(() -> {
+    private synchronized void playSequential(int resId) {
             this.sequentialPlayer.addToQueue(resId);
-//        });
     }
 
     public void contestName(int soundId, boolean contestation) {
@@ -171,6 +167,7 @@ public class SoundPlayer {
         private final Context context;
         private final Queue<Integer> audioQueue;
         private boolean isPlaying;
+        private Thread thread;
 
         private SequentialAudioPlayer(Context context) {
             this.context = context;
@@ -178,37 +175,48 @@ public class SoundPlayer {
             this.isPlaying = false;
         }
 
-        public synchronized void addToQueue(@NonNull int... resIds) {
-            for (int resId : resIds) {
-                audioQueue.add(resId);
-                if (!this.isPlaying) {
-                    playNext();
-                }
+
+        public synchronized void addToQueue(int resId) {
+            if (resId < 0) return;
+            audioQueue.add(resId);
+            if (thread == null) {
+                thread = new Thread(this::playNext);
+                thread.start();
             }
         }
 
         private void playNext() {
             MediaPlayer mediaPlayer = null;
             try {
-                Integer resId = audioQueue.poll();
-                if (resId != null) {
-                    this.isPlaying = true;
-                    mediaPlayer = MediaPlayer.create(context, resId);
-                    if (mediaPlayer != null) {
-                        mediaPlayer.setOnCompletionListener(mp -> {
-                            mp.release();
-                            this.isPlaying = false;
-                            playNext();
-                        });
-                        mediaPlayer.start();
+                while (!audioQueue.isEmpty()) {
+                    Integer resId = audioQueue.poll();
+                    if (resId != null) {
+                        this.isPlaying = true;
+                        mediaPlayer = MediaPlayer.create(context, resId);
+                        if (mediaPlayer != null) {
+                            mediaPlayer.setOnCompletionListener(mp -> {
+                                mp.release();
+                                this.isPlaying = false;
+                            });
+                            mediaPlayer.setOnErrorListener((mp, what, extra) -> {
+                                mp.release();
+                                this.isPlaying = false;
+                                return false;
+                            });
+                            mediaPlayer.start();
+                            while (this.isPlaying) {
+                                try {
+                                    Thread.sleep(100);
+                                } catch (InterruptedException ignored) {
+
+                                }
+                            }
+                        }
                     }
                 }
+                this.thread = null;
             } catch (Exception e) {
                 Log.e("SoundPlayer.SequentialAudioPlayer", "Error playing sound:", e);
-            } finally {
-                if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
-                    mediaPlayer.release();
-                }
             }
         }
 

@@ -36,7 +36,7 @@ public abstract class AbsTimerCondition extends AbsCondition {
     }
 
     private void startTimer() {
-        if (timer != null) {
+        if (timer != null || stop) {
             return;
         }
         this.timer = new Timer();

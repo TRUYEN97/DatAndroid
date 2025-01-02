@@ -10,15 +10,21 @@ import com.nextone.datandroid.customLayout.grid.impGridLayout.TestValueView;
 import com.nextone.datandroid.customLayout.impConstrainLayout.widget.MyImageLabel;
 import com.nextone.input.serial.MCUSerialHandler;
 import com.nextone.model.modelTest.process.TestDataViewModel;
+import com.nextone.model.input.CarModel;
 import com.nextone.contest.AbsContest;
 import com.nextone.common.ConstKey;
 
 public class SaHinhView extends AbsModeView{
 
     private TestDataViewModel dataViewModel;
+
+    private CarModel carModel;
     private CarStatusView carStatusView;
     private TestValueView testValueView;
-    private MyImageLabel myImageLabel;
+    private MyImageLabel lbContestName;
+    private MyImageLabel lbCb1;
+    private MyImageLabel lbCb2;
+    private MyImageLabel lbCb3;
     public SaHinhView(Context context) {
         super(context, R.layout.sa_hinh, true);
     }
@@ -35,29 +41,57 @@ public class SaHinhView extends AbsModeView{
     protected void init(int resource, boolean attachToRoot) {
         super.init(resource, attachToRoot);
         findViewById(R.id.btStart).setOnClickListener(v -> {
-            MCUSerialHandler.getInstance().getModel().setRemoteValue(ConstKey.KEY_BOARD.CONTEST.XP);
+            this.getCarModel().setRemoteValue(ConstKey.KEY_BOARD.CONTEST.XP);
         });
         findViewById(R.id.btEndTest).setOnClickListener(v -> {
-            MCUSerialHandler.getInstance().getModel().setRemoteValue(ConstKey.KEY_BOARD.CONTEST.KT);
+            this.getCarModel().setRemoteValue(ConstKey.KEY_BOARD.CONTEST.KT);
         });
-        this.dataViewModel = ProcessModelHandle.getInstance().getTestDataModel();
-        this.myImageLabel = findViewById(R.id.myImageLabel);
+        this.lbContestName = findViewById(R.id.myImageLabel);
+        this.lbContestName.setTextLabel("Bài thi hiện tại");
         this.carStatusView = findViewById(R.id.carStatusView);
         this.testValueView = findViewById(R.id.testValueView);
+        this.lbCb1 = findViewById(R.id.lbT1);
+        this.lbCb1.setTextLabel("Cảm biến 1");
+        this.lbCb2 = findViewById(R.id.lbT2);
+        this.lbCb2.setTextLabel("Cảm biến 2");
+        this.lbCb3 = findViewById(R.id.lbT3);
+        this.lbCb3.setTextLabel("Cảm biến 3");
+
+    }
+
+    private CarModel getCarModel() {
+        if (this.carModel == null) {
+            this.carModel = MCUSerialHandler.getInstance().getModel();
+        }
+        return this.carModel;
+    }
+
+    private TestDataViewModel getDataViewModel() {
+        if (this.dataViewModel == null) {
+            this.dataViewModel = ProcessModelHandle.getInstance().getTestDataModel();
+        }
+        return this.dataViewModel;
     }
 
     @Override
     protected void updateUI() {
-        if (this.dataViewModel == null) {
-            return;
+        TestDataViewModel testDataViewModel = getDataViewModel();
+        if (testDataViewModel != null) {
+            AbsContest contest = testDataViewModel.getContest();
+            if(contest != null){
+                this.lbContestName.setTextValue(contest.getName());
+            }else{
+                this.lbContestName.setTextValue("");
+            }
+            this.carStatusView.update();
+            this.testValueView.update();
         }
-        AbsContest contest = this.dataViewModel.getContest();
-        if(contest != null){
-            this.myImageLabel.setTextValue(contest.getName());
-        }else{
-            this.myImageLabel.setTextValue("");
+        CarModel carModel = getCarModel();
+        if (carModel != null) {
+            this.lbCb1.setStatus(carModel.isT1());
+            this.lbCb2.setStatus(carModel.isT2());
+            this.lbCb3.setStatus(carModel.isT3());
         }
-        this.carStatusView.update();
-        this.testValueView.update();
+
     }
 }

@@ -7,7 +7,6 @@ package com.nextone.mode;
 import android.util.Log;
 
 import com.nextone.common.ConstKey;
-import com.nextone.common.Util;
 import com.nextone.contest.AbsContest;
 import com.nextone.contest.impCondition.ContainContestChecker;
 import com.nextone.contest.impCondition.OnOffImp.CheckCM;
@@ -15,7 +14,6 @@ import com.nextone.contest.impCondition.OnOffImp.CheckRPM;
 import com.nextone.datandroid.customLayout.impConstrainLayout.modeView.AbsModeView;
 import com.nextone.model.modelTest.process.ProcessModel;
 import com.nextone.pretreatment.IKeyEvent;
-import com.nextone.pretreatment.KeyEventManagement;
 
 import java.util.List;
 import java.util.Map;
@@ -81,27 +79,6 @@ public abstract class AbsDuongTruongMode<V extends AbsModeView> extends AbsTestM
         if (id == null || id.isBlank()) {
             return false;
         }
-//        if (isOnline) {
-//            if (!runnable || !oldId.equals(id)) {
-//                oldId = id;
-//                switch (this.apiService.checkRunnable(id)) {
-//                    case ApiService.START -> {
-//                        runnable = true;
-//                    }
-//                    case ApiService.ID_INVALID -> {
-//                        soundPlayer.userIdHasTest();
-//                        runnable = false;
-//                        Util.delay(10000);
-//                    }
-//                    default -> {
-//                        runnable = false;
-//                        Util.delay(1000);
-//                    }
-//                }
-//            }
-//        } else {
-//        runnable = true;
-//        }
         if (runnable && !contests.isEmpty()) {
             AbsContest contest = contests.peek();
             return contest != null && contest.getName().equals(ConstKey.CONTEST_NAME.XUAT_PHAT);
@@ -110,50 +87,23 @@ public abstract class AbsDuongTruongMode<V extends AbsModeView> extends AbsTestM
     }
 
     @Override
-    public void begin() {
-        super.begin(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+    public boolean begin() {
+        if(!super.begin()){
+            return false;
+        }
         this.soundPlayer.begin();
+        return true;
     }
-
-//    @Override
-//    protected int upTestDataToServer() {
-//        if (isOnline) {
-//            this.timer.restart();
-//            return super.upTestDataToServer(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-//        }
-//        return ApiService.PASS;
-//    }
 
     @Override
     public void end() {
         try {
-            this.conditionHandle.stop();
-            this.contests.clear();
-            KeyEventManagement.getInstance().remove(prepareEventsPackage);
-            KeyEventManagement.getInstance().remove(testEventsPackage);
-            Util.delay(2000);
+            super.end();
             int score = this.processModel.getScore();
             this.processModel.setContestsResult(score >= scoreSpec && !this.isCancel()?
                     ProcessModel.PASS : ProcessModel.FAIL);
             updateLog();
             this.soundPlayer.sayResultTest(score, this.processHandle.isPass());
-//            if (isOnline) {
-//                int rs = ApiService.FAIL;
-//                for (int i = 0; i < 3; i++) {
-//                    rs = upTestDataToServer();
-//                    if (rs == ApiService.PASS) {
-//                        break;
-//                    }
-//                }
-//                if (rs == ApiService.DISCONNECT) {
-//                    String id = processModel.getId();
-//                    this.soundPlayer.sendlostConnect();
-//                    this.fileTestService.saveBackupLog(id, processlHandle.toProcessModelJson().toString(),
-//                            CameraRunner.getInstance().getImage());
-//                } else if (rs == ApiService.FAIL) {
-//                    this.soundPlayer.sendResultFailed();
-//                }
-//            }
             endTest();
             this.processModel.setId("");
             this.processHandle.setTesting(false);

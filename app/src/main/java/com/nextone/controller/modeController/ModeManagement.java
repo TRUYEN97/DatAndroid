@@ -52,27 +52,22 @@ public class ModeManagement {
         return currMode != null && currMode.isMode(modeName, rank);
     }
 
-    public void updateMode(AbsTestMode testMode) {
-        if (testMode == null) return;
-        new Thread(() -> {
-            AbsTestMode currMode = this.modeHandle.getTestMode();
-            if (currMode != null && currMode.equals(testMode)) {
-                return;
+    public boolean updateMode(AbsTestMode testMode) {
+        if (testMode == null) return false;
+        AbsTestMode currMode = this.modeHandle.getTestMode();
+        if (currMode != null && currMode.equals(testMode)) {
+
+        }
+        try {
+            this.modeHandle.stop();
+            if (this.modeHandle.setTestMode(testMode)) {
+                this.modeHandle.start();
+                return true;
             }
-            try {
-                this.modeHandle.setWait(true);
-                if (this.modeHandle.isRunning()) {
-                    this.modeHandle.stop();
-                }
-                if (this.modeHandle.setTestMode(testMode)) {
-                    this.modeHandle.start();
-                }
-            } catch (Exception e) {
-                Log.e(this.getClass().getSimpleName(), "updateMode", e);
-            } finally {
-                this.modeHandle.setWait(false);
-            }
-        }).start();
+        } catch (Exception e) {
+            Log.e(this.getClass().getSimpleName(), "updateMode", e);
+        }
+        return false;
     }
 
     public AbsTestMode getCurrentMode() {
@@ -89,4 +84,9 @@ public class ModeManagement {
         this.modes.add(absTestMode);
     }
 
+    public void stopCurrentMode() {
+        if (this.modeHandle.getTestMode() != null && !this.modeHandle.getTestMode().isRunning()) {
+            this.modeHandle.stop();
+        }
+    }
 }

@@ -4,10 +4,15 @@
  */
 package com.nextone.model.yardConfigMode;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  *
  * @author Admin
  */
+@Setter
+@Getter
 public class YardConfigModel {
     private YardRankConfig b;
     private YardRankConfig c;
@@ -21,36 +26,4 @@ public class YardConfigModel {
         this.e = new YardRankConfig();
     }
 
-    public YardRankConfig getB() {
-        return b;
-    }
-
-    public void setB(YardRankConfig b) {
-        this.b = b;
-    }
-
-    public YardRankConfig getC() {
-        return c;
-    }
-
-    public void setC(YardRankConfig c) {
-        this.c = c;
-    }
-
-    public YardRankConfig getD() {
-        return d;
-    }
-
-    public void setD(YardRankConfig d) {
-        this.d = d;
-    }
-
-    public YardRankConfig getE() {
-        return e;
-    }
-
-    public void setE(YardRankConfig e) {
-        this.e = e;
-    }
-    
 }

@@ -73,16 +73,16 @@ public class DuongTruongControlView extends AbsGridLayoutView {
         });
         this.lbXp = findViewById(R.id.lbXp);
         this.lbXp.setTextLabel("Xuất phát");
-        this.lbXp.setOnColor(android.R.color.holo_orange_dark);
+        this.lbXp.setOnColorResource(android.R.color.holo_orange_dark);
         this.lbTt = findViewById(R.id.lbTt);
         this.lbTt.setTextLabel("Tăng tốc");
-        this.lbTt.setOnColor(android.R.color.holo_orange_dark);
+        this.lbTt.setOnColorResource(android.R.color.holo_orange_dark);
         this.lbGt = findViewById(R.id.lbGt);
         this.lbGt.setTextLabel("Giảm tốc");
-        this.lbGt.setOnColor(android.R.color.holo_orange_dark);
+        this.lbGt.setOnColorResource(android.R.color.holo_orange_dark);
         this.lbKt = findViewById(R.id.lbKt);
         this.lbKt.setTextLabel("Kết thúc");
-        this.lbKt.setOnColor(android.R.color.holo_orange_dark);
+        this.lbKt.setOnColorResource(android.R.color.holo_orange_dark);
     }
 
     public void update() {

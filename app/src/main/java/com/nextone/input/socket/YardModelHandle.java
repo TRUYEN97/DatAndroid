@@ -6,8 +6,6 @@ package com.nextone.input.socket;
 
 import android.util.Log;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import com.nextone.common.CarConfig;
 import com.nextone.common.Util;
 import com.nextone.common.YardConfig;
@@ -18,13 +16,16 @@ import com.nextone.model.input.yard.YardRankModel;
 import com.nextone.model.yardConfigMode.ContestConfig;
 import com.nextone.model.yardConfigMode.YardConfigModel;
 import com.nextone.model.yardConfigMode.YardRankConfig;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.List;
 import java.util.Map;
 
 import lombok.Getter;
 
 /**
- *
  * @author Admin
  */
 public class YardModelHandle {
@@ -150,18 +151,22 @@ public class YardModelHandle {
             stop = false;
             this.thread = new Thread(() -> {
                 while (!stop) {
-                    Log.i(YARD_MODEL_HANDLE, " yard start");
-                    Util.delay(1000);
-                    while (!this.socketClient.connect() && !stop) {
-                        Util.delay(2000);
-                    }
-                    if (!stop) {
-                        while (!sendApplyConnect()) {
-                            Util.delay(1000);
+                    try {
+                        Log.i(YARD_MODEL_HANDLE, " yard start");
+                        Util.delay(1000);
+                        while (!this.socketClient.connect() && !stop) {
+                            Util.delay(2000);
                         }
-                        Log.i(YARD_MODEL_HANDLE, " yard connected");
-                        this.socketClient.run();
-                        Log.i(YARD_MODEL_HANDLE, " yard disconnected");
+                        if (!stop) {
+                            while (!sendApplyConnect()) {
+                                Util.delay(1000);
+                            }
+                            Log.i(YARD_MODEL_HANDLE, " yard connected");
+                            this.socketClient.run();
+                            Log.i(YARD_MODEL_HANDLE, " yard disconnected");
+                        }
+                    } catch (Exception e) {
+                        Log.e(YARD_MODEL_HANDLE, "start: while (!stop)", e);
                     }
                 }
             });

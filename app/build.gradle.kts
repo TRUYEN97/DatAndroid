@@ -51,4 +51,5 @@ dependencies {
     implementation (libs.androidx.camera.view)
     implementation (libs.androidx.camera.camera.extensions)
     implementation (libs.androidx.camera.camera2)
+    implementation (libs.gson)
 }

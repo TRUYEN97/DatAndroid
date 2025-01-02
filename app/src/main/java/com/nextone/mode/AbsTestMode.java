@@ -135,7 +135,7 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
         return this.contests.poll();
     }
 
-    public void begin() {
+    public boolean begin() {
         this.importantError.reset();
         this.cancel = false;
         this.processHandle.setTesting(false);
@@ -145,40 +145,33 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
         this.mCUSerialHandler.sendReset();
         this.carModel.setDistance(0);
         this.mCUSerialHandler.sendLedOff();
-        while (!loopCheckCanTest() && !this.cancel) {
+        while (!loopCheckCanTest()) {
             Util.delay(1000);
+            if (cancel) {
+                return false;
+            }
         }
         KeyEventManagement.getInstance().remove(prepareEventsPackage);
-        if (!cancel) {
-            this.errorcodeHandle.clear();
-            this.processHandle.resetModel();
-            this.mCUSerialHandler.sendReset();
-            this.carModel.setDistance(0);
-            this.processHandle.startTest();
-            KeyEventManagement.getInstance().addKeyEventBackAge(testEventsPackage);
-            this.mCUSerialHandler.sendLedGreenOn();
-            this.conditionHandle.start();
-            updateLog();
-//                if (isOnline) {
-//                    new Thread(() -> {
-//                        TestStatusLogger.getInstance().setTestStatus(
-//                                this.processModel.getId(),
-//                                this.processModel.getExamId());
-//                        upTestDataToServer();
-//                    }).start();
-//                }
-        }
+        this.errorcodeHandle.clear();
+        this.processHandle.resetModel();
+        this.mCUSerialHandler.sendReset();
+        this.carModel.setDistance(0);
+        this.processHandle.startTest();
+        KeyEventManagement.getInstance().addKeyEventBackAge(testEventsPackage);
+        this.mCUSerialHandler.sendLedGreenOn();
+        this.conditionHandle.start();
+        updateLog();
+        return !cancel;
+    }
+
+    public boolean isRunning() {
+        return this.modeHandle.isRunning();
     }
 
     public void endContest() {
         try {
             this.processHandle.update();
             updateLog();
-//            if (isOnline) {
-//                new Thread(() -> {
-//                    upTestDataToServer();
-//                }).start();
-//            }
             contestDone();
         } catch (Exception e) {
             Log.e(this.getClassName(), "endContest", e);
@@ -192,19 +185,13 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
 //                CameraRunner.getInstance().getImage());
     }
 
-//    protected int upTestDataToServer() {
-//        if (cancel || !isOnline) {
-//            return ApiService.PASS;
-//        }
-//        String id = processModel.getId();
-//        if (id == null || id.isBlank() || id.equals("0")) {
-//            return ApiService.PASS;
-//        }
-//        return this.apiService.sendData(CameraRunner.getInstance().getImage(),
-//                processlHandle.toProcessModelJson());
-//    }
-
-    public abstract void end();
+    public void end() {
+        this.conditionHandle.stop();
+        this.contests.clear();
+        KeyEventManagement.getInstance().remove(prepareEventsPackage);
+        KeyEventManagement.getInstance().remove(testEventsPackage);
+        Util.delay(2000);
+    }
 
     private KeyEventsPackage initPrepareKeyEventPackage() {
         Map<String, IKeyEvent> events = new HashMap<>();
@@ -238,6 +225,10 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
     public void cancelTest() {
         this.importantError.setIsImportantError();
         this.cancel = true;
+        this.conditionHandle.stop();
+        this.contests.clear();
+        KeyEventManagement.getInstance().remove(prepareEventsPackage);
+        KeyEventManagement.getInstance().remove(testEventsPackage);
     }
 
     public boolean isMode(String modeName, String rank) {

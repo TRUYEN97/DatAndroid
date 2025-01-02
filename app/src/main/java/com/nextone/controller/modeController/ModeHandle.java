@@ -6,9 +6,8 @@ package com.nextone.controller.modeController;
 
 import android.util.Log;
 
-import com.nextone.common.Util;
-import com.nextone.interfaces.IStarter;
 import com.nextone.controller.ProcessModelHandle;
+import com.nextone.interfaces.IStarter;
 import com.nextone.mode.AbsTestMode;
 
 import java.util.concurrent.ExecutorService;
@@ -31,7 +30,6 @@ public class ModeHandle implements IStarter, Runnable {
     private boolean running = false;
     private boolean stop = false;
     private Future testFuture;
-    private boolean wait;
 
     public ModeHandle() {
         this.processModelHandle = ProcessModelHandle.getInstance();
@@ -60,14 +58,10 @@ public class ModeHandle implements IStarter, Runnable {
         if (isRunning() || this.testMode == null) {
             return;
         }
-        wait = false;
-        while (true) {
+        stop = false;
+        while (!stop) {
             try {
-                while (wait) {
-                    Util.delay(1000);
-                }
-                begin();
-                if (!stop) {
+                if (begin()) {
                     test();
                     end();
                 }
@@ -83,10 +77,17 @@ public class ModeHandle implements IStarter, Runnable {
         return this.testFuture != null && !this.testFuture.isDone();
     }
 
-    private void begin() {
-        this.testMode.begin();
-        this.running = true;
-        this.stop = false;
+    public boolean isTesting() {
+        return this.contestRunner.isRunning() && running;
+    }
+
+    private boolean begin() {
+        if (this.testMode.begin()) {
+            this.running = true;
+            this.stop = false;
+            return true;
+        }
+        return false;
     }
 
     private void test() {
@@ -107,6 +108,10 @@ public class ModeHandle implements IStarter, Runnable {
     @Override
     public void stop() {
         this.stop = true;
+        stopTest();
+    }
+
+    public void stopTest() {
         this.contestRunner.stop();
         if (this.testMode != null) {
             this.testMode.modeEndInit();
@@ -122,9 +127,5 @@ public class ModeHandle implements IStarter, Runnable {
             this.testMode.modeInit();
         }
         this.testFuture = this.threadPool.submit(this);
-    }
-
-    void setWait(boolean st) {
-        this.wait = st;
     }
 }

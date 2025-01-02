@@ -4,51 +4,75 @@
  */
 package com.nextone.common;
 
-import org.json.JSONObject;
-import com.nextone.common.FileService.FileService;
+import android.content.Context;
+import android.util.Log;
+
+import com.google.gson.Gson;
+import com.nextone.model.MyContextManagement;
 import com.nextone.model.yardConfigMode.YardConfigModel;
+
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import lombok.Getter;
 
 /**
- *
  * @author Admin
  */
 public class YardConfig {
 
     private static volatile YardConfig instance;
-    private final FileService fileService;
     private final String path;
-    private final YardConfigModel yardConfigModel;
+    @Getter
+    private YardConfigModel yardConfigModel;
 
     private YardConfig() {
-        this.fileService = new FileService();
+        Context context = MyContextManagement.getInstance().getAplicationContext();
         this.yardConfigModel = new YardConfigModel();
-        this.path = Setting.getInstance().getYardConfigPath();
+        this.path = new File(context.getFilesDir(), Setting.getInstance().getYardConfigPath()).getAbsolutePath();
         try {
             File f = new File(this.path);
             if (!f.exists()) {
                 update();
                 return;
             }
-            String data = this.fileService.readFile(f);
-            if (data != null && !data.isBlank()) {
-                MyObjectMapper.copy(
-                        MyObjectMapper.convertValue(
-                                new JSONObject(data),
-                                YardConfigModel.class),
-                                this.yardConfigModel
-                );
+            String data = this.readFile(f);
+            if (!data.isBlank()) {
+                this.yardConfigModel = new Gson().fromJson(data, YardConfigModel.class);
             } else {
                 update();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(getClass().getName(), "YardConfig:", e);
             update();
         }
     }
 
-    public YardConfigModel getYardConfigModel() {
-        return yardConfigModel;
+    private String readFile(File file) throws IOException {
+        try (FileInputStream fis = new FileInputStream(file)) {
+            byte[] data = new byte[(int) file.length()];
+            fis.read(data);
+            return new String(data);
+        }
+    }
+
+    private void writeFile(String path, String content) throws IOException {
+        try {
+            File file = new File(path);
+            if (!file.exists()) {
+                if (file.getParentFile() != null && !file.getParentFile().exists()) {
+                    file.getParentFile().mkdirs();
+                }
+                file.createNewFile();
+            }
+            try (FileOutputStream fos = new FileOutputStream(path)) {
+                fos.write(content.getBytes());
+            }
+        } catch (Exception e) {
+            Log.e(getClass().getName(), "writeFile:", e);
+        }
     }
 
     public static YardConfig getInstance() {
@@ -66,9 +90,9 @@ public class YardConfig {
 
     public synchronized final void update() {
         try {
-            this.fileService.writeFile(this.path, MyObjectMapper.writeValueAsString(this.yardConfigModel), false);
+            this.writeFile(this.path, MyObjectMapper.writeValueAsString(this.yardConfigModel));
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(getClass().getName(), "update:", e);
         }
     }
 }

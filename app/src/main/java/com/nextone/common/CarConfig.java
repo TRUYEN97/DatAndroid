@@ -3,16 +3,16 @@ package com.nextone.common;
 import android.content.Context;
 import android.util.Log;
 
+import com.nextone.model.MyContextManagement;
+import com.nextone.model.config.MCU_CONFIG_MODEL;
+
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.nextone.model.config.MCU_CONFIG_MODEL;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import com.nextone.model.MyContextManagement;
 
 public class CarConfig {
 
@@ -30,12 +30,11 @@ public class CarConfig {
     public static final String TAG = "CarConfig";
     private static volatile CarConfig instance;
 
-    private JSONObject jsono;
+    private JSONObject jsonb;
     private final String path;
-    private final Context context;
 
     private CarConfig() {
-        this.context = MyContextManagement.getInstance().getAplicationContext();
+        Context context = MyContextManagement.getInstance().getAplicationContext();
         this.path = new File(context.getFilesDir(), "carConfig.json").getAbsolutePath();
         try {
             File file = new File(this.path);
@@ -44,8 +43,8 @@ public class CarConfig {
                 return;
             }
             String data = readFile(file);
-            if (!data.isBlank()) {
-                this.jsono = new JSONObject(data);
+            if (data != null && !data.isBlank()) {
+                this.jsonb = new JSONObject(data);
             } else {
                 setDefaultConfig();
             }
@@ -70,7 +69,7 @@ public class CarConfig {
 
     public String getCarId() {
         try {
-            String val = this.jsono.getString(CAR_ID_KEY);
+            String val = this.jsonb.getString(CAR_ID_KEY);
             return val.isBlank() ? "0" : val;
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -83,7 +82,7 @@ public class CarConfig {
 
     public String getTestStatusValue() {
         try {
-            return this.jsono.getString(TEST_STATUS_KEY);
+            return this.jsonb.getString(TEST_STATUS_KEY);
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -91,7 +90,7 @@ public class CarConfig {
 
     public void removeTestStatusValue() {
         try {
-            this.jsono.put(TEST_STATUS_KEY, null);
+            this.jsonb.put(TEST_STATUS_KEY, null);
             update();
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -100,7 +99,7 @@ public class CarConfig {
 
     public void setCurrentTestStatusValue(String id, String examId) {
         try {
-            this.jsono.put(TEST_STATUS_KEY, String.format("%s,%s", id, examId));
+            this.jsonb.put(TEST_STATUS_KEY, String.format("%s,%s", id, examId));
             update();
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -109,7 +108,7 @@ public class CarConfig {
 
     public void setExamId(String examid) {
         try {
-            this.jsono.put(EXAM_ID, examid == null ? "0" : examid);
+            this.jsonb.put(EXAM_ID, examid == null ? "0" : examid);
             update();
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -121,7 +120,7 @@ public class CarConfig {
             return;
         }
         try {
-            jsono.put(MCU_KEY, MyObjectMapper.convertValue(mcu_config_model, JSONObject.class));
+            jsonb.put(MCU_KEY, MyObjectMapper.convertValue(mcu_config_model, JSONObject.class));
             update();
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -130,13 +129,11 @@ public class CarConfig {
 
     public MCU_CONFIG_MODEL getMcuConfig() {
         try {
-            if (jsono.has(MCU_KEY)) {
-                JSONObject ob = jsono.getJSONObject(MCU_KEY);
-                if (ob != null) {
-                    MCU_CONFIG_MODEL mcu_config_model = MyObjectMapper.map(ob, MCU_CONFIG_MODEL.class);
-                    if (mcu_config_model != null) {
-                        return mcu_config_model;
-                    }
+            if (jsonb.has(MCU_KEY)) {
+                JSONObject ob = jsonb.getJSONObject(MCU_KEY);
+                MCU_CONFIG_MODEL mcu_config_model = MyObjectMapper.map(ob, MCU_CONFIG_MODEL.class);
+                if (mcu_config_model != null) {
+                    return mcu_config_model;
                 }
             }
         } catch (Exception e) {
@@ -148,8 +145,8 @@ public class CarConfig {
     public String getCenterName() {
         String centerName = "";
         try {
-            if (jsono.has(CENTER_NAME)) {
-                centerName = jsono.getString(CENTER_NAME);
+            if (jsonb.has(CENTER_NAME)) {
+                centerName = jsonb.getString(CENTER_NAME);
             }
             return centerName;
         } catch (JSONException e) {
@@ -159,7 +156,7 @@ public class CarConfig {
 
     public String getString(String key) {
         try {
-            return this.jsono.getString(key);
+            return this.jsonb.getString(key);
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -167,7 +164,7 @@ public class CarConfig {
 
     public void setModeIndex(int index) {
         try {
-            this.jsono.put(MODE_INDEX, index < 0 ? 0 : index);
+            this.jsonb.put(MODE_INDEX, Math.max(index, 0));
             update();
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -176,7 +173,7 @@ public class CarConfig {
 
     public int getIndexOfModel() {
         try {
-            return this.jsono.getInt(MODE_INDEX);
+            return this.jsonb.getInt(MODE_INDEX);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -189,21 +186,22 @@ public class CarConfig {
     public String getYardUser() {
         return this.getString(YARDUSERNAME, "client");
     }
+
     private void setDefaultConfig() {
-        if (this.jsono == null) {
-            this.jsono = new JSONObject();
+        if (this.jsonb == null) {
+            this.jsonb = new JSONObject();
         }
         try {
-            this.jsono.put(MCU_KEY, new MCU_CONFIG_MODEL());
-            this.jsono.put(CAR_ID_KEY, "0");
-            this.jsono.put(CENTER_NAME, "");
-            this.jsono.put(EXAM_ID, "0");
-            this.jsono.put(PASSWORD, "e10adc3949ba59abbe56e057f20f883e");
-            this.jsono.put(YARD_IP, "192.168.1.168");
-            this.jsono.put(YARD_PORT, 6868);
-            this.jsono.put(MODE_INDEX, 0);
-            this.jsono.put(YARDPASSWORD, "f3cea34ed1507b50f09c236045bb1067");
-            this.jsono.put(YARDUSERNAME, "client");
+            this.jsonb.put(MCU_KEY, new MCU_CONFIG_MODEL());
+            this.jsonb.put(CAR_ID_KEY, "0");
+            this.jsonb.put(CENTER_NAME, "");
+            this.jsonb.put(EXAM_ID, "0");
+            this.jsonb.put(PASSWORD, "e10adc3949ba59abbe56e057f20f883e");
+            this.jsonb.put(YARD_IP, "192.168.137.1");
+            this.jsonb.put(YARD_PORT, 6868);
+            this.jsonb.put(MODE_INDEX, 0);
+            this.jsonb.put(YARDPASSWORD, "f3cea34ed1507b50f09c236045bb1067");
+            this.jsonb.put(YARDUSERNAME, "client");
             update();
         } catch (Exception e) {
             Log.e(TAG, "setDefaultConfig:", e);
@@ -211,6 +209,7 @@ public class CarConfig {
     }
 
     private String readFile(File file) throws IOException {
+        if (!file.exists()) return null;
         try (FileInputStream fis = new FileInputStream(file)) {
             byte[] data = new byte[(int) file.length()];
             fis.read(data);
@@ -219,14 +218,25 @@ public class CarConfig {
     }
 
     private void writeFile(String path, String content) throws IOException {
-        try (FileOutputStream fos = new FileOutputStream(path)) {
-            fos.write(content.getBytes());
+        try {
+            File file = new File(path);
+            if (!file.exists()) {
+                if (file.getParentFile() != null && !file.getParentFile().exists()) {
+                    file.getParentFile().mkdirs();
+                }
+                file.createNewFile();
+            }
+            try (FileOutputStream fos = new FileOutputStream(path)) {
+                fos.write(content.getBytes());
+            }
+        } catch (Exception e) {
+            Log.e(getClass().getName(), "writeFile:", e);
         }
     }
 
     public synchronized final void update() {
         try {
-            writeFile(this.path, this.jsono.toString());
+            writeFile(this.path, this.jsonb.toString());
         } catch (Exception e) {
             Log.e(TAG, "update:", e);
             setDefaultConfig();
@@ -235,7 +245,7 @@ public class CarConfig {
 
     public void setCarId(String carId) {
         try {
-            jsono.put(CAR_ID_KEY, carId == null ? "0" : carId);
+            jsonb.put(CAR_ID_KEY, carId == null ? "0" : carId);
             update();
         } catch (JSONException e) {
             Log.e(TAG, "setCarId:", e);
@@ -248,7 +258,7 @@ public class CarConfig {
 
     public void setPassword(String pw) {
         try {
-            jsono.put(PASSWORD, pw == null || pw.isBlank() ? "e10adc3949ba59abbe56e057f20f883e" : pw);
+            jsonb.put(PASSWORD, pw == null || pw.isBlank() ? "e10adc3949ba59abbe56e057f20f883e" : pw);
             update();
         } catch (JSONException e) {
             Log.e(TAG, "setPassword:", e);
@@ -257,7 +267,7 @@ public class CarConfig {
 
     public String getString(String key, String defaultValue) {
         try {
-            return jsono.has(key) ? jsono.getString(key) : defaultValue;
+            return jsonb.has(key) ? jsonb.getString(key) : defaultValue;
         } catch (JSONException e) {
             return defaultValue;
         }
