@@ -51,12 +51,12 @@ public class SH_C_MODE<V  extends AbsModeView> extends AbsSaHinhMode<V> {
         contests.add(new DoXeDoc(yardRankModel, yardRankConfig.getDoXeDoc(), speedLimit));
         contests.add(new NgaTu(3, yardModelHandle.getYardModel(),
                 yardRankConfig.getNgaTu3(), speedLimit));
-        if (rd == 2) {
+        if (rd == 1) {
             contests.add(new KhanCap(40));
         }
         contests.add(new DuongTau(yardRankConfig.getDuongTau(), speedLimit));
         contests.add(new TangTocDuongThang(1, speedLimit, yardRankConfig.getTangToc()));
-        if (rd == 3) {
+        if (rd == 2) {
             contests.add(new KhanCap(30));
         }
         contests.add(new NgaTu(4, yardModelHandle.getYardModel(),

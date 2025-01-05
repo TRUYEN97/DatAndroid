@@ -100,7 +100,7 @@ public class SoundPlayer {
 
     public void contestName(int soundId, boolean contestation) {
         if (!contestation) {
-            this.play(R.raw.contest);
+            this.playSequential(R.raw.contest);
         }
         this.play(soundId);
     }

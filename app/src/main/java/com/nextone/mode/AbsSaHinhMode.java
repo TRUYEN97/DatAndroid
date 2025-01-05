@@ -75,22 +75,22 @@ public abstract class AbsSaHinhMode<V extends AbsModeView> extends AbsTestMode<V
 
     @Override
     protected boolean loopCheckCanTest() {
-//        if (this.carModel.isNt() && this.carModel.getStatus() == ConstKey.CAR_ST.STOP) {
-        if (!st) {
-            st = true;
-            this.mCUSerialHandler.sendLedRedOn();
+        if (this.carModel.isNt() && this.carModel.getStatus() == ConstKey.CAR_ST.STOP) {
+            if (!st) {
+                st = true;
+                this.mCUSerialHandler.sendLedRedOn();
+            }
+            String id = this.processModel.getId();
+            if (id == null || id.isBlank()) {
+                return false;
+            }
+            createContestList();
+            return true;
+        } else if (st) {
+            st = false;
+            this.mCUSerialHandler.sendLedOff();
         }
-        String id = this.processModel.getId();
-        if (id == null || id.isBlank()) {
-            return false;
-        }
-        createContestList();
-        return true;
-//        } else if (st) {
-//            st = false;
-//            this.mCUSerialHandler.sendLedOff();
-//        }
-//        return false;
+        return false;
     }
 
     @Override
@@ -124,7 +124,7 @@ public abstract class AbsSaHinhMode<V extends AbsModeView> extends AbsTestMode<V
         try {
             super.end();
             int score = this.processModel.getScore();
-            this.processModel.setContestsResult(score >= scoreSpec && !this.isCancel()?
+            this.processModel.setContestsResult(score >= scoreSpec && !this.isCancel() ?
                     ProcessModel.PASS : ProcessModel.FAIL);
             updateLog();
             this.soundPlayer.sayResultTest(score, this.processHandle.isPass());
