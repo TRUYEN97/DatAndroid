@@ -1,16 +1,10 @@
 package com.nextone.controller;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
-import android.widget.Button;
 
 import com.nextone.controller.modeController.ModeManagement;
 import com.nextone.datandroid.customLayout.impConstrainLayout.BaseModeLayout;
 import com.nextone.datandroid.customLayout.impConstrainLayout.ModeChooserView;
-import com.nextone.datandroid.customLayout.impConstrainLayout.modeView.AbsModeView;
 import com.nextone.datandroid.customLayout.impConstrainLayout.modeView.DuongTruongView;
 import com.nextone.datandroid.customLayout.impConstrainLayout.modeView.SaHinhView;
 import com.nextone.mode.AbsTestMode;
@@ -29,117 +23,68 @@ public class ModeChooser {
     private ModeChooserView modeChooserView;
     private final ModeManagement modeManager;
 
-    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
-    private Button btMode;
-    private Handler handler;
+    private final ExecutorService executorService;
     private BaseModeLayout baseModeLayout;
 
     public ModeChooser() {
         this.modeManager = ModeManagement.getInstance();
+        this.executorService = Executors.newSingleThreadExecutor();
     }
 
     public void setFrameLayout(BaseModeLayout baseModeLayout) {
-        Context context;
-        if (baseModeLayout == null || (context = baseModeLayout.getContext()) == null) {
-            this.baseModeLayout = null;
-            this.modeChooserView = null;
-            return;
-        }
         this.baseModeLayout = baseModeLayout;
-        this.modeChooserView = new ModeChooserView(context);
-        this.handler = new Handler(Looper.getMainLooper());
-        DuongTruongView dtView = new DuongTruongView(context);
-        SaHinhView shView = new SaHinhView(context);
+        this.modeChooserView = new ModeChooserView();
+        DuongTruongView dtView = new DuongTruongView();
+        SaHinhView shView = new SaHinhView();
         this.modeChooserView.setBtDtOnclick(v -> {
-            updateUI(dtView);
+            this.baseModeLayout.addFragment(dtView, "modeDuongTruong", true);
             executorService.execute(() -> {
-                if (modeManager.updateMode(new DT_B_MODE<DuongTruongView>(dtView, false))) {
-                    handler.post(() -> {
-                        btMode.setText(modeManager.getCurrentMode().getFullName());
-                    });
-                }
+                modeManager.updateMode(new DT_B_MODE<DuongTruongView>(dtView, false));
             });
         });
         this.modeChooserView.setBtDTB1Onclick(v -> {
-            updateUI(dtView);
+            this.baseModeLayout.addFragment(dtView, "modeDuongTruong", true);
             executorService.execute(() -> {
-                if (modeManager.updateMode(new DT_B1_AUTO_MODE<DuongTruongView>(dtView, false))) {
-                    handler.post(() -> {
-                        btMode.setText(modeManager.getCurrentMode().getFullName());
-                    });
-                }
+                modeManager.updateMode(new DT_B1_AUTO_MODE<DuongTruongView>(dtView, false));
             });
         });
         this.modeChooserView.setBtShOnclick(v -> {
-            updateUI(shView);
+            this.baseModeLayout.addFragment(shView, "modeSaHinh", true);
             executorService.execute(() -> {
-                if (this.modeManager.updateMode(new SH_B_MODE<SaHinhView>(shView, false))) {
-                    handler.post(() -> {
-                        btMode.setText(modeManager.getCurrentMode().getFullName());
-                    });
-                }
+                this.modeManager.updateMode(new SH_B_MODE<SaHinhView>(shView, false));
             });
         });
         this.modeChooserView.setBtShB1Onclick(v -> {
-            updateUI(shView);
+            this.baseModeLayout.addFragment(shView, "modeSaHinh", true);
             executorService.execute(() -> {
-                if (this.modeManager.updateMode(new SH_B1_AUTO_MODE<SaHinhView>(shView, false))) {
-                    handler.post(() -> {
-                        btMode.setText(modeManager.getCurrentMode().getFullName());
-                    });
-                }
+                this.modeManager.updateMode(new SH_B1_AUTO_MODE<SaHinhView>(shView, false));
             });
         });
         this.modeChooserView.setBtShCOnclick(v -> {
-            updateUI(shView);
+            this.baseModeLayout.addFragment(shView, "modeSaHinh", true);
             executorService.execute(() -> {
-                if (this.modeManager.updateMode(new SH_C_MODE<SaHinhView>(shView, false))) {
-                    handler.post(() -> {
-                        btMode.setText(modeManager.getCurrentMode().getFullName());
-                    });
-                }
+                this.modeManager.updateMode(new SH_C_MODE<SaHinhView>(shView, false));
             });
         });
         this.modeChooserView.setBtShDOnclick(v -> {
-            updateUI(shView);
+            this.baseModeLayout.addFragment(shView, "modeSaHinh", true);
             executorService.execute(() -> {
-                if (this.modeManager.updateMode(new SH_D_MODE<SaHinhView>(shView, false))) {
-                    handler.post(() -> {
-                        btMode.setText(modeManager.getCurrentMode().getFullName());
-                    });
-                }
+                this.modeManager.updateMode(new SH_D_MODE<SaHinhView>(shView, false));
             });
         });
         this.modeChooserView.setBtShEOnclick(v -> {
-            updateUI(shView);
+            this.baseModeLayout.addFragment(shView, "modeSaHinh", true);
             executorService.execute(() -> {
-                if (this.modeManager.updateMode(new SH_E_MODE<SaHinhView>(shView, false))) {
-                    handler.post(() -> {
-                        btMode.setText(modeManager.getCurrentMode().getFullName());
-                    });
-                }
+                this.modeManager.updateMode(new SH_E_MODE<SaHinhView>(shView, false));
             });
         });
-    }
-
-
-    public void setBtMode(Button btMode) {
-        if (btMode != null) {
-            btMode.setOnClickListener(v -> {
-                show();
-            });
-        }
-        this.btMode = btMode;
     }
     
     @SuppressLint("SetTextI18n")
     public void show() {
         if (this.baseModeLayout != null && this.isChangeModeAble()) {
             this.modeManager.stopCurrentMode();
-            this.baseModeLayout.addView(this.modeChooserView);
-            if (this.btMode != null) {
-                this.btMode.setText("Chọn chế độ");
-            }
+            this.baseModeLayout.addFragment(this.modeChooserView, "tabModeChooser", true);
         }
     }
 
@@ -147,16 +92,4 @@ public class ModeChooser {
         AbsTestMode currentMode = this.modeManager.getCurrentMode();
         return currentMode == null || !currentMode.getModeHandle().isTesting();
     }
-
-    private void updateUI(AbsModeView modeView) {
-        try {
-            if (modeView == null) {
-                return;
-            }
-            this.baseModeLayout.addView(modeView);
-        } catch (Exception e) {
-            Log.e(this.getClass().getSimpleName(), "updateUI", e);
-        }
-    }
-
 }

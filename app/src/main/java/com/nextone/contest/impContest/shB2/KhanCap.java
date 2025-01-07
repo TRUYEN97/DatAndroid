@@ -37,7 +37,7 @@ public class KhanCap extends AbsContest {
 
     @Override
     protected boolean loop() {
-        if (getDetaTime() < 5000) {
+        if (getDeltaTime() < 5000) {
             if (this.carModel.isNp() && this.carModel.isNt()) {
                 if (this.carModel.getStatus() != ConstKey.CAR_ST.STOP) {
                     this.warningSoundPlayer.stop();
@@ -49,7 +49,7 @@ public class KhanCap extends AbsContest {
             } else {
                 success = false;
             }
-            if (!success && getDetaTime() > 3000) {
+            if (!success && getDeltaTime() > 3000) {
                 this.warningSoundPlayer.stop();
                 addErrorCode(ConstKey.ERR.NO_EMERGENCY_SIGNAL);
                 return true;
@@ -61,7 +61,7 @@ public class KhanCap extends AbsContest {
                 this.firstDone = true;
                 this.soundPlayer.successSound();
             }
-            if (getDetaTime() > 9000 || this.carModel.getStatus() != ConstKey.CAR_ST.STOP) {
+            if (getDeltaTime() > 9000 || this.carModel.getStatus() != ConstKey.CAR_ST.STOP) {
                 addErrorCode(ConstKey.ERR.NO_EMERGENCY_SIGNAL);
                 return true;
             }
@@ -72,7 +72,7 @@ public class KhanCap extends AbsContest {
         return false;
     }
 
-    private long getDetaTime() {
+    private long getDeltaTime() {
         return System.currentTimeMillis() - oldTime;
     }
 

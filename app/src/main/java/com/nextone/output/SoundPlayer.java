@@ -102,7 +102,7 @@ public class SoundPlayer {
         if (!contestation) {
             this.playSequential(R.raw.contest);
         }
-        this.play(soundId);
+        this.playSequential(soundId);
     }
 
     public void welcomeCarId(String numString) {
@@ -136,7 +136,7 @@ public class SoundPlayer {
     }
 
     public void endContest() {
-        play(R.raw.contest_finish);
+        playSequential(R.raw.contest_finish);
     }
 
     public void begin() {

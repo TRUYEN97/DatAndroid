@@ -31,13 +31,13 @@ public class YardRankConfig {
     private final ContestConfig duongTau;
 
     public YardRankConfig() {
-        this.dungXeChoNg = new ContestConfig(3.3, 2.5, 0, 50);
-        this.dungXeNgangDoc = new ContestConfig(20, 2.5, 0, 50);
-        this.ngaTu1 = new ContestConfig(25, 2.5, 0, 55);
-        this.ngaTu2 = new ContestConfig(25, 2.5, 0, 35);
-        this.ngaTu3 = new ContestConfig(30, 2.5, 100, 180);
-        this.ngaTu4 = new ContestConfig(30, 2.5, 0, 40);
-        this.duongTau = new ContestConfig(4, 2.5, 0, 100);
+        this.dungXeChoNg = new ContestConfig(4, 3, 0, 50);
+        this.dungXeNgangDoc = new ContestConfig(20, 3, 0, 50);
+        this.ngaTu1 = new ContestConfig(25, 3, 0, 55);
+        this.ngaTu2 = new ContestConfig(25, 3, 0, 35);
+        this.ngaTu3 = new ContestConfig(30, 3, 100, 180);
+        this.ngaTu4 = new ContestConfig(30, 3, 0, 40);
+        this.duongTau = new ContestConfig(4, 3, 0, 100);
         this.tangToc = new ContestConfig(0, 0, 0, 70);
         this.vetBanhXe = new ArrayList<>();
         this.duongVuongGoc = new ArrayList<>();

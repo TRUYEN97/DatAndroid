@@ -5,16 +5,4 @@
     android:id="@+id/MainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".impActivity.MainActivity">
-
-    <com.nextone.datandroid.customLayout.impConstrainLayout.BaseModeLayout
-        android:id="@+id/ModeView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </com.nextone.datandroid.customLayout.impConstrainLayout.BaseModeLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+    tools:context=".impActivity.MainActivity"/>

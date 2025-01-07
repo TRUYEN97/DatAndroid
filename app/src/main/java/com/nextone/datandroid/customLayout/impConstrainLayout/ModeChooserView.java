@@ -1,60 +1,40 @@
 package com.nextone.datandroid.customLayout.impConstrainLayout;
 
-import android.content.Context;
-import android.util.AttributeSet;
 import android.view.View;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
+import com.nextone.datandroid.AbsFragment;
 import com.nextone.datandroid.R;
-import com.nextone.datandroid.customLayout.AbsCustomConstraintLayout;
 
-public class ModeChooserView extends AbsCustomConstraintLayout {
+import lombok.Setter;
 
+@Setter
+public class ModeChooserView extends AbsFragment {
 
-    public ModeChooserView(@NonNull Context context) {
-        super(context);
-        init(R.layout.chosse_mode, true);
+    private View.OnClickListener btDtOnclick;
+    private View.OnClickListener btDTB1Onclick;
+    private View.OnClickListener btShOnclick;
+    private View.OnClickListener btShB1Onclick;
+    private View.OnClickListener btShCOnclick;
+    private View.OnClickListener btShDOnclick;
+    private View.OnClickListener btShEOnclick;
+
+    public ModeChooserView() {
+        super(R.layout.chosse_mode);
     }
 
-    public ModeChooserView(@NonNull Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
-        init(R.layout.chosse_mode, true);
+    @Override
+    protected void onInitViewCreated(View view) {
+
     }
 
-    public ModeChooserView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        init(R.layout.chosse_mode, true);
+    @Override
+    protected void onInitCreateView(View view) {
+        view.findViewById(R.id.btDT).setOnClickListener(this.btDtOnclick);
+        view.findViewById(R.id.btDTB1).setOnClickListener(this.btDTB1Onclick);
+        view.findViewById(R.id.btSh).setOnClickListener(this.btShOnclick);
+        view.findViewById(R.id.btShB1).setOnClickListener(this.btShB1Onclick);
+        view.findViewById(R.id.btShC).setOnClickListener(this.btShCOnclick);
+        view.findViewById(R.id.btShD).setOnClickListener(this.btShDOnclick);
+        view.findViewById(R.id.btShE).setOnClickListener(this.btShEOnclick);
     }
-
-
-    public void setBtDtOnclick(View.OnClickListener listener){
-        findViewById(R.id.btDT).setOnClickListener(listener);
-    }
-
-    public void setBtDTB1Onclick(View.OnClickListener listener){
-        findViewById(R.id.btDTB1).setOnClickListener(listener);
-    }
-
-
-    public void setBtShOnclick(View.OnClickListener listener){
-        findViewById(R.id.btSh).setOnClickListener(listener);
-    }
-
-    public void setBtShB1Onclick(View.OnClickListener listener){
-        findViewById(R.id.btShB1).setOnClickListener(listener);
-    }
-
-    public void setBtShCOnclick(View.OnClickListener listener){
-        findViewById(R.id.btShC).setOnClickListener(listener);
-    }
-
-    public void setBtShDOnclick(View.OnClickListener listener){
-        findViewById(R.id.btShD).setOnClickListener(listener);
-    }
-    public void setBtShEOnclick(View.OnClickListener listener){
-        findViewById(R.id.btShE).setOnClickListener(listener);
-    }
-
 }

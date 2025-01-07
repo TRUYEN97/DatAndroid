@@ -43,7 +43,7 @@ public class DuongTruongControlView extends AbsGridLayoutView {
 
     private void init() {
         super.init(4, 2,
-                R.layout.duong_truong_control_view,
+                R.layout.view_mode_duong_truong_control_board,
                 R.id.duongTruongControl,
                 android.R.color.transparent);
         this.dataViewModel = ProcessModelHandle.getInstance().getTestDataModel();

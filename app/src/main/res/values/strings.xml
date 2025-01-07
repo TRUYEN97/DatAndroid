@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">DatAndroid</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="fragment.setting.sensor">Cảm biến</string>
-    <string name="fragment.setting.yard">Thông tin sân</string>
+    <string name="fragment.setting.sensor">Cài đặt cảm biến</string>
+    <string name="fragment.setting.yard">Thông tin</string>
     <string name="fragment.setting.properties">Thông tin cơ bản</string>
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>

@@ -43,7 +43,7 @@ public class TestValueView extends AbsGridLayoutView {
 
     private void init() {
         super.init(2, 3,
-                R.layout.test_value_view,
+                R.layout.view_test_value,
                 R.id.testValue,
                 android.R.color.transparent);
         this.dataViewModel = ProcessModelHandle.getInstance().getTestDataModel();

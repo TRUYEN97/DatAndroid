@@ -53,4 +53,5 @@ dependencies {
     implementation (libs.androidx.camera.camera.extensions)
     implementation (libs.androidx.camera.camera2)
     implementation (libs.gson)
+    implementation ("com.google.android.material:material:1.9.0")
 }

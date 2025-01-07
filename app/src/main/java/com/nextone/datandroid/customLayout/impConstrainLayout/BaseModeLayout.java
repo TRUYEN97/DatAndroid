@@ -1,63 +1,51 @@
 package com.nextone.datandroid.customLayout.impConstrainLayout;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
-import android.util.AttributeSet;
-import android.util.Log;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.camera.view.PreviewView;
+import androidx.fragment.app.Fragment;
 
+import com.nextone.controller.ModeChooser;
 import com.nextone.controller.ProcessModelHandle;
-import com.nextone.controller.SettingTab;
+import com.nextone.datandroid.AbsFragment;
 import com.nextone.datandroid.R;
-import com.nextone.datandroid.customLayout.AbsCustomConstraintLayout;
-import com.nextone.datandroid.customLayout.impConstrainLayout.modeView.interfaces.IStart;
 import com.nextone.datandroid.customLayout.impConstrainLayout.widget.MyImageLabel;
+import com.nextone.datandroid.customLayout.tabLayout.CustomPagerAdapter;
+import com.nextone.datandroid.customLayout.tabLayout.TabLayoutCustomView;
+import com.nextone.datandroid.customLayout.tabLayout.tabFragmant.SensorSettingFragment;
+import com.nextone.datandroid.customLayout.tabLayout.tabFragmant.TabYardRankSetting;
+import com.nextone.input.camera.CameraModule;
 import com.nextone.input.serial.MCUSerialHandler;
 import com.nextone.input.socket.YardModelHandle;
 
-import lombok.Getter;
-
-public class BaseModeLayout extends AbsCustomConstraintLayout implements IStart {
+public class BaseModeLayout extends AbsFragment {
 
 
     private MyImageLabel socketAlam;
     private MyImageLabel sensorAlam;
 
-    private Handler handler;
-    @Getter
-    private FrameLayout frameLayout;
+    private final Handler handler;
 
-    @Getter
-    private Button btMode;
-
-    @Getter
-    private PreviewView previewView;
-
-    private SettingTab settingTab;
+    private final ModeChooser modeChooser;
 
 
-    public BaseModeLayout(@NonNull Context context) {
-        super(context);
-        init(R.layout.mode, true);
-    }
+    private final CameraModule cameraModule;
 
-    public BaseModeLayout(@NonNull Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
-        init(R.layout.mode, true);
-    }
+    private final TabLayoutCustomView tabLayoutCustomView;
 
-    public BaseModeLayout(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        init(R.layout.mode, true);
+
+
+    public BaseModeLayout() {
+        super(R.layout.view_frame_mode);
+        this.modeChooser = new ModeChooser();
+        this.handler = new Handler(Looper.getMainLooper());
+        this.cameraModule = new CameraModule();
+        this.tabLayoutCustomView = new TabLayoutCustomView();
     }
 
     private void update() {
@@ -66,55 +54,11 @@ public class BaseModeLayout extends AbsCustomConstraintLayout implements IStart 
         this.handler.postDelayed(this::update, 100);
     }
 
-    public void setSettingTab(SettingTab settingTab) {
-        this.settingTab = settingTab;
-        findViewById(R.id.btSetting).setOnClickListener(v -> {
-            if (settingTab != null && !ProcessModelHandle.getInstance().isTesting()) {
-                addView(settingTab.getView());
-            }
-        });
+    private void initCamera(View view) {
+        this.cameraModule.init(requireActivity(), this, view.findViewById(R.id.camera));
     }
 
-    private boolean running = false;
-
-    public synchronized void start() {
-        if (this.running) return;
-        this.running = true;
-        this.handler.postDelayed(this::update, 100);
-    }
-
-    @Override
-    public void stop() {
-        this.handler.removeCallbacks(this::update);
-        running = false;
-    }
-
-    @Override
-    public boolean isStarted() {
-        return running;
-    }
-
-    @SuppressLint("SetTextI18n")
-    protected void init(int resource, boolean attachToRoot) {
-        super.init(resource, attachToRoot);
-        this.handler = new Handler();
-        this.socketAlam = findViewById(R.id.socketAlam);
-        this.socketAlam.setTextLabel("Server");
-        this.socketAlam.setTextLabelColor(Color.BLACK);
-        this.sensorAlam = findViewById(R.id.sensorAlam);
-        this.sensorAlam.setTextLabel("Cảm biến");
-        this.sensorAlam.setTextLabelColor(Color.BLACK);
-        this.btMode = findViewById(R.id.btMode);
-        this.btMode.setText("Chọn chế độ");
-        this.frameLayout = findViewById(R.id.boardModeView);
-        this.previewView = findViewById(R.id.camera);
-        MyImageLabel lbSetting = findViewById(R.id.btSetting);
-        lbSetting.setImage(R.drawable.setting_icon);
-        lbSetting.setTextLabel("Cài đặt");
-        lbSetting.setTextLabelColor(Color.BLACK);
-        lbSetting.setOnColorResource(android.R.color.holo_blue_dark);
-        lbSetting.setOffColorResource(android.R.color.holo_blue_light);
-        lbSetting.setButtonMode(true);
+    private void initBackground(View view) {
         GradientDrawable background = new GradientDrawable();
         background.setColor(getResources().getColor(android.R.color.darker_gray, getContext().getTheme()));
         background.setCornerRadii(new float[]{
@@ -123,20 +67,81 @@ public class BaseModeLayout extends AbsCustomConstraintLayout implements IStart 
                 25f, 25f,
                 25f, 25f
         });
-        findViewById(R.id.informationView).setBackground(background);
+        view.findViewById(R.id.informationView).setBackground(background);
+    }
+
+    public void addFragment(Fragment fragment, String tab, boolean addToBackStack) {
+        addChildFragment(R.id.boardModeView, fragment, tab, addToBackStack);
     }
 
     @Override
-    public void addView(View view) {
-        try {
-            if (view == null) {
-                return;
-            }
-            this.frameLayout.removeAllViews();
-            this.frameLayout.addView(view);
-        } catch (Exception e) {
-            Log.e(this.getClass().getSimpleName(), "addView", e);
-        }
+    public void onStart() {
+        super.onStart();
+        this.cameraModule.start();
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        cameraModule.stop();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacksAndMessages(null);
+        cameraModule.stop();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        cameraModule.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    protected void onInitViewCreated(View view) {
+        view.findViewById(R.id.btSetting).setOnClickListener(v -> {
+            if (!ProcessModelHandle.getInstance().isTesting()) {
+                tabLayoutCustomView.setCallback(pager -> {
+                    CustomPagerAdapter settingPagerAdapter = new CustomPagerAdapter(requireActivity());
+                    settingPagerAdapter.addFragment(new SensorSettingFragment(), "Cảm biến");
+                    settingPagerAdapter.addFragment(new TabYardRankSetting(), "Thông tin sân");
+                    return settingPagerAdapter;
+                });
+                addFragment(tabLayoutCustomView, "tab_setting", false);
+            }
+        });
+        this.modeChooser.setFrameLayout(this);
+        this.modeChooser.show();
+        this.handler.postDelayed(this::update, 100);
+    }
+
+    @Override
+    protected void onInitCreateView(View view) {
+        this.socketAlam = view.findViewById(R.id.socketAlam);
+        this.socketAlam.setTextLabel("Server");
+        this.socketAlam.setTextLabelColor(Color.BLACK);
+        this.sensorAlam = view.findViewById(R.id.sensorAlam);
+        this.sensorAlam.setTextLabel("Cảm biến");
+        this.sensorAlam.setTextLabelColor(Color.BLACK);
+        Button btMode = view.findViewById(R.id.btMode);
+        btMode.setText("Chọn chế độ");
+        btMode.setOnClickListener(v -> {
+            this.modeChooser.show();
+        });
+        /////////////////////////////
+        initCamera(view);
+        //////////////////////
+        MyImageLabel lbSetting = view.findViewById(R.id.btSetting);
+        lbSetting.setImage(R.drawable.setting_icon);
+        lbSetting.setTextLabel("Cài đặt");
+        lbSetting.setTextLabelColor(Color.BLACK);
+        lbSetting.setOnColorResource(android.R.color.holo_blue_dark);
+        lbSetting.setOffColorResource(android.R.color.holo_blue_light);
+        lbSetting.setButtonMode(true);
+        /////////////////////////////
+        initBackground(view);
+
+    }
 }

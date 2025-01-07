@@ -4,18 +4,7 @@
  */
 package com.nextone.mode.imp;
 
-import com.nextone.contest.impContest.shB2.DoXeDoc;
-import com.nextone.contest.impContest.shB2.DoXeNgang;
-import com.nextone.contest.impContest.shB2.DungXe;
-import com.nextone.contest.impContest.shB2.DungXeNgangDoc;
-import com.nextone.contest.impContest.shB2.DuongS;
-import com.nextone.contest.impContest.shB2.DuongTau;
-import com.nextone.contest.impContest.shB2.KetThuc;
-import com.nextone.contest.impContest.shB2.KhanCap;
-import com.nextone.contest.impContest.shB2.NgaTu;
-import com.nextone.contest.impContest.shB2.TangTocDuongThang;
-import com.nextone.contest.impContest.shB2.VetBanhXe;
-import com.nextone.contest.impContest.shB2.XuatPhat;
+import com.nextone.contest.impContest.shB2.*;
 import com.nextone.datandroid.customLayout.impConstrainLayout.modeView.AbsModeView;
 import com.nextone.mode.AbsSaHinhMode;
 

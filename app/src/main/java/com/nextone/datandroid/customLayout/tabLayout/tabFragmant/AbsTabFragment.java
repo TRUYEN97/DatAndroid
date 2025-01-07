@@ -1,40 +1,39 @@
 package com.nextone.datandroid.customLayout.tabLayout.tabFragmant;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.util.Log;
 
-import androidx.fragment.app.Fragment;
+import com.nextone.datandroid.AbsFragment;
 
+public abstract class AbsTabFragment extends AbsFragment {
 
-public abstract class AbsTabFragment extends Fragment {
-
-
-    protected final int resource;
     public AbsTabFragment(int resource) {
-        this.resource = resource;
+        super(resource);
     }
 
     public abstract void saveData();
 
     public abstract void updateData();
 
+
     @Override
     public void onResume() {
         super.onResume();
-        updateData();
+        try {
+            updateData();
+        } catch (Exception e) {
+            Log.e("AbsTabFragment", e.getMessage());
+        }
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        saveData();
+    public void onPause() {
+        super.onPause();
+        try {
+            saveData();
+        } catch (Exception e) {
+            Log.e("AbsTabFragment", e.getMessage());
+        }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(resource, container, false);
-    }
+
 }

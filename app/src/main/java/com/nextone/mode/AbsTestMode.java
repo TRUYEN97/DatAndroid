@@ -247,6 +247,7 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
 
     public void modeInit() {
         if (this.view != null) {
+            this.view.showModeName(this.fullName);
             this.view.start();
         }
         if (this.name != null) {
@@ -261,6 +262,7 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
     public void modeEndInit() {
         cancelTest();
         if (this.view != null) {
+            this.view.showModeName(null);
             this.view.stop();
         }
     }

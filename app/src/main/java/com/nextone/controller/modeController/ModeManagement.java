@@ -56,7 +56,7 @@ public class ModeManagement {
         if (testMode == null) return false;
         AbsTestMode currMode = this.modeHandle.getTestMode();
         if (currMode != null && currMode.equals(testMode)) {
-
+            return true;
         }
         try {
             this.modeHandle.stop();
