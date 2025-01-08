@@ -39,7 +39,7 @@ public class YardConfig {
                 return;
             }
             String data = this.readFile(f);
-            if (!data.isBlank()) {
+            if (data != null && !data.isBlank()) {
                 this.yardConfigModel = new Gson().fromJson(data, YardConfigModel.class);
             } else {
                 update();
@@ -55,6 +55,9 @@ public class YardConfig {
             byte[] data = new byte[(int) file.length()];
             fis.read(data);
             return new String(data);
+        }catch (Exception e){
+            Log.e(getClass().getName(), "readFile:", e);
+            return null;
         }
     }
 

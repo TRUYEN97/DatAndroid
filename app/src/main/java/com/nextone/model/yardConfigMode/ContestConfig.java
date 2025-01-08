@@ -4,10 +4,17 @@
  */
 package com.nextone.model.yardConfigMode;
 
+import androidx.annotation.NonNull;
+
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  *
  * @author Admin
  */
+@Setter
+@Getter
 public class ContestConfig {
 
     private double distanceOut = 0;
@@ -19,7 +26,7 @@ public class ContestConfig {
     public ContestConfig(){}
 
     public ContestConfig(double distanceOut, double distanceLine, double distanceLowerLimit, double distanceUpperLimit) {
-        this(distanceOut, distanceLine, distanceLowerLimit, distanceUpperLimit, 0);
+        this(distanceOut, distanceLine, distanceLowerLimit, distanceUpperLimit, -1);
     }
 
     public ContestConfig(double distanceOut, double distanceLine,
@@ -32,44 +39,18 @@ public class ContestConfig {
         this.indexOfYardInput = indexOfYardInput;
     }
 
-    public void setIndexOfYardInput(Integer indexOfYardInput) {
-        this.indexOfYardInput = indexOfYardInput;
+    @NonNull
+    public ContestConfig clone(){
+        return new ContestConfig(distanceOut, distanceLine, distanceLowerLimit, distanceUpperLimit, indexOfYardInput);
     }
 
-    public Integer getIndexOfYardInput() {
-        return indexOfYardInput;
-    }
+    public void update(ContestConfig config){
+        if(config == null) return;
+        this.distanceOut = config.distanceOut;
+        this.distanceLine = config.distanceLine;
+        this.distanceLowerLimit = config.distanceLowerLimit;
+        this.distanceUpperLimit = config.distanceUpperLimit;
 
-    public double getDistanceOut() {
-        return distanceOut;
-    }
-
-    public void setDistanceOut(double distanceOut) {
-        this.distanceOut = distanceOut;
-    }
-
-    public double getDistanceLine() {
-        return distanceLine;
-    }
-
-    public void setDistanceLine(double distanceLine) {
-        this.distanceLine = distanceLine;
-    }
-
-    public double getDistanceLowerLimit() {
-        return distanceLowerLimit;
-    }
-
-    public void setDistanceLowerLimit(double distanceLowerLimit) {
-        this.distanceLowerLimit = distanceLowerLimit;
-    }
-
-    public double getDistanceUpperLimit() {
-        return distanceUpperLimit;
-    }
-
-    public void setDistanceUpperLimit(double distanceUpperLimit) {
-        this.distanceUpperLimit = distanceUpperLimit;
     }
 
 }

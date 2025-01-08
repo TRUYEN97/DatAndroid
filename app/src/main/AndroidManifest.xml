@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <uses-permission android:name="android.permission.USB_PERMISSION" />
+
     <uses-feature android:name="android.hardware.usb.host" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -15,6 +17,7 @@
         android:required="false" />
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -26,10 +29,18 @@
         android:theme="@style/Theme.DatAndroid"
         tools:targetApi="31">
         <activity
+            android:name=".impActivity.YardListContestSettingActivity"
+            android:screenOrientation="landscape"
+            android:exported="false" />
+        <activity
+            android:name=".impActivity.YardContestSettingActivity"
+            android:exported="false"
+            android:screenOrientation="landscape" />
+        <activity
             android:name=".impActivity.MainActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:screenOrientation="landscape"
-            android:configChanges="keyboardHidden|orientation|screenSize"
             tools:ignore="DiscouragedApi">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

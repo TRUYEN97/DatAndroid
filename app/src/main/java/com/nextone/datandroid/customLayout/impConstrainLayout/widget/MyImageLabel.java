@@ -1,11 +1,11 @@
 package com.nextone.datandroid.customLayout.impConstrainLayout.widget;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.AttributeSet;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -60,6 +60,12 @@ public class MyImageLabel extends AbsCustomConstraintLayout {
         initView();
     }
 
+    public MyImageLabel(Context context, ViewGroup parent, boolean attachToRoot) {
+        super(context);
+        init(R.layout.my_image_item, parent, attachToRoot);
+        initView();
+    }
+
     private final GradientDrawable imgLabelBackground = new GradientDrawable();
     private final GradientDrawable background = new GradientDrawable();
     private final GradientDrawable background1 = new GradientDrawable();
@@ -99,7 +105,7 @@ public class MyImageLabel extends AbsCustomConstraintLayout {
         this.textValue.setTextSize(24);
         this.textLabel = findViewById(R.id.textLabel);
         this.textLabel.setTextSize(8);
-        this.textLabel.setTextColor(Color.WHITE);
+        this.textLabel.setTextColor(getColor(android.R.color.white));
         setStatus(false);
     }
 

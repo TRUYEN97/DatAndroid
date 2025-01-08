@@ -126,7 +126,7 @@ public class YardModelHandle {
                 val = false;
                 if ((contestConfig = contestConfigs.get(i)) != null
                         && (indexOfYardInput = contestConfig.getIndexOfYardInput()) != null) {
-                    if (indexOfYardInput < inputs.length()) {
+                    if (indexOfYardInput>= 0 && indexOfYardInput < inputs.length()) {
                         val = inputs.getBoolean(indexOfYardInput);
                     }
                 }

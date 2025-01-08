@@ -57,13 +57,28 @@ public class TabLayoutCustomView extends AbsTabFragment {
         }
     }
 
+    public int getCurrentItemIndex(){
+        if(viewPager == null){
+            return -1;
+        }
+        return this.viewPager.getCurrentItem();
+    }
+
     @Override
     public void updateData() {
 
     }
 
+    public void removeCurrentItem(){
+        removeItem(getCurrentItemIndex());
+    }
+
+
     @SuppressLint("NotifyDataSetChanged")
-    public void removeFragment(int positionToRemove) {
+    public void removeItem(int positionToRemove) {
+        if (positionToRemove < 0) {
+            return;
+        }
         CustomPagerAdapter adapter = (CustomPagerAdapter) this.viewPager.getAdapter();
         if (adapter != null) {
             adapter.removeFragment(positionToRemove);

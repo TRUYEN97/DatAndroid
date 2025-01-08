@@ -3,6 +3,7 @@ package com.nextone.datandroid.customLayout;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.ViewGroup;
 
 import androidx.annotation.LayoutRes;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -22,6 +23,11 @@ public abstract class AbsCustomConstraintLayout extends ConstraintLayout {
 
     protected void init(@LayoutRes int resource, boolean attachToRoot) {
         // Inflate layout
-        LayoutInflater.from(getContext()).inflate(resource, this, true);
+        LayoutInflater.from(getContext()).inflate(resource, this, attachToRoot);
+    }
+
+    protected void init(@LayoutRes int resource, ViewGroup root, boolean attachToRoot) {
+        // Inflate layout
+        LayoutInflater.from(getContext()).inflate(resource, root, attachToRoot);
     }
 }

@@ -13,11 +13,9 @@ import com.nextone.controller.Core;
 import com.nextone.datandroid.MyActivity;
 import com.nextone.datandroid.R;
 import com.nextone.datandroid.customLayout.impConstrainLayout.BaseModeLayout;
-import com.nextone.input.camera.CameraModule;
 import com.nextone.model.MyContextManagement;
 
 public class MainActivity extends MyActivity {
-    private CameraModule cameraModule;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
