@@ -62,7 +62,6 @@ public class SocketClient implements Runnable, Idisconnect, IIsConnect, Closeabl
             this.socket = new Socket(host, port);
             this.outputStream = new PrintWriter(socket.getOutputStream(), true);
             this.inputStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            this.connect = true;
             return true;
         } catch (Exception e) {
             return false;
@@ -87,6 +86,7 @@ public class SocketClient implements Runnable, Idisconnect, IIsConnect, Closeabl
         try {
             String data;
             while (isConnect() && (data = readLine()) != null) {
+                this.connect = true;
                 if (data.trim().isBlank()) {
                     continue;
                 }

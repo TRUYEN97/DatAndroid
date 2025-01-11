@@ -11,6 +11,8 @@ import com.nextone.common.Util;
 import com.nextone.common.YardConfig;
 import com.nextone.common.communication.socket.Unicast.Client.SocketClient;
 import com.nextone.common.communication.socket.Unicast.commons.Interface.IReceiver;
+import com.nextone.input.serial.MCUSerialHandler;
+import com.nextone.model.input.CarModel;
 import com.nextone.model.input.yard.YardModel;
 import com.nextone.model.input.yard.YardRankModel;
 import com.nextone.model.yardConfigMode.ContestConfig;
@@ -42,15 +44,17 @@ public class YardModelHandle {
     private final YardConfigModel yardConfig;
     @Getter
     private final YardModel yardModel;
+    private CarModel carModel;
     private Thread thread;
 
     private YardModelHandle() {
         this.carConfig = CarConfig.getInstance();
         this.yardConfig = YardConfig.getInstance().getYardConfigModel();
-        IReceiver<SocketClient> receiver = (SocketClient commnunication, String data) -> analysisReciver(data);
+        IReceiver<SocketClient> receiver = (SocketClient commnunication, String data) -> analysisReceiver(data);
         this.socketClient = new SocketClient(this.carConfig.getYardIp(),
                 this.carConfig.getYardPort(), receiver);
         this.yardModel = new YardModel();
+        this.carModel = MCUSerialHandler.getInstance().getModel();
     }
 
     public static YardModelHandle getInstance() {
@@ -66,7 +70,7 @@ public class YardModelHandle {
         return ins;
     }
 
-    private void analysisReciver(String data) {
+    private void analysisReceiver(String data) {
         if (data == null || data.isBlank()) {
             return;
         }
@@ -177,9 +181,13 @@ public class YardModelHandle {
     }
 
     private boolean sendApplyConnect() {
+        String username = this.carModel.getYardUser();
+        if(username == null || username.isBlank()){
+            return false;
+        }
         return this.socketClient.send(
                 new JSONObject(
-                        Map.of("username", this.carConfig.getYardUser(),
+                        Map.of("username", username,
                                 "password", this.carConfig.getYardPassword()))
                         .toString());
     }

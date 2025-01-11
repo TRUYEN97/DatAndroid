@@ -5,8 +5,6 @@
  */
 package com.nextone.input.serial;
 
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 
 import com.nextone.common.CarConfig;
@@ -20,8 +18,6 @@ import com.nextone.model.input.CarModel;
 import com.nextone.model.modelTest.process.ProcessModel;
 import com.nextone.model.modelView.ShareModelView;
 import com.nextone.output.SoundPlayer;
-
-import java.util.Random;
 
 /**
  *
@@ -51,15 +47,6 @@ public class MCUSerialHandler {
             System.out.println("send MCU config ok");
 
         });
-        Handler handler =  new Handler(Looper.getMainLooper());
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                model.setAt(!model.isAt());
-                ShareModelView.getInstance().postCarModel(model);
-                handler.postDelayed(this, new Random(600).nextInt());
-            }
-        },100);
         this.serialHandler.setReceiver((serial, data) -> {
             try {
                 Log.i("MCU",data);
@@ -119,6 +106,7 @@ public class MCUSerialHandler {
                     processModel.getLocation().setLng(lng);
                 }
                 this.gearBoxer.mathGearBoxValue();
+                this.model.setYardUser("usserTest");
                 ShareModelView.getInstance().postCarModel(model);
             } catch (Exception e) {
                 Log.e(getClass().getSimpleName(), "MCU serial handler", e);
