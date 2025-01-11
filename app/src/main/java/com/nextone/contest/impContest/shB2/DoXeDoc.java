@@ -42,13 +42,13 @@ public class DoXeDoc extends AbsContestHasMutiLine {
     
 
     private boolean success = false;
-    private boolean hasIntoPaking = false;
+    private boolean hasIntoPacking = false;
 
     @Override
     protected boolean loop() {
         if (this.carModel.getStatus() == ConstKey.CAR_ST.BACKWARD) {
-            if (!hasIntoPaking && this.carModel.isT2()) {
-                hasIntoPaking = true;
+            if (!hasIntoPacking && this.carModel.isT2()) {
+                hasIntoPacking = true;
             }
             if (!success && this.carModel.isT2()
                     && this.carModel.isT3()) {
@@ -58,7 +58,7 @@ public class DoXeDoc extends AbsContestHasMutiLine {
         }
         if (this.carModel.getDistance() > getContestConfig().getDistanceOut() && this.carModel.isT1()) {
             if (!success) {
-                if (hasIntoPaking) {
+                if (hasIntoPacking) {
                     addErrorCode(ConstKey.ERR.PARCKED_WRONG_POS);
                 } else {
                     addErrorCode(ConstKey.ERR.IGNORED_PARKING);
@@ -72,7 +72,7 @@ public class DoXeDoc extends AbsContestHasMutiLine {
     @Override
     protected boolean isAccept() {
         if(this.carModel.isT1() || this.carModel.isT2()) {
-            hasIntoPaking = false;
+            hasIntoPacking = false;
             success = false;
             oldDistance = this.carModel.getDistance();
             return true;

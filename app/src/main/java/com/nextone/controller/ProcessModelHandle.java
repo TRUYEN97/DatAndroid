@@ -4,20 +4,24 @@
  */
 package com.nextone.controller;
 
-import com.nextone.interfaces.IgetTime;
-import com.nextone.contest.AbsContest;
-import org.json.JSONObject;
+import android.util.Log;
+
 import com.nextone.common.CarConfig;
+import com.nextone.common.MyObjectMapper;
 import com.nextone.common.Util;
 import com.nextone.common.timer.TimeBase;
+import com.nextone.contest.AbsContest;
 import com.nextone.input.serial.MCUSerialHandler;
+import com.nextone.interfaces.IgetTime;
 import com.nextone.mode.AbsTestMode;
 import com.nextone.model.input.CarModel;
 import com.nextone.model.input.UserModel;
 import com.nextone.model.modelTest.contest.ContestDataModel;
 import com.nextone.model.modelTest.process.ProcessModel;
 import com.nextone.model.modelTest.process.TestDataViewModel;
-import com.nextone.common.MyObjectMapper;
+
+import org.json.JSONObject;
+
 import java.util.List;
 
 import lombok.Getter;
@@ -39,6 +43,7 @@ public final class ProcessModelHandle implements IgetTime {
     private long startMs = 0;
     private long endMs = 0;
     private long cysleTime = -1;
+    @Getter
     @Setter
     private boolean testing;
 
@@ -167,7 +172,7 @@ public final class ProcessModelHandle implements IgetTime {
             }
             return false;
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(getClass().getSimpleName(), "containContestClass:", e);
             return false;
         }
     }
@@ -185,7 +190,7 @@ public final class ProcessModelHandle implements IgetTime {
             String modelName = contestModels.get(index).getContestName();
             return modelName != null && modelName.equals(name);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(getClass().getSimpleName(), "containContestClass:", e);
             return false;
         }
     }
@@ -200,10 +205,6 @@ public final class ProcessModelHandle implements IgetTime {
 
     public boolean isPass() {
         return this.processModel.getContestsResult() == ProcessModel.PASS;
-    }
-
-    public boolean isTesting() {
-        return this.testing;
     }
 
     public void setContest(AbsContest absContest) {

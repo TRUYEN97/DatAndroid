@@ -9,33 +9,30 @@ import com.nextone.contest.impContest.AbsSaHinhContest;
 import com.nextone.model.yardConfigMode.ContestConfig;
 
 /**
- *
  * @author Admin
  */
 public abstract class AbsConstestJustOneLine extends AbsSaHinhContest {
 
     protected final ContestConfig contestConfig;
-    private final double intoDis;
 
     public AbsConstestJustOneLine(String name, int soundId, int timeout, ContestConfig contestConfig) {
         super(name, soundId, true, timeout);
         this.contestConfig = contestConfig;
-        this.intoDis = 3;
     }
 
     @Override
     protected boolean isIntoContest() {
-        if (this.contestConfig != null
-                && this.carModel.getDistance() > this.contestConfig.getDistanceUpperLimit()) {
-            addErrorCode(ConstKey.ERR.WRONG_WAY);
-            this.importantError.setIsImportantError();
-            this.stop();
-            return false;
-        }
-        if (this.carModel.getDistance() >= this.intoDis && isAccept()
-                && checkDistanceIntoContest()) {
-            this.carModel.setDistance(0);
-            return true;
+        if (this.contestConfig != null) {
+            if (this.carModel.getDistance() > this.contestConfig.getDistanceUpperLimit()) {
+                addErrorCode(ConstKey.ERR.WRONG_WAY);
+                this.stop();
+                return false;
+            }
+            if (this.carModel.getDistance() >= this.contestConfig.getDistanceLowerLimit() && isAccept()
+                    && checkDistanceIntoContest()) {
+                this.carModel.resetDistance();
+                return true;
+            }
         }
         return false;
     }

@@ -10,12 +10,15 @@ import com.nextone.model.yardConfigMode.ContestConfig;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Getter;
+
 /**
  *
  * @author Admin
  */
 public class CheckDistanceIntoContest {
 
+    @Getter
     private final List<ContestConfig> contestConfigs;
     private final CarModel carModel;
     private ContestConfig contestConfig;
@@ -28,10 +31,6 @@ public class CheckDistanceIntoContest {
         this.carModel = MCUSerialHandler.getInstance().getModel();
     }
 
-    public List<ContestConfig> getContestConfigs() {
-        return contestConfigs;
-    }
-
     public ContestConfig getContestConfig() {
         return contestConfig == null ? new ContestConfig() : contestConfig;
     }
@@ -40,28 +39,28 @@ public class CheckDistanceIntoContest {
          if (contestConfigs.isEmpty()) {
             return false;
         }
-        double deta = this.carModel.getDistance() - oldDistance;
+        double delta = this.carModel.getDistance() - oldDistance;
         ContestConfig config;
         for (int i = 0; i < contestConfigs.size(); i++) {
             if ((config = contestConfigs.get(i)) == null) {
                 continue;
             }
-            if (deta <= config.getDistanceUpperLimit()) {
+            if (delta <= config.getDistanceUpperLimit()) {
                 return false;
             }
         }
         return true;
     }
 
-    public int check(double oldDistance) {
-        double deta = this.carModel.getDistance() - oldDistance;
+    public int getIndexOfLine(double oldDistance) {
+        double delta = this.carModel.getDistance() - oldDistance;
         ContestConfig config;
         for (int i = 0; i < contestConfigs.size(); i++) {
             if ((config = contestConfigs.get(i)) == null) {
                 continue;
             }
-            if (deta <= config.getDistanceUpperLimit()
-                    && deta >= config.getDistanceLowerLimit()) {
+            if (delta <= config.getDistanceUpperLimit()
+                    && delta >= config.getDistanceLowerLimit()) {
                 this.contestConfig = config;
                 return i;
             }
@@ -69,4 +68,17 @@ public class CheckDistanceIntoContest {
         return -1;
     }
 
+    public boolean isEnoughMinDistanceSpec(double oldDistance) {
+        double delta = this.carModel.getDistance() - oldDistance;
+        ContestConfig config;
+        for (int i = 0; i < contestConfigs.size(); i++) {
+            if ((config = contestConfigs.get(i)) == null) {
+                continue;
+            }
+            if (delta >= config.getDistanceLowerLimit()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

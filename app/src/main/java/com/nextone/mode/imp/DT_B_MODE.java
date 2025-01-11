@@ -10,7 +10,7 @@ import com.nextone.contest.impContest.dtB2.XuatPhat;
 import com.nextone.contest.impContest.dtB2.GiamToc;
 import com.nextone.contest.impContest.dtB2.KetThuc;
 import com.nextone.contest.impContest.dtB2.TangToc;
-import com.nextone.datandroid.customLayout.impConstrainLayout.modeView.AbsModeView;
+import com.nextone.datandroid.fragment.modeView.AbsModeViewFragment;
 import com.nextone.mode.AbsDuongTruongMode;
 import com.nextone.model.input.UserModel;
 import com.nextone.pretreatment.IKeyEvent;
@@ -21,7 +21,7 @@ import java.util.Map;
  *
  * @author Admin
  */
-public class DT_B_MODE<V extends AbsModeView> extends AbsDuongTruongMode<V> {
+public class DT_B_MODE<V extends AbsModeViewFragment> extends AbsDuongTruongMode<V> {
 
     public DT_B_MODE(V truongView, boolean isOnline) {
         this(truongView, ConstKey.MODE_NAME.DUONG_TRUONG, List.of("B1", "B2", "C", "D", "E"), isOnline);

@@ -1,4 +1,4 @@
-package com.nextone.datandroid.customLayout.tabLayout.tabFragmant;
+package com.nextone.datandroid.fragment.tabLayout.tabFragmant;
 
 import android.content.Intent;
 import android.util.Log;
@@ -8,8 +8,8 @@ import androidx.fragment.app.Fragment;
 
 import com.nextone.common.YardConfig;
 import com.nextone.datandroid.R;
-import com.nextone.datandroid.customLayout.recyclerView.RecyclerViewFragment;
-import com.nextone.datandroid.customLayout.recyclerView.YardRecylerAdapter;
+import com.nextone.datandroid.fragment.recyclerView.RecyclerViewFragment;
+import com.nextone.datandroid.fragment.recyclerView.YardRecylerAdapter;
 import com.nextone.datandroid.impActivity.YardContestSettingActivity;
 import com.nextone.datandroid.impActivity.YardListContestSettingActivity;
 /**
@@ -126,7 +126,7 @@ public class YardSettingFragment extends AbsTabFragment {
 
     @Override
     protected void onInitViewCreated(View view) {
-        addChildFragment(R.id.settingYardContainer, recyclerViewFragment,
+        setChildFragment(R.id.settingYardContainer, recyclerViewFragment,
                 "YardRankSetting"+rank, false);
     }
 

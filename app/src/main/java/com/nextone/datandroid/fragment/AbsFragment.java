@@ -1,4 +1,4 @@
-package com.nextone.datandroid;
+package com.nextone.datandroid.fragment;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +21,7 @@ public abstract class AbsFragment extends Fragment {
     }
 
     protected abstract void onInitViewCreated(View view);
+
     protected abstract void onInitCreateView(View view);
 
 
@@ -38,7 +39,7 @@ public abstract class AbsFragment extends Fragment {
         return view;
     }
 
-    public void addChildFragment(int resource, Fragment fragment, String tab, boolean addToBackStack) {
+    public void setChildFragment(int resource, Fragment fragment, String tab, boolean addToBackStack) {
         if (fragment == null) {
             return;
         }
@@ -48,7 +49,7 @@ public abstract class AbsFragment extends Fragment {
             fragmentTransaction.addToBackStack(null);
         }
         fragmentTransaction.commit();
-        Log.i(getClass().getSimpleName(), "fragment toBackStack:"+
+        Log.i(getClass().getSimpleName(), "fragment toBackStack:" +
                 getChildFragmentManager().getBackStackEntryCount());
     }
 

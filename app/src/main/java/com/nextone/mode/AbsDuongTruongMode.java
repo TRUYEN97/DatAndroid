@@ -11,7 +11,7 @@ import com.nextone.contest.AbsContest;
 import com.nextone.contest.impCondition.ContainContestChecker;
 import com.nextone.contest.impCondition.OnOffImp.CheckCM;
 import com.nextone.contest.impCondition.OnOffImp.CheckRPM;
-import com.nextone.datandroid.customLayout.impConstrainLayout.modeView.AbsModeView;
+import com.nextone.datandroid.fragment.modeView.AbsModeViewFragment;
 import com.nextone.model.modelTest.process.ProcessModel;
 import com.nextone.pretreatment.IKeyEvent;
 
@@ -21,7 +21,7 @@ import java.util.Map;
 /**
  * @author Admin
  */
-public abstract class AbsDuongTruongMode<V extends AbsModeView> extends AbsTestMode<V> {
+public abstract class AbsDuongTruongMode<V extends AbsModeViewFragment> extends AbsTestMode<V> {
 
     protected boolean runnable;
     protected boolean hasXp = false;

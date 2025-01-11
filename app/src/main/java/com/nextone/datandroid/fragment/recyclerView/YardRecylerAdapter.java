@@ -1,4 +1,4 @@
-package com.nextone.datandroid.customLayout.recyclerView;
+package com.nextone.datandroid.fragment.recyclerView;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -27,6 +27,7 @@ public class YardRecylerAdapter extends RecyclerView.Adapter<YardRecylerAdapter.
     public void addItem(YardRecycleModel item) {
         if (item == null) return;
         itemList.add(item);
+        notifyItemInserted(itemList.size() - 1);
     }
 
     @NonNull

@@ -96,9 +96,7 @@ public class NgaTu extends AbsConstestJustOneLine {
                 addErrorCode(ConstKey.ERR.WRONG_WAY);
                 return true;
             }
-            if (d >= this.contestConfig.getDistanceOut()) {
-                return true;
-            }
+            return d >= this.contestConfig.getDistanceOut();
         }
         return false;
     }

@@ -8,22 +8,20 @@ import com.nextone.common.ConstKey;
 import com.nextone.contest.impCondition.OnOffImp.CheckDistanceIntoContest;
 import com.nextone.contest.impContest.AbsSaHinhContest;
 import com.nextone.model.yardConfigMode.ContestConfig;
+
 import java.util.List;
 
 /**
- *
  * @author Admin
  */
 public abstract class AbsContestHasMutiLine extends AbsSaHinhContest {
 
     protected final CheckDistanceIntoContest distanceIntoContest;
-    private final double intoDis;
     private int index = -1;
 
-    public AbsContestHasMutiLine(String name,int soundId, int timeout, List<ContestConfig> contestConfigs) {
-        super(name, soundId,false, timeout);
+    public AbsContestHasMutiLine(String name, int soundId, int timeout, List<ContestConfig> contestConfigs) {
+        super(name, soundId, false, timeout);
         this.distanceIntoContest = new CheckDistanceIntoContest(contestConfigs);
-        this.intoDis = 3;
     }
 
     public ContestConfig getContestConfig() {
@@ -34,17 +32,14 @@ public abstract class AbsContestHasMutiLine extends AbsSaHinhContest {
     protected boolean isIntoContest() {
         if (this.distanceIntoContest.isDistanceOutOfSpec(0)) {
             addErrorCode(ConstKey.ERR.WRONG_LANE);
-            this.importantError.setIsImportantError();
             this.stop();
             return false;
         }
-        if (this.carModel.getDistance() >= this.intoDis && isAccept()
-                && checkIntoContest(0)) {
+        if (this.distanceIntoContest.isEnoughMinDistanceSpec(0) && isAccept()
+                && checkIntoContest()) {
             this.carModel.setDistance(0);
             if (index >= 0) {
-                new Thread(() -> {
-                    this.soundPlayer.sayNumber(index + 1);
-                }).start();
+                this.soundPlayer.sayNumber(index + 1);
             }
             return true;
         }
@@ -60,11 +55,10 @@ public abstract class AbsContestHasMutiLine extends AbsSaHinhContest {
         return status.get(index);
     }
 
-    private boolean checkIntoContest(double oldDistance) {
-        this.index = this.distanceIntoContest.check(oldDistance);
+    private boolean checkIntoContest() {
+        this.index = this.distanceIntoContest.getIndexOfLine(0);
         if (this.index == -1) {
             addErrorCode(ConstKey.ERR.WRONG_LANE);
-            this.importantError.setIsImportantError();
             this.stop();
             return false;
         } else {

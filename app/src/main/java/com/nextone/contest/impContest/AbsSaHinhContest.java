@@ -19,6 +19,9 @@ public abstract class AbsSaHinhContest extends AbsContest {
     @Override
     public void end() {
         super.end(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+        this.carModel.setT1(false);
+        this.carModel.setT2(false);
+        this.carModel.setT3(false);
         this.carModel.setDistance(0);
     }
 

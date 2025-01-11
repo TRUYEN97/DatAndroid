@@ -14,7 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.nextone.common.YardConfig;
 import com.nextone.datandroid.MyActivity;
 import com.nextone.datandroid.R;
-import com.nextone.datandroid.customLayout.tabLayout.tabFragmant.ContestConfigFragment;
+import com.nextone.datandroid.fragment.tabLayout.tabFragmant.ContestConfigFragment;
 import com.nextone.model.yardConfigMode.ContestConfig;
 import com.nextone.model.yardConfigMode.YardConfigModel;
 import com.nextone.model.yardConfigMode.YardRankConfig;

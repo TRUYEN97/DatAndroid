@@ -16,9 +16,9 @@ import androidx.fragment.app.FragmentTransaction;
 import com.nextone.common.YardConfig;
 import com.nextone.datandroid.MyActivity;
 import com.nextone.datandroid.R;
-import com.nextone.datandroid.customLayout.tabLayout.CustomPagerAdapter;
-import com.nextone.datandroid.customLayout.tabLayout.TabLayoutCustomView;
-import com.nextone.datandroid.customLayout.tabLayout.tabFragmant.ContestConfigFragment;
+import com.nextone.datandroid.fragment.tabLayout.CustomPagerAdapter;
+import com.nextone.datandroid.fragment.tabLayout.TabLayoutCustomFragment;
+import com.nextone.datandroid.fragment.tabLayout.tabFragmant.ContestConfigFragment;
 import com.nextone.model.yardConfigMode.ContestConfig;
 import com.nextone.model.yardConfigMode.YardConfigModel;
 import com.nextone.model.yardConfigMode.YardRankConfig;
@@ -56,7 +56,7 @@ public class YardListContestSettingActivity extends MyActivity {
         String name = getIntent().getStringExtra(CONTEST_NAME_KEY);
         TextView textName = findViewById(R.id.txtName);
         textName.setText(name);
-        TabLayoutCustomView tabLayoutCustomView = new TabLayoutCustomView();
+        TabLayoutCustomFragment tabLayoutCustomView = new TabLayoutCustomFragment();
         CustomPagerAdapter settingPagerAdapter = new CustomPagerAdapter(this);
         contestConfigs = getContestConfigs(rank, contestIndex);
         findViewById(R.id.btAdd).setOnClickListener(v -> {

@@ -53,6 +53,18 @@ public class CarModel {
         this.remoteValues.add(value);
     }
 
+    public synchronized void setDistance(double distance) {
+        this.distance = distance;
+    }
+
+    public synchronized void addDistance(double distance) {
+        this.distance += distance;
+    }
+
+    public void resetDistance(){
+        setDistance(0);
+    }
+
     public String peekRemoteVal() {
         return this.remoteValues.peek();
     }

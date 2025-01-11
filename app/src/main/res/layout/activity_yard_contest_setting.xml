@@ -8,7 +8,7 @@
     tools:context=".impActivity.YardContestSettingActivity">
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView"
-        android:name="com.nextone.datandroid.customLayout.tabLayout.tabFragmant.ContestConfigFragment"
+        android:name="com.nextone.datandroid.fragment.tabLayout.tabFragmant.ContestConfigFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

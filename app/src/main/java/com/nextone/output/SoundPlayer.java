@@ -152,7 +152,7 @@ public class SoundPlayer {
     }
 
     public void successSound() {
-        play(R.raw.success);
+        playSequential(R.raw.ding_dong);
     }
 
     public void alarm() {

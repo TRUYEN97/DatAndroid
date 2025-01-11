@@ -1,4 +1,4 @@
-package com.nextone.datandroid.customLayout.tabLayout;
+package com.nextone.datandroid.fragment.tabLayout;
 
 import android.annotation.SuppressLint;
 import android.view.View;
@@ -9,11 +9,11 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.nextone.datandroid.R;
-import com.nextone.datandroid.customLayout.tabLayout.tabFragmant.AbsTabFragment;
+import com.nextone.datandroid.fragment.tabLayout.tabFragmant.AbsTabFragment;
 
 import lombok.Setter;
 
-public class TabLayoutCustomView extends AbsTabFragment {
+public class TabLayoutCustomFragment extends AbsTabFragment {
 
     private TabLayout tabLayout;
     private ViewPager2 viewPager;
@@ -25,7 +25,7 @@ public class TabLayoutCustomView extends AbsTabFragment {
     private CustomPagerAdapter adapter;
 
 
-    public TabLayoutCustomView() {
+    public TabLayoutCustomFragment() {
         super(R.layout.tab_layout_custom);
     }
 

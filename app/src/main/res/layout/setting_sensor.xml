@@ -5,7 +5,7 @@
     android:id="@+id/sensorTabSetting"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".customLayout.tabLayout.tabFragmant.SensorSettingFragment">
+    tools:context=".fragment.tabLayout.tabFragmant.SensorSettingFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

@@ -1,11 +1,11 @@
-package com.nextone.datandroid.customLayout.recyclerView;
+package com.nextone.datandroid.fragment.recyclerView;
 
 import android.view.View;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.nextone.datandroid.AbsFragment;
+import com.nextone.datandroid.fragment.AbsFragment;
 import com.nextone.datandroid.R;
 
 public class RecyclerViewFragment<VH extends RecyclerView.ViewHolder> extends AbsFragment {

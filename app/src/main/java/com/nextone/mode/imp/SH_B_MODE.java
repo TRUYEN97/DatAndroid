@@ -4,18 +4,28 @@
  */
 package com.nextone.mode.imp;
 
-import com.nextone.contest.impContest.shB2.*;
-import com.nextone.datandroid.customLayout.impConstrainLayout.modeView.AbsModeView;
+import com.nextone.contest.impContest.shB2.DoXeDoc;
+import com.nextone.contest.impContest.shB2.DoXeNgang;
+import com.nextone.contest.impContest.shB2.DungXe;
+import com.nextone.contest.impContest.shB2.DungXeNgangDoc;
+import com.nextone.contest.impContest.shB2.DuongS;
+import com.nextone.contest.impContest.shB2.DuongTau;
+import com.nextone.contest.impContest.shB2.KetThuc;
+import com.nextone.contest.impContest.shB2.KhanCap;
+import com.nextone.contest.impContest.shB2.NgaTu;
+import com.nextone.contest.impContest.shB2.TangTocDuongThang;
+import com.nextone.contest.impContest.shB2.VetBanhXe;
+import com.nextone.contest.impContest.shB2.XuatPhat;
+import com.nextone.datandroid.fragment.modeView.AbsModeViewFragment;
 import com.nextone.mode.AbsSaHinhMode;
 
 import java.util.List;
 import java.util.Random;
-
 /**
  *
  * @author Admin
  */
-public class SH_B_MODE<V  extends AbsModeView> extends AbsSaHinhMode<V> {
+public class SH_B_MODE<V  extends AbsModeViewFragment> extends AbsSaHinhMode<V> {
 
     public SH_B_MODE(V hinhView, boolean isOnline) {
         super(hinhView, 24, 1080, MODEL_RANK_NAME.RANK_B, List.of("B1", "B2"), isOnline);

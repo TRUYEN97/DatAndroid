@@ -1,4 +1,4 @@
-package com.nextone.datandroid.customLayout.impConstrainLayout.modeView.interfaces;
+package com.nextone.datandroid.fragment.modeView.interfaces;
 
 public interface IStart {
     void start();

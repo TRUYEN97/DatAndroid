@@ -1,4 +1,4 @@
-package com.nextone.datandroid.customLayout.impConstrainLayout.modeView;
+package com.nextone.datandroid.fragment.modeView;
 
 import android.view.View;
 
@@ -13,7 +13,7 @@ import com.nextone.input.serial.MCUSerialHandler;
 import com.nextone.model.input.CarModel;
 import com.nextone.model.modelTest.process.TestDataViewModel;
 
-public class SaHinhView extends AbsModeView{
+public class SaHinhViewFragment extends AbsModeViewFragment {
 
     private TestDataViewModel dataViewModel;
 
@@ -24,7 +24,7 @@ public class SaHinhView extends AbsModeView{
     private MyImageLabel lbCb1;
     private MyImageLabel lbCb2;
     private MyImageLabel lbCb3;
-    public SaHinhView() {
+    public SaHinhViewFragment() {
         super(R.layout.view_mode_sa_hinh);
     }
 
@@ -86,8 +86,4 @@ public class SaHinhView extends AbsModeView{
 
     }
 
-    @Override
-    public void showModeName(String fullName) {
-
-    }
 }

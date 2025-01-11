@@ -15,7 +15,7 @@ import com.nextone.contest.impContest.shB2.NgaTu;
 import com.nextone.contest.impContest.shB2.TangTocDuongThang;
 import com.nextone.contest.impContest.shB2.VetBanhXe;
 import com.nextone.contest.impContest.shB2.XuatPhat;
-import com.nextone.datandroid.customLayout.impConstrainLayout.modeView.AbsModeView;
+import com.nextone.datandroid.fragment.modeView.AbsModeViewFragment;
 import com.nextone.mode.AbsSaHinhMode;
 
 import java.util.List;
@@ -25,7 +25,7 @@ import java.util.Random;
  *
  * @author Admin
  */
-public class SH_E_MODE<V  extends AbsModeView> extends AbsSaHinhMode<V> {
+public class SH_E_MODE<V  extends AbsModeViewFragment> extends AbsSaHinhMode<V> {
 
     public SH_E_MODE(V hinhView, boolean isOnline) {
         super(hinhView, 20, 1200, MODEL_RANK_NAME.RANK_E, List.of("E"), isOnline);

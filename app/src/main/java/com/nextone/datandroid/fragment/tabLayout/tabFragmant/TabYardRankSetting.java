@@ -1,18 +1,18 @@
-package com.nextone.datandroid.customLayout.tabLayout.tabFragmant;
+package com.nextone.datandroid.fragment.tabLayout.tabFragmant;
 
 import android.view.View;
 
 import com.nextone.datandroid.R;
-import com.nextone.datandroid.customLayout.tabLayout.CustomPagerAdapter;
-import com.nextone.datandroid.customLayout.tabLayout.TabLayoutCustomView;
+import com.nextone.datandroid.fragment.tabLayout.CustomPagerAdapter;
+import com.nextone.datandroid.fragment.tabLayout.TabLayoutCustomFragment;
 
 public class TabYardRankSetting extends AbsTabFragment {
 
-    private final TabLayoutCustomView tabLayoutCustomView;
+    private final TabLayoutCustomFragment tabLayoutCustomView;
 
     public TabYardRankSetting() {
         super(R.layout.setting_yard);
-        this.tabLayoutCustomView = new TabLayoutCustomView();
+        this.tabLayoutCustomView = new TabLayoutCustomFragment();
         this.tabLayoutCustomView.setCallback(pager -> {
             CustomPagerAdapter settingPagerAdapter = new CustomPagerAdapter(requireActivity());
             settingPagerAdapter.addFragment(new YardSettingFragment(1), "Hạng B");
@@ -33,7 +33,7 @@ public class TabYardRankSetting extends AbsTabFragment {
 
     @Override
     protected void onInitViewCreated(View view) {
-        addChildFragment(R.id.settingYardContainer, tabLayoutCustomView, "YardSetting", true);
+        setChildFragment(R.id.settingYardContainer, tabLayoutCustomView, "YardSetting", true);
     }
 
     @Override

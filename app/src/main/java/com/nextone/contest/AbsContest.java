@@ -101,6 +101,8 @@ public abstract class AbsContest implements IgetTime {
 
     public void stop() {
         this.stop = true;
+        this.importantError.setIsImportantError();
+        Util.delay(500);
     }
 
     @Override

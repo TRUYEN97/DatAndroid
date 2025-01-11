@@ -9,19 +9,17 @@ import android.widget.GridLayout;
 
 import androidx.annotation.ColorRes;
 
-import com.nextone.datandroid.customLayout.impConstrainLayout.modeView.interfaces.IStart;
 import com.nextone.input.serial.MCUSerialHandler;
 import com.nextone.model.input.CarModel;
 
 import lombok.Getter;
 import lombok.Setter;
 
-public abstract class AbsGridLayoutView extends GridLayout implements IStart {
+public abstract class AbsGridLayoutView extends GridLayout{
 
     protected final CarModel carModel;
     protected final GradientDrawable background;
     protected final Handler handlerTimer;
-    protected Runnable runnable;
     @Getter
     @Setter
     protected int timeUpdate = 100;
@@ -59,10 +57,6 @@ public abstract class AbsGridLayoutView extends GridLayout implements IStart {
         setColumnCount(columnCount);
         setRowCount(rowCount);
         LayoutInflater.from(getContext()).inflate(layoutId, this, true);
-        this.runnable = () -> {
-            this.update();
-            this.handlerTimer.postDelayed(this.runnable, timeUpdate);
-        };
         this.background.setColor(getColor(color));
         this.background.setCornerRadii(new float[]{
                 25f, 25f,
@@ -85,22 +79,6 @@ public abstract class AbsGridLayoutView extends GridLayout implements IStart {
         return getResources().getColor(onColor, getContext().getTheme());
     }
 
-
-    @Override
-    public boolean isStarted() {
-        return this.running;
-    }
-
     protected abstract void update();
 
-    public void start() {
-        if (this.running) return;
-        this.handlerTimer.postDelayed(this.runnable, timeUpdate);
-        this.running = true;
-    }
-
-    public void stop() {
-        this.handlerTimer.removeCallbacks(this.runnable);
-        this.running = false;
-    }
 }

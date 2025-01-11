@@ -17,7 +17,7 @@ import com.nextone.contest.impContest.shB2.NgaTu;
 import com.nextone.contest.impContest.shB2.TangTocDuongThang;
 import com.nextone.contest.impContest.shB2.VetBanhXe;
 import com.nextone.contest.impContest.shB2.XuatPhat;
-import com.nextone.datandroid.customLayout.impConstrainLayout.modeView.AbsModeView;
+import com.nextone.datandroid.fragment.modeView.AbsModeViewFragment;
 import com.nextone.input.serial.MCUSerialHandler;
 import com.nextone.mode.AbsSaHinhMode;
 import com.nextone.model.input.UserModel;
@@ -29,7 +29,7 @@ import java.util.Map;
  *
  * @author Admin
  */
-public class SH_OFF<V  extends AbsModeView> extends AbsSaHinhMode<V> {
+public class SH_OFF<V  extends AbsModeViewFragment> extends AbsSaHinhMode<V> {
 
     public SH_OFF(V hinhView) {
         super(hinhView, 24, 1800, MODEL_RANK_NAME.RANK_B, List.of("off"), false);

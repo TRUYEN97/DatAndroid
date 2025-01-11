@@ -64,23 +64,18 @@ public class ContestRunner implements Runnable {
         while (!future.isDone() && !this.testDone) {
             if (currContest.isTestConditionsFailed()) {
                 stop(currContest);
-                break;
             }
             if (testMode == null || testMode.isTestConditionsFailed()) {
                 stop(currContest);
-                break;
             }
         }
         while (!future.isDone()) {
-            currContest.stop();
             future.cancel(true);
             if (currContest.isTestConditionsFailed()) {
                 stop(currContest);
-//                break;
             }
             if (testMode == null || testMode.isTestConditionsFailed()) {
                 stop(currContest);
-//                break;
             }
             Util.delay(100);
         }

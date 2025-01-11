@@ -1,4 +1,4 @@
-package com.nextone.datandroid.customLayout.tabLayout;
+package com.nextone.datandroid.fragment.tabLayout;
 
 import android.annotation.SuppressLint;
 

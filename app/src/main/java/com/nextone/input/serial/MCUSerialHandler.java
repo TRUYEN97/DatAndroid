@@ -5,18 +5,23 @@
  */
 package com.nextone.input.serial;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import com.nextone.common.CarConfig;
-import com.nextone.model.MyJson;
 import com.nextone.common.ConstKey;
 import com.nextone.common.MyObjectMapper;
 import com.nextone.common.Util;
 import com.nextone.controller.ProcessModelHandle;
+import com.nextone.model.MyJson;
 import com.nextone.model.config.MCU_CONFIG_MODEL;
 import com.nextone.model.input.CarModel;
 import com.nextone.model.modelTest.process.ProcessModel;
+import com.nextone.model.modelView.ShareModelView;
 import com.nextone.output.SoundPlayer;
+
+import java.util.Random;
 
 /**
  *
@@ -46,6 +51,15 @@ public class MCUSerialHandler {
             System.out.println("send MCU config ok");
 
         });
+        Handler handler =  new Handler(Looper.getMainLooper());
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                model.setAt(!model.isAt());
+                ShareModelView.getInstance().postCarModel(model);
+                handler.postDelayed(this, new Random(600).nextInt());
+            }
+        },100);
         this.serialHandler.setReceiver((serial, data) -> {
             try {
                 Log.i("MCU",data);
@@ -71,7 +85,7 @@ public class MCUSerialHandler {
                     SoundPlayer soundPlayer = SoundPlayer.getInstance();
                     if (t1 || t2) {
                         if (!this.sendorStartEnable) {
-                            this.model.setDistance(0);
+                            this.model.resetDistance();
                             this.sendorStartEnable = true;
                             if (this.startSoundThread == null || !this.startSoundThread.isAlive()) {
                                 this.startSoundThread = new Thread(soundPlayer::startContest);
@@ -94,8 +108,7 @@ public class MCUSerialHandler {
                     }
                 }
                 this.model.setStatus(json.getInt(ConstKey.CAR_MODEL_KEY.STATUS, ConstKey.CAR_ST.STOP));
-                this.model.setDistance(this.model.getDistance()
-                        + json.getDouble(ConstKey.CAR_MODEL_KEY.DISTANCE, 0));
+                this.model.addDistance(json.getDouble(ConstKey.CAR_MODEL_KEY.DISTANCE, 0));
                 this.model.setSpeed(json.getDouble(ConstKey.CAR_MODEL_KEY.SPEED, 0));
                 this.model.setRpm(json.getInt(ConstKey.CAR_MODEL_KEY.RPM, 0));
                 double lat = json.getDouble(ConstKey.CAR_MODEL_KEY.LATITUDE, 0);
@@ -106,8 +119,9 @@ public class MCUSerialHandler {
                     processModel.getLocation().setLng(lng);
                 }
                 this.gearBoxer.mathGearBoxValue();
+                ShareModelView.getInstance().postCarModel(model);
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e(getClass().getSimpleName(), "MCU serial handler", e);
             }
         });
     }

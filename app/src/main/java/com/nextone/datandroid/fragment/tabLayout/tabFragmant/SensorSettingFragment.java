@@ -1,4 +1,4 @@
-package com.nextone.datandroid.customLayout.tabLayout.tabFragmant;
+package com.nextone.datandroid.fragment.tabLayout.tabFragmant;
 
 import android.util.Log;
 import android.view.View;

@@ -1,5 +1,6 @@
-package com.nextone.datandroid.customLayout.impConstrainLayout;
+package com.nextone.datandroid.fragment.compoment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
@@ -7,45 +8,36 @@ import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.nextone.controller.ModeChooser;
 import com.nextone.controller.ProcessModelHandle;
-import com.nextone.datandroid.AbsFragment;
 import com.nextone.datandroid.R;
 import com.nextone.datandroid.customLayout.impConstrainLayout.widget.MyImageLabel;
-import com.nextone.datandroid.customLayout.tabLayout.CustomPagerAdapter;
-import com.nextone.datandroid.customLayout.tabLayout.TabLayoutCustomView;
-import com.nextone.datandroid.customLayout.tabLayout.tabFragmant.SensorSettingFragment;
-import com.nextone.datandroid.customLayout.tabLayout.tabFragmant.TabYardRankSetting;
+import com.nextone.datandroid.fragment.AbsFragment;
+import com.nextone.datandroid.impActivity.ChooseModeActivity;
+import com.nextone.datandroid.impActivity.SettingActivity;
 import com.nextone.input.camera.CameraModule;
 import com.nextone.input.serial.MCUSerialHandler;
 import com.nextone.input.socket.YardModelHandle;
+import com.nextone.model.modelView.ShareModelView;
+import com.nextone.datandroid.fragment.modeView.AbsModeViewFragment;
 
-public class BaseModeLayout extends AbsFragment {
+public class BaseModeLayoutFragment extends AbsFragment {
 
 
     private MyImageLabel socketAlam;
     private MyImageLabel sensorAlam;
 
     private final Handler handler;
-
-    private final ModeChooser modeChooser;
-
-
     private final CameraModule cameraModule;
 
-    private final TabLayoutCustomView tabLayoutCustomView;
+    private Button btMode;
 
 
-
-    public BaseModeLayout() {
+    public BaseModeLayoutFragment() {
         super(R.layout.view_frame_mode);
-        this.modeChooser = new ModeChooser();
         this.handler = new Handler(Looper.getMainLooper());
         this.cameraModule = new CameraModule();
-        this.tabLayoutCustomView = new TabLayoutCustomView();
     }
 
     private void update() {
@@ -60,7 +52,8 @@ public class BaseModeLayout extends AbsFragment {
 
     private void initBackground(View view) {
         GradientDrawable background = new GradientDrawable();
-        background.setColor(getResources().getColor(android.R.color.darker_gray, getContext().getTheme()));
+        background.setColor(getResources().getColor(android.R.color.darker_gray,
+                getContext() == null ? null : getContext().getTheme()));
         background.setCornerRadii(new float[]{
                 25f, 25f,
                 25f, 25f,
@@ -70,8 +63,9 @@ public class BaseModeLayout extends AbsFragment {
         view.findViewById(R.id.informationView).setBackground(background);
     }
 
-    public void addFragment(Fragment fragment, String tab, boolean addToBackStack) {
-        addChildFragment(R.id.boardModeView, fragment, tab, addToBackStack);
+    public void setFragment(Fragment fragment, String tab, boolean addToBackStack) {
+        if (getContext() == null) return;
+        setChildFragment(R.id.boardModeView, fragment, tab, addToBackStack);
     }
 
     @Override
@@ -94,27 +88,22 @@ public class BaseModeLayout extends AbsFragment {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        cameraModule.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
-    @Override
     protected void onInitViewCreated(View view) {
         view.findViewById(R.id.btSetting).setOnClickListener(v -> {
-            if (!ProcessModelHandle.getInstance().isTesting()) {
-                tabLayoutCustomView.setCallback(pager -> {
-                    CustomPagerAdapter settingPagerAdapter = new CustomPagerAdapter(requireActivity());
-                    settingPagerAdapter.addFragment(new SensorSettingFragment(), "Cảm biến");
-                    settingPagerAdapter.addFragment(new TabYardRankSetting(), "Thông tin sân");
-                    return settingPagerAdapter;
-                });
-                addFragment(tabLayoutCustomView, "tab_setting", false);
+            showSetting();
+        });
+        this.handler.postDelayed(this::update, 100);
+        ShareModelView.getInstance().getSubScreenFragment().observe(this, fragment -> {
+            if (fragment != null) {
+                if ( this.btMode != null && fragment instanceof AbsModeViewFragment viewFragment) {
+                    setFragment(fragment, "Mode view fagment", false);
+                    String currentModeName = viewFragment.getCurrentModeName();
+                    this.btMode.setText(currentModeName == null ? "Chọn chế độ" : currentModeName);
+                }
+            } else {
+                showModeChooser();
             }
         });
-        this.modeChooser.setFrameLayout(this);
-        this.modeChooser.show();
-        this.handler.postDelayed(this::update, 100);
     }
 
     @Override
@@ -125,10 +114,10 @@ public class BaseModeLayout extends AbsFragment {
         this.sensorAlam = view.findViewById(R.id.sensorAlam);
         this.sensorAlam.setTextLabel("Cảm biến");
         this.sensorAlam.setTextLabelColor(Color.BLACK);
-        Button btMode = view.findViewById(R.id.btMode);
-        btMode.setText("Chọn chế độ");
-        btMode.setOnClickListener(v -> {
-            this.modeChooser.show();
+        this.btMode = view.findViewById(R.id.btMode);
+        this.btMode.setText("Chọn chế độ");
+        this.btMode.setOnClickListener(v -> {
+            this.showModeChooser();
         });
         /////////////////////////////
         initCamera(view);
@@ -142,6 +131,17 @@ public class BaseModeLayout extends AbsFragment {
         lbSetting.setButtonMode(true);
         /////////////////////////////
         initBackground(view);
+    }
 
+    public void showModeChooser() {
+        if (!ProcessModelHandle.getInstance().isTesting()) {
+            Intent intent = new Intent(requireActivity(), ChooseModeActivity.class);
+            startActivity(intent);
+        }
+    }
+
+    public void showSetting() {
+        Intent intent = new Intent(requireActivity(), SettingActivity.class);
+        startActivity(intent);
     }
 }

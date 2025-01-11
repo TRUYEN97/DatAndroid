@@ -1,4 +1,4 @@
-package com.nextone.datandroid.customLayout.impConstrainLayout.modeView;
+package com.nextone.datandroid.fragment.modeView;
 
 import android.view.View;
 
@@ -9,12 +9,12 @@ import com.nextone.datandroid.customLayout.grid.impGridLayout.CarStatusView;
 import com.nextone.datandroid.customLayout.grid.impGridLayout.DuongTruongControlView;
 import com.nextone.datandroid.customLayout.grid.impGridLayout.TestValueView;
 
-public class DuongTruongView extends AbsModeView {
+public class DuongTruongViewFragment extends AbsModeViewFragment {
     private CarStatusView carStatusView;
     private TestValueView testValueView;
     private DuongTruongControlView duongTruongControlView;
 
-    public DuongTruongView() {
+    public DuongTruongViewFragment() {
         super(R.layout.view_mode_duong_truong);
     }
 
@@ -31,8 +31,4 @@ public class DuongTruongView extends AbsModeView {
         this.duongTruongControlView.update();
     }
 
-    @Override
-    public void showModeName(String fullName) {
-
-    }
 }

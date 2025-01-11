@@ -12,7 +12,7 @@ import com.nextone.contest.impCondition.ContainContestChecker;
 import com.nextone.contest.impCondition.OnOffImp.CheckCM;
 import com.nextone.contest.impCondition.OnOffImp.CheckRPM;
 import com.nextone.contest.impCondition.timerCondition.TatalTimeOut;
-import com.nextone.datandroid.customLayout.impConstrainLayout.modeView.AbsModeView;
+import com.nextone.datandroid.fragment.modeView.AbsModeViewFragment;
 import com.nextone.input.serial.MCUSerialHandler;
 import com.nextone.input.socket.YardModelHandle;
 import com.nextone.model.input.UserModel;
@@ -28,7 +28,7 @@ import java.util.Map;
 /**
  * @author Admin
  */
-public abstract class AbsSaHinhMode<V extends AbsModeView> extends AbsTestMode<V> {
+public abstract class AbsSaHinhMode<V extends AbsModeViewFragment> extends AbsTestMode<V> {
 
     protected static enum MODEL_RANK_NAME {
         RANK_B, RANK_C, RANK_D, RANK_E

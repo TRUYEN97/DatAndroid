@@ -95,7 +95,7 @@ public class KhanCap extends AbsContest {
         return false;
     }
 
-    class WarningSoundPlayer {
+    private class WarningSoundPlayer {
 
         Thread thread;
         boolean stop = false;
@@ -107,8 +107,8 @@ public class KhanCap extends AbsContest {
                     while (!stop) {
                         uSerialHandler.sendLedRedOn();
                         soundPlayer.alarm();
+                        Util.delay(686);
                         uSerialHandler.sendLedRedOff();
-                        Util.delay(50);
                     }
                 });
                 thread.start();
@@ -118,7 +118,7 @@ public class KhanCap extends AbsContest {
         void stop() {
             stop = true;
             if (this.thread != null && this.thread.isAlive()) {
-                this.thread.stop();
+                this.thread.interrupt();
             }
         }
     }

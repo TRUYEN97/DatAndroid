@@ -16,7 +16,7 @@ import com.nextone.controller.CheckConditionHandle;
 import com.nextone.controller.ErrorcodeHandle;
 import com.nextone.controller.ProcessModelHandle;
 import com.nextone.controller.modeController.ModeHandle;
-import com.nextone.datandroid.customLayout.impConstrainLayout.modeView.AbsModeView;
+import com.nextone.datandroid.fragment.modeView.AbsModeViewFragment;
 import com.nextone.input.serial.MCUSerialHandler;
 import com.nextone.model.input.CarModel;
 import com.nextone.model.modelTest.process.ProcessModel;
@@ -40,7 +40,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
+public abstract class AbsTestMode<V extends AbsModeViewFragment> implements IgetName {
 
     protected final V view;
     protected final String name;
@@ -75,7 +75,7 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
         this.view = view;
         this.name = name;
         this.isOnline = isOnline;
-        this.fullName = creareFullName(ranks);
+        this.fullName = createFullName(ranks);
         this.ranks = ranks;
         this.cancel = false;
         this.scoreSpec = scoreSpec;
@@ -93,7 +93,7 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
         this.conditionHandle.addCondition(importantError);
     }
 
-    private String creareFullName(List<String> ranks) {
+    private String createFullName(List<String> ranks) {
         StringBuilder builder = new StringBuilder(name);
         builder.append(" (");
         for (String rank : ranks) {
@@ -247,7 +247,7 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
 
     public void modeInit() {
         if (this.view != null) {
-            this.view.showModeName(this.fullName);
+            this.view.setCurrentModeName(this.fullName);
             this.view.start();
         }
         if (this.name != null) {
@@ -262,7 +262,7 @@ public abstract class AbsTestMode<V extends AbsModeView> implements IgetName {
     public void modeEndInit() {
         cancelTest();
         if (this.view != null) {
-            this.view.showModeName(null);
+            this.view.setCurrentModeName(null);
             this.view.stop();
         }
     }

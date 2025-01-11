@@ -29,7 +29,7 @@ public class ModeHandle implements IStarter, Runnable {
     @Getter
     private boolean running = false;
     private boolean stop = false;
-    private Future testFuture;
+    private Future<?> testFuture;
 
     public ModeHandle() {
         this.processModelHandle = ProcessModelHandle.getInstance();
@@ -109,6 +109,14 @@ public class ModeHandle implements IStarter, Runnable {
     public void stop() {
         this.stop = true;
         stopTest();
+        while (this.testFuture != null && !this.testFuture.isDone()){
+            this.testFuture.cancel(true);
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+
+            }
+        }
     }
 
     public void stopTest() {

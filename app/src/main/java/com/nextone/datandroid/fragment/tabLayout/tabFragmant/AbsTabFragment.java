@@ -1,8 +1,8 @@
-package com.nextone.datandroid.customLayout.tabLayout.tabFragmant;
+package com.nextone.datandroid.fragment.tabLayout.tabFragmant;
 
 import android.util.Log;
 
-import com.nextone.datandroid.AbsFragment;
+import com.nextone.datandroid.fragment.AbsFragment;
 
 public abstract class AbsTabFragment extends AbsFragment {
 
