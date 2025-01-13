@@ -12,14 +12,14 @@ import com.nextone.model.input.yard.YardRankModel;
 import com.nextone.model.yardConfigMode.ContestConfig;
 
 import java.util.List;
+
 /**
- *
  * @author Admin
  */
 public class DoXeNgang extends AbsContestHasMutiLine {
 
     public DoXeNgang(YardRankModel yardRankModel, List<ContestConfig> contestConfigs, int speedLimit) {
-        super(ConstKey.CONTEST_NAME.GHEP_XE_NGANG, R.raw.gxn,120, contestConfigs);
+        super(ConstKey.CONTEST_NAME.GHEP_XE_NGANG, R.raw.gxn, 120, contestConfigs);
         CheckWheelCrossedLine crossedLine = new CheckWheelCrossedLine(5, () -> {
             return getWheelCrosserLineStatus(yardRankModel.getPackings1());
         });
@@ -32,23 +32,23 @@ public class DoXeNgang extends AbsContestHasMutiLine {
     }
 
     private boolean success = false;
-    private boolean hasIntoPaking = false;
+    private boolean hasIntoPacking = false;
 
     @Override
     protected boolean loop() {
-        if (this.carModel.getStatus() == ConstKey.CAR_ST.BACKWARD) {
-            if (!hasIntoPaking && this.carModel.isT3() && this.carModel.isT2()) {
-                hasIntoPaking = true;
-            }
-            if (!success && this.carModel.isT1() && this.carModel.isT2()
-                    && this.carModel.isT3()) {
-                success = true;
-                soundPlayer.successSound();
-            }
+//        if (this.carModel.getStatus() == ConstKey.CAR_ST.BACKWARD || hasIntoPacking) {
+        if (!hasIntoPacking && this.carModel.isT3() && this.carModel.isT2()) {
+            hasIntoPacking = true;
         }
+        if (!success && this.carModel.isT1() && this.carModel.isT2()
+                && this.carModel.isT3()) {
+            success = true;
+            soundPlayer.successSound();
+        }
+//        }
         if (this.carModel.getDistance() > getContestConfig().getDistanceOut()) {
             if (!success) {
-                if (hasIntoPaking) {
+                if (hasIntoPacking) {
                     addErrorCode(ConstKey.ERR.PARCKED_WRONG_POS);
                 } else {
                     addErrorCode(ConstKey.ERR.IGNORED_PARKING);
@@ -62,7 +62,7 @@ public class DoXeNgang extends AbsContestHasMutiLine {
     @Override
     protected boolean isAccept() {
         if (this.carModel.isT3() && this.carModel.getStatus() == ConstKey.CAR_ST.BACKWARD) {
-            hasIntoPaking = false;
+            hasIntoPacking = false;
             success = false;
             return true;
         }

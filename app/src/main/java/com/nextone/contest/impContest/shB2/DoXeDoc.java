@@ -12,8 +12,8 @@ import com.nextone.model.input.yard.YardRankModel;
 import com.nextone.model.yardConfigMode.ContestConfig;
 
 import java.util.List;
+
 /**
- *
  * @author Admin
  */
 public class DoXeDoc extends AbsContestHasMutiLine {
@@ -21,7 +21,7 @@ public class DoXeDoc extends AbsContestHasMutiLine {
     private double oldDistance;
 
     public DoXeDoc(YardRankModel yardRankModel, List<ContestConfig> contestConfigs, int speedLimit) {
-        super(ConstKey.CONTEST_NAME.GHEP_XE_DOC,R.raw.gxd, 120, contestConfigs);
+        super(ConstKey.CONTEST_NAME.GHEP_XE_DOC, R.raw.gxd, 120, contestConfigs);
         CheckWheelCrossedLine crossedLine = new CheckWheelCrossedLine(5, () -> {
             return getWheelCrosserLineStatus(yardRankModel.getPackings());
         });
@@ -38,24 +38,23 @@ public class DoXeDoc extends AbsContestHasMutiLine {
         super.end(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
         this.carModel.setDistance(oldDistance);
     }
-    
-    
+
 
     private boolean success = false;
     private boolean hasIntoPacking = false;
 
     @Override
     protected boolean loop() {
-        if (this.carModel.getStatus() == ConstKey.CAR_ST.BACKWARD) {
-            if (!hasIntoPacking && this.carModel.isT2()) {
-                hasIntoPacking = true;
-            }
-            if (!success && this.carModel.isT2()
-                    && this.carModel.isT3()) {
-                success = true;
-                soundPlayer.successSound();
-            }
+//        if (this.carModel.getStatus() == ConstKey.CAR_ST.BACKWARD) {
+        if (!hasIntoPacking && this.carModel.isT2()) {
+            hasIntoPacking = true;
         }
+        if (!success && this.carModel.isT2()
+                && this.carModel.isT3()) {
+            success = true;
+            soundPlayer.successSound();
+        }
+//        }
         if (this.carModel.getDistance() > getContestConfig().getDistanceOut() && this.carModel.isT1()) {
             if (!success) {
                 if (hasIntoPacking) {
@@ -71,7 +70,7 @@ public class DoXeDoc extends AbsContestHasMutiLine {
 
     @Override
     protected boolean isAccept() {
-        if(this.carModel.isT1() || this.carModel.isT2()) {
+        if (this.carModel.isT1() || this.carModel.isT2()) {
             hasIntoPacking = false;
             success = false;
             oldDistance = this.carModel.getDistance();

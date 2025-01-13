@@ -175,6 +175,12 @@ public final class ConstKey {
         }
     }
 
+    public static final class CAR_CONFIG_KEY {
+        public static final String ENCODER_SCALA = "encoder";
+        public static final String NT_TIME = "nt_time";
+        public static final String NP_TIME = "np_time";
+        public static final String RPM_SCALA = "rpm";
+    }
     public static final class CAR_MODEL_KEY {
 
         public static final String LONGITUDE = "longitude";

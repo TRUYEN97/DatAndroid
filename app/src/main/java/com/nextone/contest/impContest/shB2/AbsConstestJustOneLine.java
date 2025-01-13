@@ -43,7 +43,7 @@ public abstract class AbsConstestJustOneLine extends AbsSaHinhContest {
         double d = this.carModel.getDistance();
         if (d < this.contestConfig.getDistanceLowerLimit()
                 || d > this.contestConfig.getDistanceUpperLimit()) {
-            addErrorCode(ConstKey.ERR.WRONG_LANE);
+            addErrorCode(ConstKey.ERR.WRONG_WAY);
             stop();
             return false;
         }

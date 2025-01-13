@@ -71,7 +71,7 @@ public class BaseModeLayoutFragment extends AbsFragment {
     @Override
     public void onStart() {
         super.onStart();
-        this.cameraModule.start();
+//        this.cameraModule.start();
     }
 
     @Override

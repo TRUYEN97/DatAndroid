@@ -46,9 +46,9 @@ public class DungXeNgangDoc extends AbsConstestJustOneLine {
         if (!hasStop && this.carModel.getStatus() == ConstKey.CAR_ST.STOP) {
             hasStop = true;
             distanceWhenStop = this.carModel.getDistance();
-            if (d > contestConfig.getDistanceLine()) {
+            if (distanceWhenStop > contestConfig.getDistanceLine()) {
                 addErrorCode(ConstKey.ERR.STOP_AFTER_DES_2);
-            } else if (d < contestConfig.getDistanceLine() - 0.5) {
+            } else if (distanceWhenStop < contestConfig.getDistanceLine() - 0.5) {
                 addErrorCode(ConstKey.ERR.STOP_BEFORE_DES);
             } else {
                 soundPlayer.successSound();

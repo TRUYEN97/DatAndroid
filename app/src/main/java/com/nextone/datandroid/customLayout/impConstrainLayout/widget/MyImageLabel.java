@@ -97,8 +97,8 @@ public class MyImageLabel extends AbsCustomConstraintLayout {
         this.imgLabelBackground.setCornerRadius(30f);
         this.imgLabelBackground.setStroke(2, getColor(android.R.color.holo_blue_light));
         ///////////////////////
-//        findViewById(R.id.background).setBackground(background);
-//        findViewById(R.id.background1).setBackground(background1);
+        findViewById(R.id.background).setBackground(background);
+        findViewById(R.id.background1).setBackground(background1);
         findViewById(R.id.relativeLayout).setBackground(imgLabelBackground);
         this.imageView = findViewById(R.id.imageView);
         this.textValue = findViewById(R.id.textValue);

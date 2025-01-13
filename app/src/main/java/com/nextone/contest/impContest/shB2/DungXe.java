@@ -8,8 +8,8 @@ import com.nextone.common.ConstKey;
 import com.nextone.contest.impCondition.OnOffImp.CheckOverSpeedLimit;
 import com.nextone.model.yardConfigMode.ContestConfig;
 import com.nextone.datandroid.R;
+
 /**
- *
  * @author Admin
  */
 public class DungXe extends AbsConstestJustOneLine {
@@ -35,6 +35,7 @@ public class DungXe extends AbsConstestJustOneLine {
         double d = this.carModel.getDistance();
         if (!hasStop && this.carModel.getStatus() == ConstKey.CAR_ST.STOP) {
             hasStop = true;
+            d = this.carModel.getDistance();
             if (d > this.contestConfig.getDistanceLine()) {
                 addErrorCode(ConstKey.ERR.STOP_AFTER_DES);
             } else if (d < this.contestConfig.getDistanceLine() - 0.5) {
