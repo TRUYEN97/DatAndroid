@@ -70,7 +70,7 @@ public class ModeChooserFragment extends AbsFragment {
                         AbsModeViewFragment viewFragment = modeManager.getCurrentMode().getView();
                         shareModelView.postSubScreenFragment(viewFragment);
                         if (chooseCallback != null) {
-                            new Handler(Looper.getMainLooper()).post(chooseCallback);
+                            new Handler(Looper.getMainLooper()).postDelayed(chooseCallback, 100);
                         }
                     }
                 });

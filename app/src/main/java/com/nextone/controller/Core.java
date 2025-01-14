@@ -49,9 +49,9 @@ public class Core {
             return;
         }
         this.first = false;
+        YardModelHandle.getInstance().start();
         MCUSerialHandler.getInstance().start();
         SoundPlayer.getInstance().sayWelcome();
-        YardModelHandle.getInstance().start();
         KeyEventManagement.getInstance().start();
         this.eventManagement.start();
         this.eventManagement.addKeyEventBackAge(this.eventsPackage);

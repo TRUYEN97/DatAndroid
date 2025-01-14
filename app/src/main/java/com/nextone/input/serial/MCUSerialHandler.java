@@ -32,8 +32,8 @@ public class MCUSerialHandler {
     @Getter
     private CarModel model;
     private Thread threadRunner;
-    private boolean sendorStartEnable = false;
-    private boolean sendorEndEnable = false;
+    private boolean sensorStartEnable = false;
+    private boolean sensorEndEnable = false;
     private Thread startSoundThread;
     private Thread endSoundThread;
 
@@ -41,97 +41,105 @@ public class MCUSerialHandler {
         this.model = new CarModel();
         this.gearBoxer = new GearBoxer();
         this.serialHandler = new SerialHandler("pico", 115200); //ttyS0
-        this.serialHandler.setFirstConnectAction(() -> {
-//            System.out.println("send MCU config");
-//            while (!sendConfig(CarConfig.getInstance().getMcuConfig())) {
-//                Util.delay(500);
-//            }
-//            System.out.println("send MCU config ok");
+        this.serialHandler.setConnectAction(() -> {
             System.out.println("send get MCU config");
             while (!sendCommand("getConfig")) {
                 Util.delay(500);
             }
             System.out.println("send get MCU config ok");
-
+        });
+        SoundPlayer soundPlayer = SoundPlayer.getInstance();
+        ShareModelView shareModelView = ShareModelView.getInstance();
+        shareModelView.setCarModel(this.model);
+        this.serialHandler.setDisConnectAction(() -> {
+            this.model.setYardUser("");
+            shareModelView.postCarModel(model);
         });
         this.serialHandler.setReceiver((serial, data) -> {
             try {
                 Log.i("MCU", data);
                 MyJson json = new MyJson(data);
                 if (json.has(ConstKey.CAR_CONFIG_KEY.ENCODER_SCALA)) {
-                    MCU_CONFIG_MODEL mcu_config_model = CarConfig.getInstance().getMcuConfig();
-                    mcu_config_model.setEncoder(json.getDouble(ConstKey.CAR_CONFIG_KEY.ENCODER_SCALA,
-                            mcu_config_model.getEncoder()));
-                    mcu_config_model.setRpm(json.getDouble(ConstKey.CAR_CONFIG_KEY.RPM_SCALA,
-                            mcu_config_model.getRpm()));
-                    mcu_config_model.setNt_time(json.getInt(ConstKey.CAR_CONFIG_KEY.NT_TIME,
-                            mcu_config_model.getNt_time()));
-                    mcu_config_model.setNp_time(json.getInt(ConstKey.CAR_CONFIG_KEY.NP_TIME,
-                            mcu_config_model.getNp_time()));
-                    CarConfig.getInstance().updateMcuConfig(mcu_config_model);
+                    updateConfig(json);
                 } else {
-                    this.model.setAt(!json.getBoolean(ConstKey.CAR_MODEL_KEY.AT, false));
-                    this.model.setCm(json.getBoolean(ConstKey.CAR_MODEL_KEY.CM, false));
-                    this.model.setNp(json.getBoolean(ConstKey.CAR_MODEL_KEY.NP, false));
-                    this.model.setNt(json.getBoolean(ConstKey.CAR_MODEL_KEY.NT, false));
-                    this.model.setPt(json.getBoolean(ConstKey.CAR_MODEL_KEY.PT, false));
-                    this.model.setS1(json.getBoolean(ConstKey.CAR_MODEL_KEY.S1, false));
-                    this.model.setS2(json.getBoolean(ConstKey.CAR_MODEL_KEY.S2, false));
-                    this.model.setS3(json.getBoolean(ConstKey.CAR_MODEL_KEY.S3, false));
-                    this.model.setS4(json.getBoolean(ConstKey.CAR_MODEL_KEY.S4, false));
-                    this.model.setS5(json.getBoolean(ConstKey.CAR_MODEL_KEY.S5, false));
-                    ProcessModelHandle modelHandle = ProcessModelHandle.getInstance();
-                    boolean t1 = json.getBoolean(ConstKey.CAR_MODEL_KEY.T1, false);
-                    this.model.setT1(t1);
-                    boolean t2 = json.getBoolean(ConstKey.CAR_MODEL_KEY.T2, false);
-                    this.model.setT2(t2);
-                    boolean t3 = json.getBoolean(ConstKey.CAR_MODEL_KEY.T3, false);
-                    this.model.setT3(t3);
-                    if (!modelHandle.isTesting()) {
-                        SoundPlayer soundPlayer = SoundPlayer.getInstance();
-                        if (t1 || t2) {
-                            if (!this.sendorStartEnable) {
-                                this.model.resetDistance();
-                                this.sendorStartEnable = true;
-                                if (this.startSoundThread == null || !this.startSoundThread.isAlive()) {
-                                    this.startSoundThread = new Thread(soundPlayer::startContest);
-                                    this.startSoundThread.start();
-                                }
-                            }
-                        } else {
-                            this.sendorStartEnable = false;
-                        }
-                        if (t3) {
-                            if (!this.sendorEndEnable) {
-                                this.sendorEndEnable = true;
-                                if (this.endSoundThread == null || !this.endSoundThread.isAlive()) {
-                                    this.endSoundThread = new Thread(soundPlayer::endContest);
-                                    this.endSoundThread.start();
-                                }
-                            }
-                        } else {
-                            this.sendorEndEnable = false;
-                        }
-                    }
-                    this.model.setStatus(json.getInt(ConstKey.CAR_MODEL_KEY.STATUS, ConstKey.CAR_ST.STOP));
-                    this.model.addDistance(json.getDouble(ConstKey.CAR_MODEL_KEY.DISTANCE, 0));
-                    this.model.setSpeed(json.getDouble(ConstKey.CAR_MODEL_KEY.SPEED, 0));
-                    this.model.setRpm(json.getInt(ConstKey.CAR_MODEL_KEY.RPM, 0));
-                    double lat = json.getDouble(ConstKey.CAR_MODEL_KEY.LATITUDE, 0);
-                    double lng = json.getDouble(ConstKey.CAR_MODEL_KEY.LONGITUDE, 0);
-                    if (lng != 0 && lat != 0) {
-                        ProcessModel processModel = modelHandle.getProcessModel();
-                        processModel.getLocation().setLat(lat);
-                        processModel.getLocation().setLng(lng);
-                    }
-                    this.gearBoxer.mathGearBoxValue();
-                    this.model.setYardUser("usserTest");
-                    ShareModelView.getInstance().postCarModel(model);
+                    updateModel(json, soundPlayer);
+                    shareModelView.postCarModel(model);
                 }
             } catch (Exception e) {
                 Log.e(getClass().getSimpleName(), "MCU serial handler", e);
             }
         });
+    }
+
+    private void updateModel(MyJson json, SoundPlayer soundPlayer) {
+        this.model.setAt(!json.getBoolean(ConstKey.CAR_MODEL_KEY.AT, false));
+        this.model.setCm(json.getBoolean(ConstKey.CAR_MODEL_KEY.CM, false));
+        this.model.setNp(json.getBoolean(ConstKey.CAR_MODEL_KEY.NP, false));
+        this.model.setNt(json.getBoolean(ConstKey.CAR_MODEL_KEY.NT, false));
+        this.model.setPt(json.getBoolean(ConstKey.CAR_MODEL_KEY.PT, false));
+        this.model.setS1(json.getBoolean(ConstKey.CAR_MODEL_KEY.S1, false));
+        this.model.setS2(json.getBoolean(ConstKey.CAR_MODEL_KEY.S2, false));
+        this.model.setS3(json.getBoolean(ConstKey.CAR_MODEL_KEY.S3, false));
+        this.model.setS4(json.getBoolean(ConstKey.CAR_MODEL_KEY.S4, false));
+        this.model.setS5(json.getBoolean(ConstKey.CAR_MODEL_KEY.S5, false));
+        ProcessModelHandle modelHandle = ProcessModelHandle.getInstance();
+        boolean t1 = json.getBoolean(ConstKey.CAR_MODEL_KEY.T1, false);
+        this.model.setT1(t1);
+        boolean t2 = json.getBoolean(ConstKey.CAR_MODEL_KEY.T2, false);
+        this.model.setT2(t2);
+        boolean t3 = json.getBoolean(ConstKey.CAR_MODEL_KEY.T3, false);
+        this.model.setT3(t3);
+        if (!modelHandle.isTesting()) {
+            if (t1 || t2) {
+                if (!this.sensorStartEnable) {
+                    this.model.resetDistance();
+                    this.sensorStartEnable = true;
+                    if (this.startSoundThread == null || !this.startSoundThread.isAlive()) {
+                        this.startSoundThread = new Thread(soundPlayer::startContest);
+                        this.startSoundThread.start();
+                    }
+                }
+            } else {
+                this.sensorStartEnable = false;
+            }
+            if (t3) {
+                if (!this.sensorEndEnable) {
+                    this.sensorEndEnable = true;
+                    if (this.endSoundThread == null || !this.endSoundThread.isAlive()) {
+                        this.endSoundThread = new Thread(soundPlayer::endContest);
+                        this.endSoundThread.start();
+                    }
+                }
+            } else {
+                this.sensorEndEnable = false;
+            }
+        }
+        this.model.setStatus(json.getInt(ConstKey.CAR_MODEL_KEY.STATUS, ConstKey.CAR_ST.STOP));
+        this.model.addDistance(json.getDouble(ConstKey.CAR_MODEL_KEY.DISTANCE, 0));
+        this.model.setSpeed(json.getDouble(ConstKey.CAR_MODEL_KEY.SPEED, 0));
+        this.model.setRpm(json.getInt(ConstKey.CAR_MODEL_KEY.RPM, 0));
+        double lat = json.getDouble(ConstKey.CAR_MODEL_KEY.LATITUDE, 0);
+        double lng = json.getDouble(ConstKey.CAR_MODEL_KEY.LONGITUDE, 0);
+        if (lng != 0 && lat != 0) {
+            ProcessModel processModel = modelHandle.getProcessModel();
+            processModel.getLocation().setLat(lat);
+            processModel.getLocation().setLng(lng);
+        }
+        this.gearBoxer.mathGearBoxValue();
+        this.model.setYardUser(json.getString(ConstKey.CAR_MODEL_KEY.YARD_USER, ""));
+    }
+
+    private static void updateConfig(MyJson json) {
+        MCU_CONFIG_MODEL mcu_config_model = CarConfig.getInstance().getMcuConfig();
+        mcu_config_model.setEncoder(json.getDouble(ConstKey.CAR_CONFIG_KEY.ENCODER_SCALA,
+                mcu_config_model.getEncoder()));
+        mcu_config_model.setRpm(json.getDouble(ConstKey.CAR_CONFIG_KEY.RPM_SCALA,
+                mcu_config_model.getRpm()));
+        mcu_config_model.setNt_time(json.getInt(ConstKey.CAR_CONFIG_KEY.NT_TIME,
+                mcu_config_model.getNt_time()));
+        mcu_config_model.setNp_time(json.getInt(ConstKey.CAR_CONFIG_KEY.NP_TIME,
+                mcu_config_model.getNp_time()));
+        CarConfig.getInstance().updateMcuConfig(mcu_config_model);
     }
 
     public boolean isConnect() {

@@ -23,6 +23,8 @@ public class SensorSettingFragment extends AbsTabFragment {
     private EditText inputEncoder;
     private EditText inputRpm;
     private EditText inputNtpDelayTime;
+    private EditText inputIp;
+    private EditText inputPort;
 
     public SensorSettingFragment() {
         // Required empty public constructor
@@ -32,8 +34,11 @@ public class SensorSettingFragment extends AbsTabFragment {
 
     @Override
     public void saveData() {
+        if (carConfig == null || inputIp == null) return;
+        carConfig.setYardIp(inputIp.getText().toString());
+        carConfig.setYardPort(Integer.parseInt(inputPort.getText().toString()));
         MCU_CONFIG_MODEL mcu_config_model = carConfig.getMcuConfig();
-        if (mcu_config_model == null || inputEncoder == null) {
+        if (mcu_config_model == null) {
             return;
         }
         mcu_config_model.setEncoder(Double.parseDouble(inputEncoder.getText().toString()));
@@ -59,11 +64,16 @@ public class SensorSettingFragment extends AbsTabFragment {
         inputEncoder = view.findViewById(R.id.inputEncoder);
         inputRpm = view.findViewById(R.id.inputRpm);
         inputNtpDelayTime = view.findViewById(R.id.inputNtpDelayTime);
+        inputIp = view.findViewById(R.id.inputServerIP);
+        inputPort = view.findViewById(R.id.inputServerPort);
         view.findViewById(R.id.btSave).setOnClickListener(v -> saveData());
     }
 
     @Override
     public void updateData() {
+        if(carConfig == null || inputEncoder == null) return;
+        inputIp.setText(carConfig.getYardIp());
+        inputPort.setText(String.valueOf(carConfig.getYardPort()));
         MCU_CONFIG_MODEL mcu_config_model = carConfig.getMcuConfig();
         if (mcu_config_model == null || inputEncoder == null) {
             return;

@@ -152,6 +152,18 @@ public class ModeManagement {
         return false;
     }
 
+    public void pauseCurrentMode(){
+        this.modeHandle.pause();
+    }
+
+    public boolean hasPauseCurrentMode(){
+        return this.modeHandle.hasPause();
+    }
+
+    public void resumeCurrentMode(){
+        this.modeHandle.resume();
+    }
+
     public AbsTestMode getCurrentMode() {
         return this.modeHandle.getTestMode();
     }

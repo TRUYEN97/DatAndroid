@@ -22,17 +22,18 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- *
  * @author Administrator
  */
 public class SocketClient implements Runnable, Idisconnect, IIsConnect, Closeable {
     private static final String TAG = "SocketClient";
     @Getter
-    private final String host;
+    @Setter
+    private String host;
     @Getter
     private final String hostName;
     @Getter
-    private final int port;
+    @Setter
+    private int port;
     private final IReceiver<SocketClient> clientReceiver;
     private Socket socket;
     private PrintWriter outputStream;
@@ -42,7 +43,7 @@ public class SocketClient implements Runnable, Idisconnect, IIsConnect, Closeabl
     private boolean debug;
 
     public SocketClient(String host, int port, IReceiver<SocketClient> objectAnalysis) {
-        this(Keywords.SERVER, host, port, objectAnalysis);
+        this(Keywords.CLIENT, host, port, objectAnalysis);
     }
 
     public SocketClient(String hostName, String host, int port, IReceiver<SocketClient> objectAnalysis) {
@@ -56,12 +57,18 @@ public class SocketClient implements Runnable, Idisconnect, IIsConnect, Closeabl
     public String readLine() throws IOException {
         return this.inputStream.readLine();
     }
-
     public boolean connect() {
+        return connect(this.host, this.port);
+    }
+
+    public boolean connect(String host, int port) {
         try {
+            this.host = host;
+            this.port = port;
             this.socket = new Socket(host, port);
             this.outputStream = new PrintWriter(socket.getOutputStream(), true);
             this.inputStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            this.connect = true;
             return true;
         } catch (Exception e) {
             return false;
@@ -86,7 +93,6 @@ public class SocketClient implements Runnable, Idisconnect, IIsConnect, Closeabl
         try {
             String data;
             while (isConnect() && (data = readLine()) != null) {
-                this.connect = true;
                 if (data.trim().isBlank()) {
                     continue;
                 }

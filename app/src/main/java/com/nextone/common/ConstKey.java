@@ -204,6 +204,7 @@ public final class ConstKey {
         public static final String S4 = "s4";
         public static final String S5 = "s5";
         public static final String REMOTE = "remote";
+        public static final String YARD_USER = "yardUser";
     }
 
     public static final class CAR_ST {

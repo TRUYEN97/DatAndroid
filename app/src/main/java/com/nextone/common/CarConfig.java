@@ -188,6 +188,7 @@ public class CarConfig {
         return this.jsonb.getString(YARD_USER_NAME, "client");
     }
 
+
     private void setDefaultConfig() {
         if (this.jsonb == null) {
             this.jsonb = new MyJson();
@@ -272,5 +273,21 @@ public class CarConfig {
 
     public int getYardPort() {
         return this.jsonb.getInt(YARD_PORT, 6868);
+    }
+
+    public void setYardIp(String ip) {
+        try {
+            this.jsonb.put(YARD_IP, ip);
+        } catch (JSONException e) {
+            Log.e(TAG, "setYardIp:", e);
+        }
+    }
+
+    public void setYardPort(int port) {
+        try {
+            this.jsonb.put(YARD_PORT, port);
+        } catch (JSONException e) {
+            Log.e(TAG, "setYardPort:", e);
+        }
     }
 }

@@ -52,6 +52,10 @@ public class ShareModelView {
         subScreenFragment.setValue(fragment);
     }
 
+    public Fragment getSubScreenFragmentValue(){
+        return subScreenFragment.getValue();
+    }
+
     public void setTestDataViewModel(TestDataViewModel model){
         testDataViewModel.setValue(model);
     }

@@ -135,21 +135,29 @@ public abstract class AbsTestMode<V extends AbsModeViewFragment> implements Iget
         return this.contests.poll();
     }
 
+    @Getter
+    private boolean inBeginWhile;
+
     public boolean begin() {
-        this.importantError.reset();
-        this.cancel = false;
-        this.processHandle.setTesting(false);
-        KeyEventManagement.getInstance().addKeyEventBackAge(prepareEventsPackage);
-        this.errorcodeHandle.clear();
-        this.processHandle.resetModel();
-        this.mCUSerialHandler.sendReset();
-        this.carModel.setDistance(0);
-        this.mCUSerialHandler.sendLedOff();
-        while (!loopCheckCanTest()) {
-            Util.delay(1000);
-            if (cancel) {
-                return false;
+        try {
+            this.inBeginWhile = true;
+            this.importantError.reset();
+            this.cancel = false;
+            this.processHandle.setTesting(false);
+            KeyEventManagement.getInstance().addKeyEventBackAge(prepareEventsPackage);
+            this.errorcodeHandle.clear();
+            this.processHandle.resetModel();
+            this.mCUSerialHandler.sendReset();
+            this.carModel.setDistance(0);
+            this.mCUSerialHandler.sendLedOff();
+            while (!loopCheckCanTest()) {
+                Util.delay(1000);
+                if (cancel) {
+                    return false;
+                }
             }
+        } finally {
+            this.inBeginWhile = false;
         }
         KeyEventManagement.getInstance().remove(prepareEventsPackage);
         this.errorcodeHandle.clear();
@@ -162,6 +170,7 @@ public abstract class AbsTestMode<V extends AbsModeViewFragment> implements Iget
         this.conditionHandle.start();
         updateLog();
         return !cancel;
+
     }
 
     public boolean isRunning() {

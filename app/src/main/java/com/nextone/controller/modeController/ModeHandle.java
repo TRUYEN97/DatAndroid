@@ -6,6 +6,7 @@ package com.nextone.controller.modeController;
 
 import android.util.Log;
 
+import com.nextone.common.Util;
 import com.nextone.controller.ProcessModelHandle;
 import com.nextone.interfaces.IStarter;
 import com.nextone.mode.AbsTestMode;
@@ -29,6 +30,8 @@ public class ModeHandle implements IStarter, Runnable {
     @Getter
     private boolean running = false;
     private boolean stop = false;
+    private final Object lock = new Object();
+    private boolean paused = false;
     private Future<?> testFuture;
 
     public ModeHandle() {
@@ -61,6 +64,9 @@ public class ModeHandle implements IStarter, Runnable {
         stop = false;
         while (!stop) {
             try {
+                while (paused) {
+                    Util.delay(500);
+                }
                 if (begin()) {
                     test();
                     end();
@@ -72,6 +78,18 @@ public class ModeHandle implements IStarter, Runnable {
         }
     }
 
+    public void pause() {
+        this.paused = true;
+        if (this.testMode != null && this.testMode.isInBeginWhile()) {
+            this.testMode.cancelTest();
+        }
+    }
+
+    public void resume() {
+        this.paused = false;
+    }
+
+
     @Override
     public boolean isStarted() {
         return this.testFuture != null && !this.testFuture.isDone();
@@ -82,9 +100,8 @@ public class ModeHandle implements IStarter, Runnable {
     }
 
     private boolean begin() {
-        if (this.testMode.begin()) {
+        if (this.testMode.begin() && !this.paused && !this.stop) {
             this.running = true;
-            this.stop = false;
             return true;
         }
         return false;
@@ -109,7 +126,7 @@ public class ModeHandle implements IStarter, Runnable {
     public void stop() {
         this.stop = true;
         stopTest();
-        while (this.testFuture != null && !this.testFuture.isDone()){
+        while (this.testFuture != null && !this.testFuture.isDone()) {
             this.testFuture.cancel(true);
             try {
                 Thread.sleep(100);
@@ -135,5 +152,9 @@ public class ModeHandle implements IStarter, Runnable {
             this.testMode.modeInit();
         }
         this.testFuture = this.threadPool.submit(this);
+    }
+
+    public boolean hasPause() {
+        return this.paused;
     }
 }

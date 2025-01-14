@@ -24,6 +24,8 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 import java.io.File;
 
+import lombok.Getter;
+
 public class CameraModule extends Fragment {
     private static final int REQUEST_CODE_PERMISSIONS = 10;
     private static final String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.CAMERA"};
@@ -34,6 +36,8 @@ public class CameraModule extends Fragment {
     private LifecycleOwner lifecycle;
     private CameraSelector cameraSelector;
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
+
+    @Getter
     private boolean isStreaming = false;
 
     public CameraModule() {

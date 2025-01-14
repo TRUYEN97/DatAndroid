@@ -17,23 +17,24 @@ public class SerialHandler implements Runnable {
     @Getter
     private final String serialName;
     private final int baudRate;
-    private final CheckConntect checkConntect;
+    private final CheckConnect checkConntect;
     private boolean connect = false;
     @Setter
     private IReceiver<UsbSerial> receiver;
     private UsbSerial usbSerial;
-    private Runnable action;
+
+    @Setter
+    private Runnable connectAction;
+    @Setter
+    private Runnable disConnectAction;
+
+    private boolean stop;
 
     public SerialHandler(String serialName, int baudRate) {
         this.baudRate = baudRate;
         this.serialName = serialName;
-        this.checkConntect = new CheckConntect(2000);
+        this.checkConntect = new CheckConnect(2000);
     }
-
-    public void setFirstConnectAction(Runnable action) {
-        this.action = action;
-    }
-
     private boolean checkConnecting() {
         if (!isConnect()) {
             return false;
@@ -56,14 +57,19 @@ public class SerialHandler implements Runnable {
         return false;
     }
 
+    public void stop(){
+        this.stop = true;
+    }
+
     @Override
     public void run() {
-        while (true) {
+        stop = false;
+        while (!stop) {
             connect = false;
             usbSerial = null;
             try (UsbSerial serial = new UsbSerial()) {
                 serial.connect(serialName, baudRate);
-                while (!serial.isConnect()) {
+                while (!stop && !serial.isConnect()) {
                     try {
                         Thread.sleep(2000);
                         serial.connect(serialName, baudRate);
@@ -71,15 +77,16 @@ public class SerialHandler implements Runnable {
                         Log.e(TAG, "Interrupted while waiting to reconnect", ex);
                     }
                 }
+                if(stop) break;
                 Log.i(TAG, "Reconnected to " + serialName);
                 usbSerial = serial;
                 connect = true;
-                if (action != null) {
-                    action.run();
+                if (connectAction != null) {
+                    connectAction.run();
                 }
                 String line;
                 this.checkConntect.start();
-                while (isConnect()) {
+                while (!stop && isConnect()) {
                     line = serial.readLine();
                     if (line == null) {
                         if (this.checkConntect.isNoResponse()) {
@@ -99,10 +106,13 @@ public class SerialHandler implements Runnable {
                 Log.e(TAG, "Error in SerialHandler run loop", e);
             }
             this.checkConntect.stop();
+            if(this.disConnectAction != null){
+                this.disConnectAction.run();
+            }
         }
     }
 
-    private class CheckConntect {
+    private class CheckConnect {
 
         private final Handler handler;
         private final int time;
@@ -110,7 +120,7 @@ public class SerialHandler implements Runnable {
         private boolean noResponse = false;
         private Runnable checkTask;
 
-        private CheckConntect(int time) {
+        private CheckConnect(int time) {
             this.handler = new Handler(Looper.getMainLooper());
             this.time = Math.max(time, 1000);
 

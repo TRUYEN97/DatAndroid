@@ -44,7 +44,8 @@ public class YardModelHandle {
     private final YardConfigModel yardConfig;
     @Getter
     private final YardModel yardModel;
-    private CarModel carModel;
+    private final CarModel carModel;
+    private boolean connect;
     private Thread thread;
 
     private YardModelHandle() {
@@ -55,6 +56,7 @@ public class YardModelHandle {
                 this.carConfig.getYardPort(), receiver);
         this.yardModel = new YardModel();
         this.carModel = MCUSerialHandler.getInstance().getModel();
+        this.connect = false;
     }
 
     public static YardModelHandle getInstance() {
@@ -130,7 +132,7 @@ public class YardModelHandle {
                 val = false;
                 if ((contestConfig = contestConfigs.get(i)) != null
                         && (indexOfYardInput = contestConfig.getIndexOfYardInput()) != null) {
-                    if (indexOfYardInput>= 0 && indexOfYardInput < inputs.length()) {
+                    if (indexOfYardInput >= 0 && indexOfYardInput < inputs.length()) {
                         val = inputs.getBoolean(indexOfYardInput);
                     }
                 }
@@ -153,36 +155,47 @@ public class YardModelHandle {
                 return;
             }
             stop = false;
+            this.connect = false;
             this.thread = new Thread(() -> {
                 while (!stop) {
                     try {
                         Log.i(YARD_MODEL_HANDLE, " yard start");
-                        Util.delay(1000);
-                        while (!this.socketClient.connect() && !stop) {
-                            Util.delay(2000);
+                        while (!this.socketClient.connect(this.carConfig.getYardIp(),
+                                this.carConfig.getYardPort()) && !stop) {
+                            Util.delay(1000);
                         }
                         if (!stop) {
-                            while (!sendApplyConnect()) {
+                            while (this.socketClient.isConnect() && !stop && !sendApplyConnect()) {
                                 Util.delay(1000);
                             }
+                            if (stop) {
+                                break;
+                            }
+                            if (!this.socketClient.isConnect()) {
+                                continue;
+                            }
                             Log.i(YARD_MODEL_HANDLE, " yard connected");
+                            this.connect = true;
                             this.socketClient.run();
                             Log.i(YARD_MODEL_HANDLE, " yard disconnected");
                         }
                     } catch (Exception e) {
                         Log.e(YARD_MODEL_HANDLE, "start: while (!stop)", e);
+                    } finally {
+                        this.connect = false;
                     }
                 }
             });
             this.thread.start();
         } catch (Exception e) {
             Log.e(YARD_MODEL_HANDLE, "start:", e);
+            this.connect = false;
         }
     }
 
     private boolean sendApplyConnect() {
         String username = this.carModel.getYardUser();
-        if(username == null || username.isBlank()){
+        if (username == null || username.isBlank()) {
             return false;
         }
         return this.socketClient.send(
@@ -212,7 +225,7 @@ public class YardModelHandle {
     }
 
     public boolean isConnect() {
-        return this.socketClient.isConnect();
+        return this.socketClient.isConnect() && this.connect;
     }
 
 }
