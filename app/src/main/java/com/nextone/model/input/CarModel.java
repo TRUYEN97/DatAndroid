@@ -39,7 +39,7 @@ public class CarModel {
     private boolean s5;
     private int gearBoxValue = 0;
     private final LocationModel location;
-    private String yardUser;
+    private String yardUser = "";
 
     public CarModel() {
         this.location = new LocationModel();

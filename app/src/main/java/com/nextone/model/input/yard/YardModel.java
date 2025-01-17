@@ -4,10 +4,16 @@
  */
 package com.nextone.model.input.yard;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import lombok.Getter;
+
 /**
  *
  * @author Admin
  */
+@Getter
 public class YardModel {
 
     private final YardRankModel rankB;
@@ -17,6 +23,10 @@ public class YardModel {
     private final TrafficLightModel trafficLightModel;
     private final TrafficLightModel trafficLightModel1;
 
+    private final List<Boolean> inputs;
+
+
+
     public YardModel() {
         this.rankB = new YardRankModel();
         this.rankC = new YardRankModel();
@@ -24,32 +34,8 @@ public class YardModel {
         this.rankE = new YardRankModel();
         this.trafficLightModel = new TrafficLightModel();
         this.trafficLightModel1 = new TrafficLightModel();
+        this.inputs = new ArrayList<>();
     }
 
-    public TrafficLightModel getTrafficLightModel1() {
-        return trafficLightModel1;
-    }
-    
-
-    public TrafficLightModel getTrafficLightModel() {
-        return trafficLightModel;
-    }
-    
-
-    public YardRankModel getRankB() {
-        return rankB;
-    }
-
-    public YardRankModel getRankC() {
-        return rankC;
-    }
-
-    public YardRankModel getRankD() {
-        return rankD;
-    }
-
-    public YardRankModel getRankE() {
-        return rankE;
-    }
 
 }

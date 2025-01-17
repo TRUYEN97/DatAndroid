@@ -15,6 +15,7 @@ import com.nextone.input.serial.MCUSerialHandler;
 import com.nextone.model.input.CarModel;
 import com.nextone.model.input.yard.YardModel;
 import com.nextone.model.input.yard.YardRankModel;
+import com.nextone.model.modelView.ShareModelView;
 import com.nextone.model.yardConfigMode.ContestConfig;
 import com.nextone.model.yardConfigMode.YardConfigModel;
 import com.nextone.model.yardConfigMode.YardRankConfig;
@@ -51,7 +52,7 @@ public class YardModelHandle {
     private YardModelHandle() {
         this.carConfig = CarConfig.getInstance();
         this.yardConfig = YardConfig.getInstance().getYardConfigModel();
-        IReceiver<SocketClient> receiver = (SocketClient commnunication, String data) -> analysisReceiver(data);
+        IReceiver<SocketClient> receiver = (SocketClient communication, String data) -> analysisReceiver(data);
         this.socketClient = new SocketClient(this.carConfig.getYardIp(),
                 this.carConfig.getYardPort(), receiver);
         this.yardModel = new YardModel();
@@ -76,16 +77,25 @@ public class YardModelHandle {
         if (data == null || data.isBlank()) {
             return;
         }
+        Log.i("yard", data);
         try {
             JSONObject ob = new JSONObject(data);
-            if (ob.isNull(INPUTS)) {
+            if (ob.has(INPUTS)) {
                 JSONArray inputs = ob.getJSONArray(INPUTS);
                 updateRank(this.yardConfig.getB(), inputs, this.yardModel.getRankB());
                 updateRank(this.yardConfig.getC(), inputs, this.yardModel.getRankC());
                 updateRank(this.yardConfig.getD(), inputs, this.yardModel.getRankD());
                 updateRank(this.yardConfig.getE(), inputs, this.yardModel.getRankE());
+                this.yardModel.getInputs().clear();
+                for (int i = 0; i < inputs.length(); i++) {
+                    try{
+                        this.yardModel.getInputs().add(inputs.getBoolean(i));
+                    }catch (Exception e){
+                        this.yardModel.getInputs().add(false);
+                    }
+                }
             }
-            if (ob.isNull(TRAFFIC_LIGHT_MODEL)) {
+            if (ob.has(TRAFFIC_LIGHT_MODEL)) {
                 JSONObject tl = ob.getJSONObject(TRAFFIC_LIGHT_MODEL);
                 if (this.yardModel.getTrafficLightModel() != null) {
                     this.yardModel.getTrafficLightModel()
@@ -94,7 +104,7 @@ public class YardModelHandle {
                             .setTime(tl.getInt(TIME));
                 }
             }
-            if (ob.isNull(TRAFFIC_LIGHT_MODEL1)) {
+            if (ob.has(TRAFFIC_LIGHT_MODEL1)) {
                 JSONObject tl = ob.getJSONObject(TRAFFIC_LIGHT_MODEL1);
                 if (this.yardModel.getTrafficLightModel1() != null) {
                     this.yardModel.getTrafficLightModel1()
@@ -103,6 +113,7 @@ public class YardModelHandle {
                             .setTime(tl.getInt(TIME));
                 }
             }
+            ShareModelView.getInstance().portYardModelMutableLiveData(this.yardModel);
         } catch (Exception e) {
             Log.e(YARD_MODEL_HANDLE, "analysisReciver: ", e);
         }

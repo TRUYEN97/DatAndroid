@@ -4,10 +4,15 @@
  */
 package com.nextone.model.input.yard;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  *
  * @author Admin
  */
+@Setter
+@Getter
 public class TrafficLightModel {
     
     public static final int GREEN = 0;
@@ -20,19 +25,4 @@ public class TrafficLightModel {
         this.trafficLight = GREEN;
     }
 
-    public int getTime() {
-        return time;
-    }
-
-    public void setTime(int time) {
-        this.time = time;
-    }
-    
-    public int getTrafficLight() {
-        return trafficLight;
-    }
-
-    public void setTrafficLight(int trafficLight) {
-        this.trafficLight = trafficLight;
-    }
 }

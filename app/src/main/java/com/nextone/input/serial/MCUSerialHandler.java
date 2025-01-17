@@ -50,7 +50,7 @@ public class MCUSerialHandler {
         });
         SoundPlayer soundPlayer = SoundPlayer.getInstance();
         ShareModelView shareModelView = ShareModelView.getInstance();
-        shareModelView.setCarModel(this.model);
+        shareModelView.setCarModelMutableLiveData(this.model);
         this.serialHandler.setDisConnectAction(() -> {
             this.model.setYardUser("");
             shareModelView.postCarModel(model);

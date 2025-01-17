@@ -57,7 +57,7 @@ public abstract class AbsModeViewFragment extends AbsFragment implements IStart 
         if (this.running) return;
         this.handler.postDelayed(runnable, intervalMs);
         new Handler(Looper.getMainLooper()).post(() -> {
-            ShareModelView.getInstance().getCarModel().observe(this, carModel -> {
+            ShareModelView.getInstance().getCarModelMutableLiveData().observe(this, carModel -> {
                 if (getView() != null) {
                     this.updateUI();
                 }
@@ -69,7 +69,7 @@ public abstract class AbsModeViewFragment extends AbsFragment implements IStart 
     @Override
     public void stop() {
         new Handler(Looper.getMainLooper()).post(() -> {
-            ShareModelView.getInstance().getCarModel().removeObservers(this);
+            ShareModelView.getInstance().getCarModelMutableLiveData().removeObservers(this);
         });
         this.handler.removeCallbacks(runnable);
         this.running = false;

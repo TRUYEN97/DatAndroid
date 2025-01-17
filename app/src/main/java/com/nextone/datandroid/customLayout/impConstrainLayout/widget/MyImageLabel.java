@@ -27,7 +27,6 @@ public class MyImageLabel extends AbsCustomConstraintLayout {
     public static int ON_COLOR = android.R.color.holo_orange_light;
     public static int OFF_COLOR = android.R.color.white;
 
-    @Setter
     private Integer onColor = null;
 
     private Integer offColor = null;
@@ -129,7 +128,7 @@ public class MyImageLabel extends AbsCustomConstraintLayout {
         background1.setColor(color);
     }
 
-    public void blink(int blinkTime){
+    public void blink(int blinkTime) {
         setStatus(!status);
         Handler handler = new Handler(Looper.getMainLooper());
         handler.postDelayed(() -> setStatus(!status), blinkTime);
@@ -152,12 +151,21 @@ public class MyImageLabel extends AbsCustomConstraintLayout {
         background.setColor(getColor(color));
     }
 
+    public void setOnColor(Integer color) {
+        this.onColor = color;
+        if (status)
+            setStatus(true);
+    }
+
     public void setOnColorResource(Integer color) {
         if (color == null) {
             this.onColor = null;
         } else {
             this.onColor = getColor(color);
         }
+        if (status)
+            setStatus(true);
+
     }
 
     public void setOffColor(Integer offColor) {

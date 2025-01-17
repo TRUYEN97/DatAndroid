@@ -60,7 +60,7 @@ public class LoginFragment extends AbsFragment {
     @Override
     public void onResume() {
         super.onResume();
-        this.shareModelView.getCarModel().observe(this, carModel -> {
+        this.shareModelView.getCarModelMutableLiveData().observe(this, carModel -> {
             if (carModel != null) {
                 this.setMess(getMessage(carModel));
             }
@@ -70,7 +70,7 @@ public class LoginFragment extends AbsFragment {
     @Override
     public void onPause() {
         super.onPause();
-        this.shareModelView.getCarModel().removeObservers(this);
+        this.shareModelView.getCarModelMutableLiveData().removeObservers(this);
     }
 
     @Override

@@ -4,27 +4,29 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 
 import com.nextone.model.input.CarModel;
+import com.nextone.model.input.yard.YardModel;
 import com.nextone.model.modelTest.process.TestDataViewModel;
 
 import lombok.Getter;
 
 
+@Getter
 public class ShareModelView {
 
     private static volatile ShareModelView instance;
 
-    @Getter
     private final MutableLiveData<Fragment> subScreenFragment;
 
-    @Getter
-    private final MutableLiveData<CarModel> carModel;
+    private final MutableLiveData<CarModel> carModelMutableLiveData;
 
-    @Getter
+    private final MutableLiveData<YardModel> yardModelMutableLiveData;
+
     private final MutableLiveData<TestDataViewModel> testDataViewModel;
 
     private ShareModelView(){
         this.subScreenFragment = new MutableLiveData<>();
-        this.carModel = new MutableLiveData<>();
+        this.carModelMutableLiveData = new MutableLiveData<>();
+        this.yardModelMutableLiveData = new MutableLiveData<>();
         this.testDataViewModel = new MutableLiveData<>();
         this.subScreenFragment.setValue(null);
     }
@@ -40,16 +42,24 @@ public class ShareModelView {
         return instance;
     }
 
-    public void setCarModel(CarModel model){
-        carModel.setValue(model);
+    public void setCarModelMutableLiveData(CarModel model){
+        carModelMutableLiveData.setValue(model);
     }
 
     public void postCarModel(CarModel model){
-        carModel.postValue(model);
+        carModelMutableLiveData.postValue(model);
     }
 
     public void setSubScreenFragment(Fragment fragment){
         subScreenFragment.setValue(fragment);
+    }
+
+    public void setYardModelMutableLiveData(YardModel model){
+        yardModelMutableLiveData.setValue(model);
+    }
+
+    public void portYardModelMutableLiveData(YardModel model){
+        yardModelMutableLiveData.postValue(model);
     }
 
     public Fragment getSubScreenFragmentValue(){
