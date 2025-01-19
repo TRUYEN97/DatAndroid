@@ -86,12 +86,17 @@ public class YardModelHandle {
                 updateRank(this.yardConfig.getC(), inputs, this.yardModel.getRankC());
                 updateRank(this.yardConfig.getD(), inputs, this.yardModel.getRankD());
                 updateRank(this.yardConfig.getE(), inputs, this.yardModel.getRankE());
-                this.yardModel.getInputs().clear();
+                List<Boolean> temp = this.yardModel.getInputs();
                 for (int i = 0; i < inputs.length(); i++) {
-                    try{
-                        this.yardModel.getInputs().add(inputs.getBoolean(i));
-                    }catch (Exception e){
-                        this.yardModel.getInputs().add(false);
+                    boolean st = false;
+                    try {
+                        st = inputs.getBoolean(i);
+                    } catch (Exception ignored) {
+                    }
+                    if (i >= temp.size()) {
+                        temp.add(st);
+                    }else{
+                        temp.set(i, st);
                     }
                 }
             }

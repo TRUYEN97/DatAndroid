@@ -28,7 +28,6 @@ public class MCUSerialHandler {
 
     private static volatile MCUSerialHandler instance;
     private final SerialHandler serialHandler;
-    private final GearBoxer gearBoxer;
     @Getter
     private CarModel model;
     private Thread threadRunner;
@@ -39,7 +38,6 @@ public class MCUSerialHandler {
 
     private MCUSerialHandler() {
         this.model = new CarModel();
-        this.gearBoxer = new GearBoxer();
         this.serialHandler = new SerialHandler("pico", 115200); //ttyS0
         this.serialHandler.setConnectAction(() -> {
             System.out.println("send get MCU config");
@@ -125,7 +123,8 @@ public class MCUSerialHandler {
             processModel.getLocation().setLat(lat);
             processModel.getLocation().setLng(lng);
         }
-        this.gearBoxer.mathGearBoxValue();
+        model.setGearBoxValue(Util.getGearBoxVal(model.isS1(), model.isS2(),
+                model.isS3(), model.isS4()));
         this.model.setYardUser(json.getString(ConstKey.CAR_MODEL_KEY.YARD_USER, ""));
     }
 
@@ -239,11 +238,4 @@ public class MCUSerialHandler {
         }
     }
 
-    class GearBoxer {
-
-        public void mathGearBoxValue() {
-            model.setGearBoxValue(Util.getGearBoxVal(model.isS1(), model.isS2(),
-                    model.isS3(), model.isS4()));
-        }
-    }
 }

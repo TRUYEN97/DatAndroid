@@ -22,7 +22,6 @@ public class YardModel {
     private final YardRankModel rankE;
     private final TrafficLightModel trafficLightModel;
     private final TrafficLightModel trafficLightModel1;
-
     private final List<Boolean> inputs;
 
 

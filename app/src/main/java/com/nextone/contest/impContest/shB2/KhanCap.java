@@ -38,17 +38,8 @@ public class KhanCap extends AbsContest {
     @Override
     protected boolean loop() {
         if (getDeltaTime() < 5000) {
-            if (this.carModel.isNp() && this.carModel.isNt()) {
-                if (this.carModel.getStatus() != ConstKey.CAR_ST.STOP) {
-                    this.warningSoundPlayer.stop();
-                    addErrorCode(ConstKey.ERR.NO_EMERGENCY_SIGNAL);
-                    return true;
-                } else {
-                    success = true;
-                }
-            } else {
-                success = false;
-            }
+            success = this.carModel.isNp() && this.carModel.isNt()
+                    && this.carModel.getStatus() == ConstKey.CAR_ST.STOP;
             if (!success && getDeltaTime() > 3000) {
                 this.warningSoundPlayer.stop();
                 addErrorCode(ConstKey.ERR.NO_EMERGENCY_SIGNAL);

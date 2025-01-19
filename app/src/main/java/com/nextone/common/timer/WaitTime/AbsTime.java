@@ -4,6 +4,8 @@
  */
 package com.nextone.common.timer.WaitTime;
 
+import lombok.Getter;
+
 /**
  *
  * @author Administrator
@@ -12,6 +14,7 @@ public abstract class AbsTime {
 
     private double startTime = 0;
     private double spec = 0;
+    @Getter
     private boolean run = false;
     private double endTime = 0;
 
@@ -56,10 +59,6 @@ public abstract class AbsTime {
 
     public boolean isOverTime(int time) {
         return getTime() >= time;
-    }
-
-    public boolean isRun() {
-        return run;
     }
 
     public void stop() {

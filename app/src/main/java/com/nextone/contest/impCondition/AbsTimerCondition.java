@@ -36,7 +36,7 @@ public abstract class AbsTimerCondition extends AbsCondition {
     }
 
     private void startTimer() {
-        if (timer != null || stop) {
+        if (timer != null || !running) {
             return;
         }
         this.timer = new Timer();
@@ -51,7 +51,7 @@ public abstract class AbsTimerCondition extends AbsCondition {
                             importantError.setIsImportantError();
                         }
                     }
-                    if (!stop) {
+                    if (running) {
                         action();
                     }
                     if (justOneTime) {
@@ -80,7 +80,7 @@ public abstract class AbsTimerCondition extends AbsCondition {
 
     @Override
     protected boolean checkCondition() {
-        return stop || !timeout;
+        return !running || !timeout;
     }
 
     public void resetTimer() {

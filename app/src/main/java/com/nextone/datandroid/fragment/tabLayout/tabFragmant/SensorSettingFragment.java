@@ -45,6 +45,7 @@ public class SensorSettingFragment extends AbsTabFragment {
         mcu_config_model.setRpm(Double.parseDouble(inputRpm.getText().toString()));
         mcu_config_model.setNp_time(Integer.parseInt(inputNtpDelayTime.getText().toString()));
         mcu_config_model.setNt_time(Integer.parseInt(inputNtpDelayTime.getText().toString()));
+        carConfig.updateMcuConfig(mcu_config_model);
         if (MCUSerialHandler.getInstance().sendConfig(mcu_config_model)) {
             carConfig.updateMcuConfig(mcu_config_model);
 //            SoundPlayer.getInstance().changeSuccess();

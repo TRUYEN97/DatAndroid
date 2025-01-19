@@ -9,6 +9,7 @@ import com.nextone.input.serial.MCUSerialHandler;
 import com.nextone.model.input.CarModel;
 import com.nextone.model.modelTest.contest.ContestDataModel;
 
+import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -21,33 +22,35 @@ public abstract class AbsCondition {
     @Setter
     protected ContestDataModel contestDataModel;
     private final ErrorcodeHandle codeHandle;
+    @Getter
     @Setter
     protected boolean important;
-    protected boolean stop;
+    @Getter
+    protected boolean running;
     protected boolean hasFail;
 
     public AbsCondition() {
         this.carModel = MCUSerialHandler.getInstance().getModel();
         this.codeHandle = ErrorcodeHandle.getInstance();
         this.important = false;
-        this.stop = true;
+        this.running = false;
         this.hasFail = false;
     }
 
     public void start() {
-        this.stop = false;
+        this.running = true;
         this.hasFail = false;
     }
 
     public void stop() {
-        this.stop = true;
+        this.running = false;
     }
 
     public boolean checkPassed() {
         if (hasFail) {
             return false;
         }
-        if (stop) {
+        if (!running) {
             return true;
         }
         if (!checkCondition()) {
@@ -69,11 +72,7 @@ public abstract class AbsCondition {
         }
     }
 
-    public boolean isImportant() {
-        return important;
-    }
-
-    public boolean isTestCondisionsFailed() {
+    public boolean isTestConditionsFailed() {
         return !checkPassed() && important;
     }
 }

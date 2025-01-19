@@ -55,7 +55,7 @@ public class CheckConditionHandle {
 
     public boolean isTestConditionsFailed() {
         for (AbsCondition condition : conditions) {
-            if (condition.isTestCondisionsFailed()) {
+            if (condition.isTestConditionsFailed()) {
                 return true;
             }
         }

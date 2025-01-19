@@ -28,9 +28,9 @@ public class NgaTu extends AbsConstestJustOneLine {
         this.checkTimeOut30s = new CheckTimeOut(importantError, 30, ConstKey.ERR.FAILED_PASS_INTERSECTION_OVER_30S);
         this.checkTimeOut20s = new CheckTimeOut(null, 20, ConstKey.ERR.FAILED_PASS_INTERSECTION_OVER_20S, false);
         if (times == 1 || times == 3) {
-            this.trafficLightModel = yardModel.getTrafficLightModel1();
-        } else {
             this.trafficLightModel = yardModel.getTrafficLightModel();
+        } else {
+            this.trafficLightModel = yardModel.getTrafficLightModel1();
         }
         this.conditionBeginHandle.addCondition(new CheckOverSpeedLimit(speedLimit));
     }
@@ -48,7 +48,6 @@ public class NgaTu extends AbsConstestJustOneLine {
     private boolean dontTurnOnNt;
     private boolean dontTurnOnNp;
     private boolean firstTime;
-    private int lightStatus;
 
     @Override
     protected boolean loop() {
@@ -84,16 +83,19 @@ public class NgaTu extends AbsConstestJustOneLine {
             if (this.carModel.isT1() || this.carModel.isT2()) {
                 if (times == 3 && d < 14) {
                     addErrorCode(ConstKey.ERR.WRONG_WAY);
+                    stop();
                 }
                 return true;
             }
             if (d >= this.contestConfig.getDistanceOut()) {
                 addErrorCode(ConstKey.ERR.WRONG_WAY);
+                stop();
                 return true;
             }
         } else {
             if (this.carModel.isT1() || this.carModel.isT2()) {
                 addErrorCode(ConstKey.ERR.WRONG_WAY);
+                stop();
                 return true;
             }
             return d >= this.contestConfig.getDistanceOut();
@@ -104,14 +106,7 @@ public class NgaTu extends AbsConstestJustOneLine {
     private void checkCondition() {
         this.checkTimeOut20s.start();
         this.checkTimeOut30s.start();
-        if (lightStatus != 1) {
-            if (this.trafficLightModel.getTrafficLight() == TrafficLightModel.GREEN) {
-                lightStatus = 1;
-            } else {
-                lightStatus = 0;
-            }
-        }
-        if (!ranRedLight && lightStatus == 0) {
+        if (!ranRedLight && this.trafficLightModel.getTrafficLight() == TrafficLightModel.RED) {
             addErrorCode(ConstKey.ERR.RAN_A_RED_LIGHT);
             ranRedLight = true;
         }
@@ -136,7 +131,6 @@ public class NgaTu extends AbsConstestJustOneLine {
             this.dontTurnOnNp = false;
             this.ranRedLight = false;
             this.firstTime = true;
-            this.lightStatus = -1;
             return true;
         }
         return false;

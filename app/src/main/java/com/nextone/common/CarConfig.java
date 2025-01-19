@@ -26,8 +26,8 @@ public class CarConfig {
     private static final String YARD_PORT = "yardPort";
     private static final String MODE_INDEX = "modeIndex";
     private static final String CENTER_NAME = "centerName";
-    private static final String YARD_USER_NAME = "yardusername";
-    private static final String YARD_PASS_WORD = "yardpassword";
+    private static final String YARD_USER_NAME = "yardUserName";
+    private static final String YARD_PASS_WORD = "yardPassword";
     public static final String TAG = "CarConfig";
     private static volatile CarConfig instance;
 
@@ -200,7 +200,7 @@ public class CarConfig {
             this.jsonb.put(EXAM_ID, "0");
             this.jsonb.put(PASSWORD, "e10adc3949ba59abbe56e057f20f883e");
             this.jsonb.put(YARD_IP, "192.168.137.1");
-            this.jsonb.put(YARD_PORT, 6868);
+            this.jsonb.put(YARD_PORT, 28686);
             this.jsonb.put(MODE_INDEX, 0);
             this.jsonb.put(YARD_PASS_WORD, "f3cea34ed1507b50f09c236045bb1067");
             this.jsonb.put(YARD_USER_NAME, "client");
@@ -268,11 +268,11 @@ public class CarConfig {
     }
 
     public String getYardIp() {
-        return this.jsonb.getString(YARD_IP, "192.168.1.168");
+        return this.jsonb.getString(YARD_IP, "192.168.137.1");
     }
 
     public int getYardPort() {
-        return this.jsonb.getInt(YARD_PORT, 6868);
+        return this.jsonb.getInt(YARD_PORT, 28686);
     }
 
     public void setYardIp(String ip) {
