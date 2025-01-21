@@ -45,16 +45,15 @@ public class DoXeDoc extends AbsContestHasMutiLine {
 
     @Override
     protected boolean loop() {
-//        if (this.carModel.getStatus() == ConstKey.CAR_ST.BACKWARD) {
-        if (!hasIntoPacking && this.carModel.isT2()) {
-            hasIntoPacking = true;
+        if (!hasIntoPacking && this.carModel.getStatus() == ConstKey.CAR_ST.BACKWARD
+                && this.carModel.isT2()) {
+                hasIntoPacking = true;
         }
-        if (!success && this.carModel.isT2()
+        if (hasIntoPacking && !success && this.carModel.isT2()
                 && this.carModel.isT3()) {
             success = true;
             soundPlayer.successSound();
         }
-//        }
         if (this.carModel.getDistance() > getContestConfig().getDistanceOut() && this.carModel.isT1()) {
             if (!success) {
                 if (hasIntoPacking) {

@@ -34,18 +34,18 @@ public class DoXeNgang extends AbsContestHasMutiLine {
     private boolean success = false;
     private boolean hasIntoPacking = false;
 
+
     @Override
     protected boolean loop() {
-//        if (this.carModel.getStatus() == ConstKey.CAR_ST.BACKWARD || hasIntoPacking) {
-        if (!hasIntoPacking && this.carModel.isT3() && this.carModel.isT2()) {
-            hasIntoPacking = true;
+        if (!hasIntoPacking && this.carModel.getStatus() == ConstKey.CAR_ST.BACKWARD
+            && this.carModel.isT3() && this.carModel.isT2()) {
+                hasIntoPacking = true;
         }
-        if (!success && this.carModel.isT1() && this.carModel.isT2()
+        if (hasIntoPacking && !success && this.carModel.isT1() && this.carModel.isT2()
                 && this.carModel.isT3()) {
             success = true;
             soundPlayer.successSound();
         }
-//        }
         if (this.carModel.getDistance() > getContestConfig().getDistanceOut()) {
             if (!success) {
                 if (hasIntoPacking) {

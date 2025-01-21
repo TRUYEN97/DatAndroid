@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 
 import com.nextone.datandroid.R;
 import com.nextone.datandroid.fragment.AbsFragment;
+import com.nextone.input.serial.MCUSerialHandler;
+import com.nextone.input.socket.YardModelHandle;
 import com.nextone.model.input.CarModel;
 import com.nextone.model.modelView.ShareModelView;
 
@@ -33,28 +35,38 @@ public class LoginFragment extends AbsFragment {
 
     @NonNull
     private String getMessage(CarModel carModel) {
-        if (carModel == null) return "";
-        String yardUser = carModel.getYardUser();
-        String mess = """
-                Không thể kết nối tới server!
-                
-                Vui lòng kiểm tra lại:
-                
-                - kết nối wifi.
-                - Thông tin tài khoản.
-                """;
-        if (yardUser == null || yardUser.isBlank()) {
+        if(carModel == null) return "";
+        MCUSerialHandler mcuSerialHandler = MCUSerialHandler.getInstance();
+        if (!mcuSerialHandler.isConnect()) {
             userInvalide = true;
-            mess = """
+            return """
                     Vui lòng kiểm tra lại:
                     
-                    - Kết nối usb.
-                    - Thông tin tài khoản.
+                    - Bật cho phép kết nối OTG trong cài đặt máy.
+                    - Kết nối điện thoại với thiết bị trên xe.
                     """;
-        }else{
+        } else if (!YardModelHandle.getInstance().isConnect()) {
+            CarModel model = mcuSerialHandler.getModel();
+            String yardUser = model.getYardUser();
             userInvalide = false;
+            if (yardUser == null || yardUser.isBlank()) {
+                return """
+                        Vui lòng kiểm tiến hành:
+                        
+                        - Đăng nhập tài khoản trên xe.
+                        """;
+            } else {
+                return  """
+                        Không thể kết nối tới server!
+                        
+                        Vui lòng kiểm tra lại:
+                        
+                        - kết nối wifi.
+                        - Thông tin tài khoản.
+                        """;
+            }
         }
-        return mess;
+        return "";
     }
 
     @Override
@@ -78,10 +90,10 @@ public class LoginFragment extends AbsFragment {
         this.lbMess = view.findViewById(R.id.lbMess);
         setMess(mess);
         view.findViewById(R.id.btCheck).setOnClickListener(v -> {
-            if (userInvalide){
+            if (userInvalide) {
                 Intent intent = new Intent(Settings.ACTION_SETTINGS);
                 startActivity(intent);
-            }else{
+            } else {
                 Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
                 startActivity(intent);
             }

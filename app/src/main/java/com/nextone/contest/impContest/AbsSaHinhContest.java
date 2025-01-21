@@ -15,13 +15,11 @@ public abstract class AbsSaHinhContest extends AbsContest {
     public AbsSaHinhContest(String name, int soundNameId, boolean soundIn, int timeout) {
         super(name, soundNameId, true, soundIn, true, timeout);
     }
-    
+
+
     @Override
     public void end() {
         super.end(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-        this.carModel.setT1(false);
-        this.carModel.setT2(false);
-        this.carModel.setT3(false);
         this.carModel.setDistance(0);
     }
 

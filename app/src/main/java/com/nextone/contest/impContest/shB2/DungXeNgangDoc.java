@@ -60,7 +60,7 @@ public class DungXeNgangDoc extends AbsConstestJustOneLine {
             }
             if (d > contestConfig.getDistanceOut()) {
                 if (!hasStop) {
-                    addErrorCode(ConstKey.ERR.DONT_STOP_AS_REQUIRED);
+                    addErrorCode(ConstKey.ERR.DONT_STOP_AS_REQUIRED_2);
                 }
                 this.checkTimeOut30s.setPass();
                 return true;
