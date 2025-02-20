@@ -34,6 +34,7 @@ import lombok.Getter;
 public class YardModelHandle {
 
     public static final String YARD_MODEL_HANDLE = "YardModelHandle";
+    public static final String STATUS = "status";
     private static volatile YardModelHandle instance;
     private static final String INPUTS = "inputs";
     private static final String TRAFFIC_LIGHT_MODEL = "trafficLightModel";
@@ -48,6 +49,7 @@ public class YardModelHandle {
     private final CarModel carModel;
     private boolean connect;
     private Thread thread;
+    private Thread threadRecheckUser;
 
     private YardModelHandle() {
         this.carConfig = CarConfig.getInstance();
@@ -80,7 +82,10 @@ public class YardModelHandle {
         Log.i("yard", data);
         try {
             JSONObject ob = new JSONObject(data);
-            if (ob.has(INPUTS)) {
+            if (ob.has(STATUS) && ob.getString(STATUS).equalsIgnoreCase("error")) {
+                this.socketClient.disconnect();
+                return;
+            }else if (ob.has(INPUTS)) {
                 JSONArray inputs = ob.getJSONArray(INPUTS);
                 updateRank(this.yardConfig.getB(), inputs, this.yardModel.getRankB());
                 updateRank(this.yardConfig.getC(), inputs, this.yardModel.getRankC());
@@ -119,6 +124,7 @@ public class YardModelHandle {
                 }
             }
             ShareModelView.getInstance().portYardModelMutableLiveData(this.yardModel);
+            this.connect = true;
         } catch (Exception e) {
             Log.e(YARD_MODEL_HANDLE, "analysisReciver: ", e);
         }
@@ -190,8 +196,20 @@ public class YardModelHandle {
                             if (!this.socketClient.isConnect()) {
                                 continue;
                             }
+                            if(this.threadRecheckUser == null || !this.threadRecheckUser.isAlive()){
+                                this.threadRecheckUser = new Thread(() -> {
+                                    while (YardModelHandle.this.socketClient.isConnect() && !stop) {
+                                        YardModelHandle.this.sendApplyConnect();
+                                        try {
+                                            Thread.sleep(5000);
+                                        } catch (InterruptedException e) {
+                                            throw new RuntimeException(e);
+                                        }
+                                    }
+                                });
+                                this.threadRecheckUser.start();
+                            }
                             Log.i(YARD_MODEL_HANDLE, " yard connected");
-                            this.connect = true;
                             this.socketClient.run();
                             Log.i(YARD_MODEL_HANDLE, " yard disconnected");
                         }

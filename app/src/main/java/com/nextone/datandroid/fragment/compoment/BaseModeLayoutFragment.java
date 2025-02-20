@@ -24,6 +24,7 @@ import com.nextone.input.camera.CameraModule;
 import com.nextone.input.serial.MCUSerialHandler;
 import com.nextone.input.socket.YardModelHandle;
 import com.nextone.model.modelView.ShareModelView;
+import com.nextone.datandroid.impActivity.UserInformationActivity;
 
 public class BaseModeLayoutFragment extends AbsFragment {
 
@@ -130,6 +131,9 @@ public class BaseModeLayoutFragment extends AbsFragment {
         view.findViewById(R.id.btSetting).setOnClickListener(v -> {
             showSetting();
         });
+        view.findViewById(R.id.imgViewLogo).setOnClickListener(v -> {
+            showUerInfo();
+        });
         this.shareModelView.getSubScreenFragment().observe(this, fragment -> {
             if (fragment != null) {
                 if (fragment instanceof AbsModeViewFragment viewFragment) {
@@ -193,6 +197,11 @@ public class BaseModeLayoutFragment extends AbsFragment {
 
     public void showSetting() {
         Intent intent = new Intent(requireActivity(), SettingActivity.class);
+        startActivity(intent);
+    }
+
+    public void showUerInfo(){
+        Intent intent = new Intent(requireActivity(), UserInformationActivity.class);
         startActivity(intent);
     }
 }

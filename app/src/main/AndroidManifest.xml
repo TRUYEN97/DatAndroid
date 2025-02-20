@@ -29,9 +29,13 @@
         android:theme="@style/Theme.DatAndroid"
         tools:targetApi="31">
         <activity
+            android:name=".impActivity.UserInformationActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"  />
+        <activity
             android:name=".impActivity.SettingActivity"
             android:exported="false"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".impActivity.ChooseModeActivity"
             android:exported="false"
