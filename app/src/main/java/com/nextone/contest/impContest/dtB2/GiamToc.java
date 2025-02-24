@@ -7,8 +7,8 @@ package com.nextone.contest.impContest.dtB2;
 import com.nextone.common.ConstKey;
 import com.nextone.contest.AbsContest;
 import com.nextone.datandroid.R;
+
 /**
- *
  * @author Admin
  */
 public class GiamToc extends AbsContest {
@@ -37,13 +37,10 @@ public class GiamToc extends AbsContest {
             if (detaG < 1 || !hasChaged) {
                 addErrorCode(ConstKey.ERR.FAILED_SHIFTDOWN_GEAR_IN_100M);
             } else if (detaV < 5) {
-               addErrorCode(ConstKey.ERR.FAILED_SHIFTDOWN_GEAR_IN_100M);
+                addErrorCode(ConstKey.ERR.FAILED_SHIFTDOWN_GEAR_IN_100M);
             }
             return true;
-        } else if (hasChaged && detaG >= 1 && detaV >= 5) {
-            return true;
-        }
-        return false;
+        } else return this.carModel.getSpeed() == 0 || (hasChaged && detaG >= 1 && detaV >= 5);
     }
 
     @Override

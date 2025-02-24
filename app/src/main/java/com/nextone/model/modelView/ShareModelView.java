@@ -23,11 +23,14 @@ public class ShareModelView {
 
     private final MutableLiveData<TestDataViewModel> testDataViewModel;
 
+    private final MutableLiveData<UserInfo> userInfo;
+
     private ShareModelView(){
         this.subScreenFragment = new MutableLiveData<>();
         this.carModelMutableLiveData = new MutableLiveData<>();
         this.yardModelMutableLiveData = new MutableLiveData<>();
         this.testDataViewModel = new MutableLiveData<>();
+        this.userInfo = new MutableLiveData<>();
         this.subScreenFragment.setValue(null);
     }
 
@@ -72,6 +75,13 @@ public class ShareModelView {
 
     public void postTestDataViewModel(TestDataViewModel model){
         testDataViewModel.postValue(model);
+    }
+    public void postUserInfoLiveData(UserInfo userInfo){
+        this.userInfo.postValue(userInfo);
+    }
+
+    public void setUserInfoLiveData(UserInfo userInfo){
+        this.userInfo.setValue(userInfo);
     }
 
     public void postSubScreenFragment(Fragment fragment){

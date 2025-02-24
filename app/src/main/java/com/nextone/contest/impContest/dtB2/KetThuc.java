@@ -55,6 +55,7 @@ public class KetThuc extends AbsContest {
             if (kpt && deta >= 5000 && !this.carModel.isPt()) {
                 this.addErrorCode(ConstKey.ERR.FAILED_APPLY_PARKING_BRAKE);
                 kpt = false;
+                return true;
             }
         } else {
             oldMill = System.currentTimeMillis();

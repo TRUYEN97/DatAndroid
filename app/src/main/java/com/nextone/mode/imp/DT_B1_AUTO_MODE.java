@@ -60,6 +60,9 @@ public class DT_B1_AUTO_MODE<V extends AbsModeViewFragment> extends AbsDuongTruo
             hasTs = true;
         });
         events.put(ConstKey.KEY_BOARD.CONTEST.GS, (key) -> {
+            if(this.carModel.getSpeed() < 5){
+                return;
+            }
             if (!contests.isEmpty()) {
                 return;
             }

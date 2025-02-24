@@ -65,6 +65,9 @@ public class DT_B_MODE<V extends AbsModeViewFragment> extends AbsDuongTruongMode
             hasTs = true;
         });
         events.put(ConstKey.KEY_BOARD.CONTEST.GS, (key) -> {
+            if(this.carModel.getSpeed() < 5){
+                return;
+            }
             if (this.carModel.getGearBoxValue() <= 1) {
                 return;
             }

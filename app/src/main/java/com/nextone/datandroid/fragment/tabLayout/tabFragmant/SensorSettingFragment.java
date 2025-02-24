@@ -10,7 +10,7 @@ import com.nextone.common.CarConfig;
 import com.nextone.datandroid.R;
 import com.nextone.input.serial.MCUSerialHandler;
 import com.nextone.model.config.MCU_CONFIG_MODEL;
-
+import com.nextone.datandroid.fragment.ShadowDialogFragment;
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link SensorSettingFragment#} factory method to
@@ -23,8 +23,6 @@ public class SensorSettingFragment extends AbsTabFragment {
     private EditText inputEncoder;
     private EditText inputRpm;
     private EditText inputNtpDelayTime;
-    private EditText inputIp;
-    private EditText inputPort;
 
     public SensorSettingFragment() {
         // Required empty public constructor
@@ -34,25 +32,40 @@ public class SensorSettingFragment extends AbsTabFragment {
 
     @Override
     public void saveData() {
-        if (carConfig == null || inputIp == null) return;
-        carConfig.setYardIp(inputIp.getText().toString());
-        carConfig.setYardPort(Integer.parseInt(inputPort.getText().toString()));
+        if (carConfig == null || inputEncoder == null) return;
         MCU_CONFIG_MODEL mcu_config_model = carConfig.getMcuConfig();
         if (mcu_config_model == null) {
             return;
         }
-        mcu_config_model.setEncoder(Double.parseDouble(inputEncoder.getText().toString()));
-        mcu_config_model.setRpm(Double.parseDouble(inputRpm.getText().toString()));
-        mcu_config_model.setNp_time(Integer.parseInt(inputNtpDelayTime.getText().toString()));
-        mcu_config_model.setNt_time(Integer.parseInt(inputNtpDelayTime.getText().toString()));
-        carConfig.updateMcuConfig(mcu_config_model);
+        boolean hasChange = false;
+        String value = inputEncoder.getText().toString();
+        if (mcu_config_model.getEncoder() != Double.parseDouble(value)) {
+            mcu_config_model.setEncoder(Double.parseDouble(value));
+            hasChange = true;
+        }
+        value = inputRpm.getText().toString();
+        if (mcu_config_model.getRpm() != Double.parseDouble(value)) {
+            mcu_config_model.setRpm(Double.parseDouble(value));
+            hasChange = true;
+        }
+        value = inputNtpDelayTime.getText().toString();
+        int nt_time = Integer.parseInt(value);
+        if (mcu_config_model.getNt_time() != nt_time) {
+            mcu_config_model.setNt_time(nt_time);
+            mcu_config_model.setNp_time(nt_time);
+            hasChange = true;
+        }
+        if (!hasChange) {
+            return;
+        }
+        ShadowDialogFragment shadowDialogFragment = new ShadowDialogFragment();
         if (MCUSerialHandler.getInstance().sendConfig(mcu_config_model)) {
             carConfig.updateMcuConfig(mcu_config_model);
-//            SoundPlayer.getInstance().changeSuccess();
+            shadowDialogFragment.showUpdateSuccess(requireActivity().getSupportFragmentManager());
         } else {
-//            SoundPlayer.getInstance().changeFault();
+            shadowDialogFragment.showUpdatefailure(requireActivity().getSupportFragmentManager());
         }
-        Log.i("SensorSettingFragment", "saveData");
+        Log.i(TAG, "saveData");
     }
 
     @Override
@@ -65,24 +78,20 @@ public class SensorSettingFragment extends AbsTabFragment {
         inputEncoder = view.findViewById(R.id.inputEncoder);
         inputRpm = view.findViewById(R.id.inputRpm);
         inputNtpDelayTime = view.findViewById(R.id.inputNtpDelayTime);
-        inputIp = view.findViewById(R.id.inputServerIP);
-        inputPort = view.findViewById(R.id.inputServerPort);
         view.findViewById(R.id.btSave).setOnClickListener(v -> saveData());
     }
 
     @Override
     public void updateData() {
         if(carConfig == null || inputEncoder == null) return;
-        inputIp.setText(carConfig.getYardIp());
-        inputPort.setText(String.valueOf(carConfig.getYardPort()));
         MCU_CONFIG_MODEL mcu_config_model = carConfig.getMcuConfig();
-        if (mcu_config_model == null || inputEncoder == null) {
+        if (mcu_config_model == null) {
             return;
         }
         this.inputEncoder.setText(String.valueOf(mcu_config_model.getEncoder()));
         this.inputRpm.setText(String.valueOf(mcu_config_model.getRpm()));
         this.inputNtpDelayTime.setText(String.valueOf(mcu_config_model.getNp_time()));
-        Log.i("SensorSettingFragment", "updateData");
+        Log.i(TAG, "updateData");
     }
 
 

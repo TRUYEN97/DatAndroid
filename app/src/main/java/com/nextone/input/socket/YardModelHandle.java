@@ -16,6 +16,7 @@ import com.nextone.model.input.CarModel;
 import com.nextone.model.input.yard.YardModel;
 import com.nextone.model.input.yard.YardRankModel;
 import com.nextone.model.modelView.ShareModelView;
+import com.nextone.model.modelView.UserInfo;
 import com.nextone.model.yardConfigMode.ContestConfig;
 import com.nextone.model.yardConfigMode.YardConfigModel;
 import com.nextone.model.yardConfigMode.YardRankConfig;
@@ -35,6 +36,11 @@ public class YardModelHandle {
 
     public static final String YARD_MODEL_HANDLE = "YardModelHandle";
     public static final String STATUS = "status";
+    public static final String DATA = "data";
+    public static final String USER = "user";
+    public static final String CARD_ID = "card_id";
+    public static final String SDT = "sdt";
+    public static final String RENTER_NAME = "renter_name";
     private static volatile YardModelHandle instance;
     private static final String INPUTS = "inputs";
     private static final String TRAFFIC_LIGHT_MODEL = "trafficLightModel";
@@ -82,48 +88,65 @@ public class YardModelHandle {
         Log.i("yard", data);
         try {
             JSONObject ob = new JSONObject(data);
-            if (ob.has(STATUS) && ob.getString(STATUS).equalsIgnoreCase("error")) {
-                this.socketClient.disconnect();
-                return;
-            }else if (ob.has(INPUTS)) {
-                JSONArray inputs = ob.getJSONArray(INPUTS);
-                updateRank(this.yardConfig.getB(), inputs, this.yardModel.getRankB());
-                updateRank(this.yardConfig.getC(), inputs, this.yardModel.getRankC());
-                updateRank(this.yardConfig.getD(), inputs, this.yardModel.getRankD());
-                updateRank(this.yardConfig.getE(), inputs, this.yardModel.getRankE());
-                List<Boolean> temp = this.yardModel.getInputs();
-                for (int i = 0; i < inputs.length(); i++) {
-                    boolean st = false;
-                    try {
-                        st = inputs.getBoolean(i);
-                    } catch (Exception ignored) {
+            if (ob.has(STATUS)) {
+                UserInfo userInfo = null;
+                try {
+                    if (ob.getBoolean(STATUS)) {
+                        if (ob.has(DATA)) {
+                            JSONObject user = ob.getJSONObject(DATA).getJSONObject(USER);
+                            userInfo = new UserInfo();
+                            userInfo.setCardId(user.getString(CARD_ID));
+                            userInfo.setPhoneNumber(user.getString(SDT));
+                            userInfo.setName(user.getString(RENTER_NAME));
+                        }
+                    } else {
+                        this.socketClient.disconnect();
+                        return;
                     }
-                    if (i >= temp.size()) {
-                        temp.add(st);
-                    }else{
-                        temp.set(i, st);
+                } finally {
+                    ShareModelView.getInstance().postUserInfoLiveData(userInfo);
+                }
+            } else {
+                if (ob.has(INPUTS)) {
+                    JSONArray inputs = ob.getJSONArray(INPUTS);
+                    updateRank(this.yardConfig.getB(), inputs, this.yardModel.getRankB());
+                    updateRank(this.yardConfig.getC(), inputs, this.yardModel.getRankC());
+                    updateRank(this.yardConfig.getD(), inputs, this.yardModel.getRankD());
+                    updateRank(this.yardConfig.getE(), inputs, this.yardModel.getRankE());
+                    List<Boolean> temp = this.yardModel.getInputs();
+                    for (int i = 0; i < inputs.length(); i++) {
+                        boolean st = false;
+                        try {
+                            st = inputs.getBoolean(i);
+                        } catch (Exception ignored) {
+                        }
+                        if (i >= temp.size()) {
+                            temp.add(st);
+                        } else {
+                            temp.set(i, st);
+                        }
                     }
                 }
-            }
-            if (ob.has(TRAFFIC_LIGHT_MODEL)) {
-                JSONObject tl = ob.getJSONObject(TRAFFIC_LIGHT_MODEL);
-                if (this.yardModel.getTrafficLightModel() != null) {
-                    this.yardModel.getTrafficLightModel()
-                            .setTrafficLight(tl.getInt(TRAFFIC_LIGHT));
-                    this.yardModel.getTrafficLightModel()
-                            .setTime(tl.getInt(TIME));
+                if (ob.has(TRAFFIC_LIGHT_MODEL)) {
+                    JSONObject tl = ob.getJSONObject(TRAFFIC_LIGHT_MODEL);
+                    if (this.yardModel.getTrafficLightModel() != null) {
+                        this.yardModel.getTrafficLightModel()
+                                .setTrafficLight(tl.getInt(TRAFFIC_LIGHT));
+                        this.yardModel.getTrafficLightModel()
+                                .setTime(tl.getInt(TIME));
+                    }
                 }
-            }
-            if (ob.has(TRAFFIC_LIGHT_MODEL1)) {
-                JSONObject tl = ob.getJSONObject(TRAFFIC_LIGHT_MODEL1);
-                if (this.yardModel.getTrafficLightModel1() != null) {
-                    this.yardModel.getTrafficLightModel1()
-                            .setTrafficLight(tl.getInt(TRAFFIC_LIGHT));
-                    this.yardModel.getTrafficLightModel1()
-                            .setTime(tl.getInt(TIME));
+                if (ob.has(TRAFFIC_LIGHT_MODEL1)) {
+                    JSONObject tl = ob.getJSONObject(TRAFFIC_LIGHT_MODEL1);
+                    if (this.yardModel.getTrafficLightModel1() != null) {
+                        this.yardModel.getTrafficLightModel1()
+                                .setTrafficLight(tl.getInt(TRAFFIC_LIGHT));
+                        this.yardModel.getTrafficLightModel1()
+                                .setTime(tl.getInt(TIME));
+                    }
                 }
+                ShareModelView.getInstance().portYardModelMutableLiveData(this.yardModel);
             }
-            ShareModelView.getInstance().portYardModelMutableLiveData(this.yardModel);
             this.connect = true;
         } catch (Exception e) {
             Log.e(YARD_MODEL_HANDLE, "analysisReciver: ", e);
@@ -196,7 +219,7 @@ public class YardModelHandle {
                             if (!this.socketClient.isConnect()) {
                                 continue;
                             }
-                            if(this.threadRecheckUser == null || !this.threadRecheckUser.isAlive()){
+                            if (this.threadRecheckUser == null || !this.threadRecheckUser.isAlive()) {
                                 this.threadRecheckUser = new Thread(() -> {
                                     while (YardModelHandle.this.socketClient.isConnect() && !stop) {
                                         YardModelHandle.this.sendApplyConnect();

@@ -12,19 +12,22 @@ import android.widget.Button;
 import androidx.camera.view.PreviewView;
 import androidx.fragment.app.Fragment;
 
+import com.nextone.common.CarConfig;
 import com.nextone.controller.ProcessModelHandle;
 import com.nextone.controller.modeController.ModeManagement;
 import com.nextone.datandroid.R;
 import com.nextone.datandroid.customLayout.impConstrainLayout.widget.MyImageLabel;
 import com.nextone.datandroid.fragment.AbsFragment;
+import com.nextone.datandroid.fragment.PasswordDialogFragment;
+import com.nextone.datandroid.fragment.ShadowDialogFragment;
 import com.nextone.datandroid.fragment.modeView.AbsModeViewFragment;
 import com.nextone.datandroid.impActivity.ChooseModeActivity;
 import com.nextone.datandroid.impActivity.SettingActivity;
+import com.nextone.datandroid.impActivity.UserInformationActivity;
 import com.nextone.input.camera.CameraModule;
 import com.nextone.input.serial.MCUSerialHandler;
 import com.nextone.input.socket.YardModelHandle;
 import com.nextone.model.modelView.ShareModelView;
-import com.nextone.datandroid.impActivity.UserInformationActivity;
 
 public class BaseModeLayoutFragment extends AbsFragment {
 
@@ -196,8 +199,20 @@ public class BaseModeLayoutFragment extends AbsFragment {
     }
 
     public void showSetting() {
-        Intent intent = new Intent(requireActivity(), SettingActivity.class);
-        startActivity(intent);
+        PasswordDialogFragment passwordDialogFragment = new PasswordDialogFragment();
+        passwordDialogFragment.setAcceptActionCallback(() -> {
+            String password = CarConfig.getInstance().getPassword();
+            String inputPassword = passwordDialogFragment.getPassword();
+            if (password.equals(inputPassword)) {
+                Intent intent = new Intent(requireActivity(), SettingActivity.class);
+                startActivity(intent);
+            }else{
+                ShadowDialogFragment shadowDialogFragment = new ShadowDialogFragment();
+                shadowDialogFragment.showMessage(requireActivity().getSupportFragmentManager()
+                        , "Mật khẩu không đúng!");
+            }
+        });
+        passwordDialogFragment.show(requireActivity().getSupportFragmentManager(), "PasswordDialogFragment");
     }
 
     public void showUerInfo(){

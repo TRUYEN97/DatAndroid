@@ -194,7 +194,7 @@ public class CarConfig {
             this.jsonb = new MyJson();
         }
         try {
-            this.jsonb.put(MCU_KEY, new MCU_CONFIG_MODEL());
+            this.jsonb.put(MCU_KEY,  new JSONObject(new Gson().toJson(new MCU_CONFIG_MODEL())));
             this.jsonb.put(CAR_ID_KEY, "0");
             this.jsonb.put(CENTER_NAME, "");
             this.jsonb.put(EXAM_ID, "0");

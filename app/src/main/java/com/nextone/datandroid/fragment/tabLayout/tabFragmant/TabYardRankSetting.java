@@ -15,6 +15,7 @@ public class TabYardRankSetting extends AbsTabFragment {
         this.tabLayoutCustomView = new TabLayoutCustomFragment();
         this.tabLayoutCustomView.setCallback(pager -> {
             CustomPagerAdapter settingPagerAdapter = new CustomPagerAdapter(requireActivity());
+            settingPagerAdapter.addFragment(new YardServerSettingFragment(), "Server");
             settingPagerAdapter.addFragment(new YardSettingFragment(1), "Hạng B");
             settingPagerAdapter.addFragment(new YardSettingFragment(2), "Hạng C");
             settingPagerAdapter.addFragment(new YardSettingFragment(3), "Hạng D");
