@@ -13,12 +13,14 @@ import com.nextone.input.serial.MCUSerialHandler;
 import com.nextone.input.socket.YardModelHandle;
 import com.nextone.model.input.CarModel;
 import com.nextone.model.modelView.ShareModelView;
+import com.nextone.model.modelView.UserInfo;
 
 public class LoginFragment extends AbsFragment {
 
     private TextView lbMess;
     private String mess;
     private final ShareModelView shareModelView;
+    private UserInfo userInfo;
 
     private boolean userInvalide = false;
 
@@ -34,8 +36,7 @@ public class LoginFragment extends AbsFragment {
     }
 
     @NonNull
-    private String getMessage(CarModel carModel) {
-        if(carModel == null) return "";
+    private String getMessage() {
         MCUSerialHandler mcuSerialHandler = MCUSerialHandler.getInstance();
         if (!mcuSerialHandler.isConnect()) {
             userInvalide = true;
@@ -46,24 +47,31 @@ public class LoginFragment extends AbsFragment {
                     - Kết nối điện thoại với thiết bị trên xe.
                     """;
         } else if (!YardModelHandle.getInstance().isConnect()) {
-            CarModel model = mcuSerialHandler.getModel();
-            String yardUser = model.getYardUser();
-            userInvalide = false;
-            if (yardUser == null || yardUser.isBlank()) {
-                return """
-                        Vui lòng kiểm tiến hành:
-                        
-                        - Đăng nhập tài khoản trên xe.
-                        """;
+            String mess;
+            if (this.userInfo != null
+                    && (mess = this.userInfo.getMessage()) != null
+                    && !mess.isBlank()) {
+                return String.format("Thông báo:\r\n- %s", mess);
             } else {
-                return  """
-                        Không thể kết nối tới server!
-                        
-                        Vui lòng kiểm tra lại:
-                        
-                        - kết nối wifi.
-                        - Thông tin tài khoản.
-                        """;
+                CarModel model = mcuSerialHandler.getModel();
+                String yardUser = model.getYardUser();
+                userInvalide = false;
+                if (yardUser == null || yardUser.isBlank()) {
+                    return """
+                            Vui lòng tiến hành:
+                            
+                            - Đăng nhập tài khoản trên xe.
+                            """;
+                } else {
+                    return """
+                            Không thể kết nối tới server!
+                            
+                            Vui lòng kiểm tra lại:
+                            
+                            - kết nối wifi.
+                            - Thông tin tài khoản.
+                            """;
+                }
             }
         }
         return "";
@@ -72,9 +80,12 @@ public class LoginFragment extends AbsFragment {
     @Override
     public void onResume() {
         super.onResume();
-        this.shareModelView.getCarModelMutableLiveData().observe(this, carModel -> {
-            if (carModel != null) {
-                this.setMess(getMessage(carModel));
+        this.shareModelView.getCarModelMutableLiveData().observe(this, carModel ->
+                this.setMess(getMessage()));
+        this.shareModelView.getUserInfo().observe(this, userInfo -> {
+            if (userInfo != null) {
+                this.userInfo = userInfo;
+                this.setMess(getMessage());
             }
         });
     }

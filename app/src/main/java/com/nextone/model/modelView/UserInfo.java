@@ -10,4 +10,5 @@ public class UserInfo {
     private String name;
     private String cccd;
     private String phoneNumber;
+    private String message;
 }

@@ -41,6 +41,7 @@ public class YardModelHandle {
     public static final String CARD_ID = "card_id";
     public static final String SDT = "sdt";
     public static final String RENTER_NAME = "renter_name";
+    public static final String MESSAGE = "message";
     private static volatile YardModelHandle instance;
     private static final String INPUTS = "inputs";
     private static final String TRAFFIC_LIGHT_MODEL = "trafficLightModel";
@@ -91,10 +92,13 @@ public class YardModelHandle {
             if (ob.has(STATUS)) {
                 UserInfo userInfo = null;
                 try {
+                    userInfo = new UserInfo();
+                    if(ob.has(MESSAGE)){
+                        userInfo.setMessage(ob.getString(MESSAGE));
+                    }
                     if (ob.getBoolean(STATUS)) {
                         if (ob.has(DATA)) {
                             JSONObject user = ob.getJSONObject(DATA).getJSONObject(USER);
-                            userInfo = new UserInfo();
                             userInfo.setCardId(user.getString(CARD_ID));
                             userInfo.setPhoneNumber(user.getString(SDT));
                             userInfo.setName(user.getString(RENTER_NAME));
@@ -211,7 +215,7 @@ public class YardModelHandle {
                         }
                         if (!stop) {
                             while (this.socketClient.isConnect() && !stop && !sendApplyConnect()) {
-                                Util.delay(1000);
+                                Util.delay(3000);
                             }
                             if (stop) {
                                 break;
