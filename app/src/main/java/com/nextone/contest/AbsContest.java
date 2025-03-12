@@ -127,9 +127,6 @@ public abstract class AbsContest implements IgetTime {
                 while (!isIntoContest() && !stop) {
                     Util.delay(10);
                 }
-                this.carModel.setT1(false);
-                this.carModel.setT2(false);
-                this.carModel.setT3(false);
                 this.conditionRunningHandle.start();
                 if (this.playSoundWhenIn) {
                     this.soundPlayer.startContest();
@@ -168,9 +165,6 @@ public abstract class AbsContest implements IgetTime {
                 this.soundPlayer.endContest();
             }
             this.processlHandle.setContest(null);
-            this.carModel.setT1(false);
-            this.carModel.setT2(false);
-            this.carModel.setT3(false);
         } catch (Exception e) {
             Log.e("AbsContest", "end", e);
         }

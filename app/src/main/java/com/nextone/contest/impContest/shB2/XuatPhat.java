@@ -58,9 +58,9 @@ public class XuatPhat extends AbsSaHinhContest {
 
     @Override
     protected boolean isIntoContest() {
-        if (this.carModel.isT1() || this.carModel.isT2()) {
+        if (isSignal(this.carModel::isT1)) {
             firstCheck = true;
-            this.carModel.setDistance(0);
+            this.carModel.resetDistance();
             return true;
         }
         return false;

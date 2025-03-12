@@ -113,7 +113,8 @@ public class MCUSerialHandler {
             }
         }
         this.model.setStatus(json.getInt(ConstKey.CAR_MODEL_KEY.STATUS, ConstKey.CAR_ST.STOP));
-        this.model.addDistance(json.getDouble(ConstKey.CAR_MODEL_KEY.DISTANCE, 0));
+        this.model.setDistance(json.getDouble(ConstKey.CAR_MODEL_KEY.DISTANCE,
+                this.model.getDistance()));
         this.model.setSpeed(json.getDouble(ConstKey.CAR_MODEL_KEY.SPEED, 0));
         this.model.setRpm(json.getInt(ConstKey.CAR_MODEL_KEY.RPM, 0));
         double lat = json.getDouble(ConstKey.CAR_MODEL_KEY.LATITUDE, 0);

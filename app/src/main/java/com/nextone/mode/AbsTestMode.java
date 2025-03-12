@@ -147,8 +147,7 @@ public abstract class AbsTestMode<V extends AbsModeViewFragment> implements Iget
             KeyEventManagement.getInstance().addKeyEventBackAge(prepareEventsPackage);
             this.errorcodeHandle.clear();
             this.processHandle.resetModel();
-            this.mCUSerialHandler.sendReset();
-            this.carModel.setDistance(0);
+            this.carModel.resetDistance();
             this.mCUSerialHandler.sendLedOff();
             while (!loopCheckCanTest()) {
                 Util.delay(1000);
@@ -162,8 +161,7 @@ public abstract class AbsTestMode<V extends AbsModeViewFragment> implements Iget
         KeyEventManagement.getInstance().remove(prepareEventsPackage);
         this.errorcodeHandle.clear();
         this.processHandle.resetModel();
-        this.mCUSerialHandler.sendReset();
-        this.carModel.setDistance(0);
+        this.carModel.resetDistance();
         this.processHandle.startTest();
         KeyEventManagement.getInstance().addKeyEventBackAge(testEventsPackage);
         this.mCUSerialHandler.sendLedGreenOn();

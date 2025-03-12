@@ -5,8 +5,10 @@
 package com.nextone.model.input;
 
 import com.nextone.model.modelTest.process.LocationModel;
+
 import java.util.ArrayDeque;
 import java.util.Queue;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -15,14 +17,15 @@ import lombok.ToString;
  *
  * @author Admin
  */
-@Getter
 @Setter
+@Getter
 @ToString
 public class CarModel {
 
     private int status;
-    private double distance;
     private int rpm;
+    private double distance;
+    private double distanceMark;
     private double speed;
     private boolean nt;
     private boolean np;
@@ -58,12 +61,12 @@ public class CarModel {
         this.distance = distance;
     }
 
-    public synchronized void addDistance(double distance) {
-        this.distance += distance;
+    public double getDistance() {
+        return distance - distanceMark;
     }
 
-    public void resetDistance(){
-        setDistance(0);
+    public synchronized void resetDistance(){
+        this.distanceMark = distance;
     }
 
     public String peekRemoteVal() {

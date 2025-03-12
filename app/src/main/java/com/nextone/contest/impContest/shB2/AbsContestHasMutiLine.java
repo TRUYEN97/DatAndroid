@@ -37,7 +37,7 @@ public abstract class AbsContestHasMutiLine extends AbsSaHinhContest {
         }
         if (this.distanceIntoContest.isEnoughMinDistanceSpec(0) && isAccept()
                 && checkIntoContest()) {
-            this.carModel.setDistance(0);
+            this.carModel.resetDistance();
             if (index >= 0) {
                 this.soundPlayer.sayNumber(index + 1);
             }

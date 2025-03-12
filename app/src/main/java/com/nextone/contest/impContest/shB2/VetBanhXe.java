@@ -60,7 +60,7 @@ public class VetBanhXe extends AbsContestHasMutiLine {
             this.crossedLine.start();
             this.crossedLine.checkPassed();
         }
-        if (checkPathLineDone && (this.carModel.isT1() || this.carModel.isT2())) {
+        if (checkPathLineDone && isSignal(this.carModel::isT1)) {
             this.crossedLine.stop();
             return true;
         }
@@ -69,7 +69,7 @@ public class VetBanhXe extends AbsContestHasMutiLine {
 
     @Override
     protected boolean isAccept() {
-        if (this.carModel.isT1() || this.carModel.isT2()) {
+        if (isSignal(this.carModel::isT1)) {
             this.into = false;
             this.checkPathLineDone = false;
             return true;

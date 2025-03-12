@@ -33,7 +33,7 @@ public class UserInformationActivity extends MyActivity {
         txtId.setText(MCUSerialHandler.getInstance().getModel().getYardUser());
         ShareModelView shareModelView = ShareModelView.getInstance();
         shareModelView.getUserInfo().observe(this, userInfo -> {
-            if(userInfo != null){
+            if(userInfo != null && userInfo.getCardId() != null && !userInfo.getCardId().isBlank()){
                 txtId.setText(userInfo.getCardId());
                 txtName.setText(userInfo.getName());
                 txtPhoneNumber.setText(userInfo.getPhoneNumber());

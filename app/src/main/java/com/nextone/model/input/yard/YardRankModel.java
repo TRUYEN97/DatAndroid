@@ -48,7 +48,13 @@ public class YardRankModel {
         return packings1;
     }
     
-    
+    public void reset(){
+        this.roadZs.clear();
+        this.roadZs1.clear();
+        this.roadSs.clear();
+        this.packings.clear();
+        this.packings1.clear();
+    }
     
 
 }

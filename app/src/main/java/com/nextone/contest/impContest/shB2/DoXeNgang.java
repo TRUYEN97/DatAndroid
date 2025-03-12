@@ -61,7 +61,7 @@ public class DoXeNgang extends AbsContestHasMutiLine {
 
     @Override
     protected boolean isAccept() {
-        if (this.carModel.isT3() && this.carModel.getStatus() == ConstKey.CAR_ST.BACKWARD) {
+        if (isSignal(this.carModel::isT3) && this.carModel.getStatus() == ConstKey.CAR_ST.BACKWARD) {
             hasIntoPacking = false;
             success = false;
             return true;

@@ -34,12 +34,12 @@ public class DuongS extends AbsContestHasMutiLine {
     @Override
     protected boolean loop() {
         return this.carModel.getDistance() >= getContestConfig().getDistanceOut()
-                && (this.carModel.isT1() || this.carModel.isT2());
+                && isSignal(this.carModel::isT1);
     }
 
     @Override
     protected boolean isAccept() {
-        return this.carModel.isT1() || this.carModel.isT2() || this.carModel.isT3();
+        return isSignal(this.carModel::isT1);
     }
 
 }

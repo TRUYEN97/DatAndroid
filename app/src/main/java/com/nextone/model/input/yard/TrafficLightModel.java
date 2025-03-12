@@ -25,4 +25,8 @@ public class TrafficLightModel {
         this.trafficLight = GREEN;
     }
 
+    public void reset() {
+        this.trafficLight = GREEN;
+        this.time = 0;
+    }
 }

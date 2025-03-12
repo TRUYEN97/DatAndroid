@@ -7,10 +7,10 @@ package com.nextone.contest.impContest.shB2;
 import com.nextone.common.ConstKey;
 import com.nextone.contest.impCondition.OnOffImp.CheckOverSpeedLimit;
 import com.nextone.contest.impCondition.timerCondition.CheckTimeOut;
+import com.nextone.datandroid.R;
 import com.nextone.model.input.yard.TrafficLightModel;
 import com.nextone.model.input.yard.YardModel;
 import com.nextone.model.yardConfigMode.ContestConfig;
-import com.nextone.datandroid.R;
 /**
  *
  * @author Admin
@@ -80,7 +80,7 @@ public class NgaTu extends AbsConstestJustOneLine {
     private boolean checkEndTest() {
         double d = this.carModel.getDistance();
         if (times == 2 || times == 3) {
-            if (this.carModel.isT1() || this.carModel.isT2()) {
+            if (isSignal(this.carModel::isT1)) {
                 if (times == 3 && d < 14) {
                     addErrorCode(ConstKey.ERR.WRONG_WAY);
                     stop();
@@ -93,7 +93,7 @@ public class NgaTu extends AbsConstestJustOneLine {
                 return true;
             }
         } else {
-            if (this.carModel.isT1() || this.carModel.isT2()) {
+            if (isSignal(this.carModel::isT1)) {
                 addErrorCode(ConstKey.ERR.WRONG_WAY);
                 stop();
                 return true;
@@ -106,7 +106,7 @@ public class NgaTu extends AbsConstestJustOneLine {
     private void checkCondition() {
         this.checkTimeOut20s.start();
         this.checkTimeOut30s.start();
-        if (!ranRedLight && this.trafficLightModel.getTrafficLight() == TrafficLightModel.RED) {
+        if (!ranRedLight && this.trafficLightModel.getTrafficLight() != TrafficLightModel.GREEN) {
             addErrorCode(ConstKey.ERR.RAN_A_RED_LIGHT);
             ranRedLight = true;
         }
@@ -126,7 +126,7 @@ public class NgaTu extends AbsConstestJustOneLine {
 
     @Override
     protected boolean isAccept() {
-        if (this.carModel.isT1() || this.carModel.isT2()) {
+        if (isSignal(this.carModel::isT1)) {
             this.dontTurnOnNt = false;
             this.dontTurnOnNp = false;
             this.ranRedLight = false;

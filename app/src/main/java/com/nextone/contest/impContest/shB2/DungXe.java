@@ -6,8 +6,8 @@ package com.nextone.contest.impContest.shB2;
 
 import com.nextone.common.ConstKey;
 import com.nextone.contest.impCondition.OnOffImp.CheckOverSpeedLimit;
-import com.nextone.model.yardConfigMode.ContestConfig;
 import com.nextone.datandroid.R;
+import com.nextone.model.yardConfigMode.ContestConfig;
 
 /**
  * @author Admin
@@ -38,7 +38,7 @@ public class DungXe extends AbsConstestJustOneLine {
             d = this.carModel.getDistance();
             if (d > this.contestConfig.getDistanceLine()) {
                 addErrorCode(ConstKey.ERR.STOP_AFTER_DES);
-            } else if (d < this.contestConfig.getDistanceLine() - 0.5) {
+            } else if (d < this.contestConfig.getDistanceLine() - 0.5f) {
                 addErrorCode(ConstKey.ERR.STOP_BEFORE_DES);
             } else {
                 soundPlayer.successSound();
@@ -54,7 +54,7 @@ public class DungXe extends AbsConstestJustOneLine {
 
     @Override
     protected boolean isAccept() {
-        if (this.carModel.isT1() || this.carModel.isT2()) {
+        if (isSignal(this.carModel::isT1)) {
             hasStop = false;
             return true;
         }

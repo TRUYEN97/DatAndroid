@@ -244,6 +244,7 @@ public class YardModelHandle {
                         Log.e(YARD_MODEL_HANDLE, "start: while (!stop)", e);
                     } finally {
                         this.connect = false;
+                        this.yardModel.reset();
                     }
                 }
             });

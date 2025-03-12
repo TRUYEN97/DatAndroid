@@ -47,14 +47,14 @@ public class DoXeDoc extends AbsContestHasMutiLine {
     protected boolean loop() {
         if (!hasIntoPacking && this.carModel.getStatus() == ConstKey.CAR_ST.BACKWARD
                 && this.carModel.isT2()) {
-                hasIntoPacking = true;
+            hasIntoPacking = true;
         }
         if (hasIntoPacking && !success && this.carModel.isT2()
                 && this.carModel.isT3()) {
             success = true;
             soundPlayer.successSound();
         }
-        if (this.carModel.getDistance() > getContestConfig().getDistanceOut() && this.carModel.isT1()) {
+        if (this.carModel.getDistance() > getContestConfig().getDistanceOut() && isSignal(this.carModel::isT1)) {
             if (!success) {
                 if (hasIntoPacking) {
                     addErrorCode(ConstKey.ERR.PARCKED_WRONG_POS);
@@ -69,7 +69,7 @@ public class DoXeDoc extends AbsContestHasMutiLine {
 
     @Override
     protected boolean isAccept() {
-        if (this.carModel.isT1() || this.carModel.isT2()) {
+        if (isSignal(this.carModel::isT1)) {
             hasIntoPacking = false;
             success = false;
             oldDistance = this.carModel.getDistance();

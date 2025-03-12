@@ -37,4 +37,14 @@ public class YardModel {
     }
 
 
+    public void reset(){
+        this.rankB.reset();
+        this.rankC.reset();
+        this.rankD.reset();
+        this.rankE.reset();
+        this.trafficLightModel.reset();
+        this.trafficLightModel1.reset();
+        this.inputs.clear();
+    }
+
 }

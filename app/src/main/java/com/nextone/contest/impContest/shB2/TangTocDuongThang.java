@@ -5,8 +5,8 @@
 package com.nextone.contest.impContest.shB2;
 
 import com.nextone.common.ConstKey;
-import com.nextone.model.yardConfigMode.ContestConfig;
 import com.nextone.datandroid.R;
+import com.nextone.model.yardConfigMode.ContestConfig;
 /**
  *
  * @author Admin
@@ -84,7 +84,7 @@ public class TangTocDuongThang extends AbsConstestJustOneLine {
 
     @Override
     protected boolean isAccept() {
-        if (this.carModel.isT1() || this.carModel.isT2()) {
+        if (isSignal(this.carModel::isT1)) {
             this.hasBeginGearInvaild = false;
             this.hasSpeedUp = false;
             this.hasGearUp = false;

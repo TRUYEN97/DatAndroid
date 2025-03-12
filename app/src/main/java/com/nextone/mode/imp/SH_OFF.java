@@ -18,10 +18,10 @@ import com.nextone.contest.impContest.shB2.TangTocDuongThang;
 import com.nextone.contest.impContest.shB2.VetBanhXe;
 import com.nextone.contest.impContest.shB2.XuatPhat;
 import com.nextone.datandroid.fragment.modeView.AbsModeViewFragment;
-import com.nextone.input.serial.MCUSerialHandler;
 import com.nextone.mode.AbsSaHinhMode;
 import com.nextone.model.input.UserModel;
 import com.nextone.pretreatment.IKeyEvent;
+
 import java.util.List;
 import java.util.Map;
 
@@ -73,32 +73,28 @@ public class SH_OFF<V  extends AbsModeViewFragment> extends AbsSaHinhMode<V> {
             if (!contests.isEmpty()) {
                 return;
             }
-            MCUSerialHandler.getInstance().sendReset();
-            this.carModel.setDistance(0);
+            this.carModel.resetDistance();
             addContest(new DungXe(yardRankConfig.getDungXeChoNg(), speedLimit));
         });
         events.put(ConstKey.KEY_BOARD.VK_3, (key) -> {
             if (!contests.isEmpty()) {
                 return;
             }
-            MCUSerialHandler.getInstance().sendReset();
-            this.carModel.setDistance(0);
+            this.carModel.resetDistance();
             addContest(new DungXeNgangDoc(yardRankConfig.getDungXeNgangDoc(), speedLimit));
         });
         events.put(ConstKey.KEY_BOARD.VK_4, (key) -> {
             if (!contests.isEmpty()) {
                 return;
             }
-            MCUSerialHandler.getInstance().sendReset();
-            this.carModel.setDistance(0);
+            this.carModel.resetDistance();
             addContest(new VetBanhXe(yardRankModel, yardRankConfig.getVetBanhXe(), speedLimit));
         });
         events.put(ConstKey.KEY_BOARD.VK_5, (key) -> {
             if (!contests.isEmpty()) {
                 return;
             }
-            MCUSerialHandler.getInstance().sendReset();
-            this.carModel.setDistance(0);
+            this.carModel.resetDistance();
             addContest(new NgaTu(1, yardModelHandle.getYardModel(),
                     yardRankConfig.getNgaTu1(), speedLimit));
         });
@@ -106,16 +102,14 @@ public class SH_OFF<V  extends AbsModeViewFragment> extends AbsSaHinhMode<V> {
             if (!contests.isEmpty()) {
                 return;
             }
-            MCUSerialHandler.getInstance().sendReset();
-            this.carModel.setDistance(0);
+            this.carModel.resetDistance();
             addContest(new DuongS(yardRankModel, yardRankConfig.getDuongS(), speedLimit));
         });
         events.put(ConstKey.KEY_BOARD.VK_7, (key) -> {
             if (!contests.isEmpty()) {
                 return;
             }
-            MCUSerialHandler.getInstance().sendReset();
-            this.carModel.setDistance(0);
+            this.carModel.resetDistance();
             addContest(new NgaTu(2, yardModelHandle.getYardModel(),
                     yardRankConfig.getNgaTu2(), speedLimit));
         });
@@ -123,16 +117,14 @@ public class SH_OFF<V  extends AbsModeViewFragment> extends AbsSaHinhMode<V> {
             if (!contests.isEmpty()) {
                 return;
             }
-            MCUSerialHandler.getInstance().sendReset();
-            this.carModel.setDistance(0);
+            this.carModel.resetDistance();
             addContest(new DoXeDoc(yardRankModel, yardRankConfig.getDoXeDoc(), speedLimit));
         });
         events.put(ConstKey.KEY_BOARD.VK_9, (key) -> {
             if (!contests.isEmpty()) {
                 return;
             }
-            MCUSerialHandler.getInstance().sendReset();
-            this.carModel.setDistance(0);
+            this.carModel.resetDistance();
             addContest(new NgaTu(3, yardModelHandle.getYardModel(),
                     yardRankConfig.getNgaTu3(), speedLimit));
         });
@@ -140,32 +132,28 @@ public class SH_OFF<V  extends AbsModeViewFragment> extends AbsSaHinhMode<V> {
             if (!contests.isEmpty()) {
                 return;
             }
-            MCUSerialHandler.getInstance().sendReset();
-            this.carModel.setDistance(0);
+            this.carModel.resetDistance();
             addContest(new DuongTau(yardRankConfig.getDuongTau(), speedLimit));
         });
         events.put("11", (key) -> {
             if (!contests.isEmpty()) {
                 return;
             }
-            MCUSerialHandler.getInstance().sendReset();
-            this.carModel.setDistance(0);
+            this.carModel.resetDistance();
             addContest(new TangTocDuongThang(1, speedLimit, yardRankConfig.getTangToc()));
         });
         events.put("12", (key) -> {
             if (!contests.isEmpty()) {
                 return;
             }
-            MCUSerialHandler.getInstance().sendReset();
-            this.carModel.setDistance(0);
+            this.carModel.resetDistance();
             addContest(new DoXeNgang(yardRankModel, yardRankConfig.getDoXeNgang(), speedLimit));
         });
         events.put("13", (key) -> {
             if (!contests.isEmpty()) {
                 return;
             }
-            MCUSerialHandler.getInstance().sendReset();
-            this.carModel.setDistance(0);
+            this.carModel.resetDistance();
             addContest(new NgaTu(4, yardModelHandle.getYardModel(),
                     yardRankConfig.getNgaTu4(), speedLimit));
         });
@@ -173,16 +161,14 @@ public class SH_OFF<V  extends AbsModeViewFragment> extends AbsSaHinhMode<V> {
             if (!contests.isEmpty()) {
                 return;
             }
-            MCUSerialHandler.getInstance().sendReset();
-            this.carModel.setDistance(0);
+            this.carModel.resetDistance();
             addContest(new KetThuc(speedLimit));
         });
         events.put("15", (key) -> {
             if (!contests.isEmpty()) {
                 return;
             }
-            MCUSerialHandler.getInstance().sendReset();
-            this.carModel.setDistance(0);
+            this.carModel.resetDistance();
             addContest(new KhanCap(0));
         });
     }

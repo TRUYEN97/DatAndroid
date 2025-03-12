@@ -278,6 +278,7 @@ public class CarConfig {
     public void setYardIp(String ip) {
         try {
             this.jsonb.put(YARD_IP, ip);
+            update();
         } catch (JSONException e) {
             Log.e(TAG, "setYardIp:", e);
         }
@@ -286,6 +287,7 @@ public class CarConfig {
     public void setYardPort(int port) {
         try {
             this.jsonb.put(YARD_PORT, port);
+            update();
         } catch (JSONException e) {
             Log.e(TAG, "setYardPort:", e);
         }
