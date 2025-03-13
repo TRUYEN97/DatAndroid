@@ -19,6 +19,8 @@ import com.nextone.model.modelTest.process.ProcessModel;
 import com.nextone.model.modelView.ShareModelView;
 import com.nextone.output.SoundPlayer;
 
+import org.json.JSONObject;
+
 import lombok.Getter;
 
 /**
@@ -26,6 +28,7 @@ import lombok.Getter;
  */
 public class MCUSerialHandler {
 
+    private static final String FIRST_TIME = "firstTime";
     private static volatile MCUSerialHandler instance;
     private final SerialHandler serialHandler;
     @Getter
@@ -57,7 +60,11 @@ public class MCUSerialHandler {
             try {
                 Log.i("MCU", data);
                 MyJson json = new MyJson(data);
-                if (json.has(ConstKey.CAR_CONFIG_KEY.ENCODER_SCALA)) {
+                if (json.has(FIRST_TIME) && json.getBoolean(FIRST_TIME)) {
+                    sendCommand(new JSONObject()
+                            .put(ConstKey.CAR_MODEL_KEY.DISTANCE, this.model.getOriginDistance())
+                            .toString());
+                } else if (json.has(ConstKey.CAR_CONFIG_KEY.ENCODER_SCALA)) {
                     updateConfig(json);
                 } else {
                     updateModel(json, soundPlayer);
@@ -114,7 +121,7 @@ public class MCUSerialHandler {
         }
         this.model.setStatus(json.getInt(ConstKey.CAR_MODEL_KEY.STATUS, ConstKey.CAR_ST.STOP));
         this.model.setDistance(json.getDouble(ConstKey.CAR_MODEL_KEY.DISTANCE,
-                this.model.getDistance()));
+                this.model.getOriginDistance()));
         this.model.setSpeed(json.getDouble(ConstKey.CAR_MODEL_KEY.SPEED, 0));
         this.model.setRpm(json.getInt(ConstKey.CAR_MODEL_KEY.RPM, 0));
         double lat = json.getDouble(ConstKey.CAR_MODEL_KEY.LATITUDE, 0);

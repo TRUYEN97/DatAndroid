@@ -63,7 +63,8 @@ public class NgaTu extends AbsConstestJustOneLine {
                 return true;
             }
         }
-        if (!hasStop && this.carModel.getStatus() == ConstKey.CAR_ST.STOP) {
+        if (!hasStop && this.carModel.getStatus() == ConstKey.CAR_ST.STOP
+                && this.trafficLightModel.getTrafficLight() != TrafficLightModel.GREEN) {
             hasStop = true;
             d = this.carModel.getDistance();
             if (d >= this.contestConfig.getDistanceLine()) {

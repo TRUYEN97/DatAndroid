@@ -61,6 +61,10 @@ public class CarModel {
         this.distance = distance;
     }
 
+    public double getOriginDistance() {
+        return distance;
+    }
+
     public double getDistance() {
         return distance - distanceMark;
     }
