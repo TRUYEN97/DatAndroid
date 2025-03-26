@@ -10,13 +10,15 @@ import com.nextone.datandroid.fragment.modeView.AbsModeViewFragment;
 import com.nextone.datandroid.fragment.modeView.DuongTruongViewFragment;
 import com.nextone.datandroid.fragment.modeView.SaHinhViewFragment;
 import com.nextone.mode.AbsTestMode;
-import com.nextone.mode.imp.DT_B1_AUTO_MODE;
+import com.nextone.mode.imp.DT_B_AUTO_MODE;
 import com.nextone.mode.imp.DT_B_MODE;
-import com.nextone.mode.imp.SH_B1_AUTO_MODE;
+import com.nextone.mode.imp.SH_B_AUTO_MODE;
 import com.nextone.mode.imp.SH_B_MODE;
+import com.nextone.mode.imp.SH_C1_MODE;
 import com.nextone.mode.imp.SH_C_MODE;
+import com.nextone.mode.imp.SH_D1_MODE;
+import com.nextone.mode.imp.SH_D2_MODE;
 import com.nextone.mode.imp.SH_D_MODE;
-import com.nextone.mode.imp.SH_E_MODE;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -85,18 +87,22 @@ public class ModeManagement {
     private void initMode() {
         this.addMode(DT_B_MODE.class,
                 DuongTruongViewFragment.class, false, "Đường trường\n(Số sàn)");
-        this.addMode(DT_B1_AUTO_MODE.class,
+        this.addMode(DT_B_AUTO_MODE.class,
                 DuongTruongViewFragment.class, false, "Đường trường\n(Số tự động)");
         this.addMode(SH_B_MODE.class,
                 SaHinhViewFragment.class, false, "Sa hình - Hạng B\n(Số sàn)");
-        this.addMode(SH_B1_AUTO_MODE.class,
+        this.addMode(SH_B_AUTO_MODE.class,
                 SaHinhViewFragment.class, false, "Sa hình\n(Số tự động)");
+        this.addMode(SH_C1_MODE.class,
+                SaHinhViewFragment.class, false, "Sa hình - Hạng C1");
         this.addMode(SH_C_MODE.class,
                 SaHinhViewFragment.class, false, "Sa hình - Hạng C");
+        this.addMode(SH_D1_MODE.class,
+                SaHinhViewFragment.class, false, "Sa hình - Hạng D1");
+        this.addMode(SH_D2_MODE.class,
+                SaHinhViewFragment.class, false, "Sa hình - Hạng D2");
         this.addMode(SH_D_MODE.class,
                 SaHinhViewFragment.class, false, "Sa hình - Hạng D");
-        this.addMode(SH_E_MODE.class,
-                SaHinhViewFragment.class, false, "Sa hình - Hạng E");
     }
 
 

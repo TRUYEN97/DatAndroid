@@ -15,15 +15,19 @@ import lombok.Setter;
 @Getter
 public class YardConfigModel {
     private YardRankConfig b;
+    private YardRankConfig c1;
     private YardRankConfig c;
+    private YardRankConfig d1;
+    private YardRankConfig d2;
     private YardRankConfig d;
-    private YardRankConfig e;
 
     public YardConfigModel() {
         this.b = new YardRankConfig();
+        this.c1 = new YardRankConfig();
         this.c = new YardRankConfig();
+        this.d1 = new YardRankConfig();
+        this.d2 = new YardRankConfig();
         this.d = new YardRankConfig();
-        this.e = new YardRankConfig();
     }
 
 }

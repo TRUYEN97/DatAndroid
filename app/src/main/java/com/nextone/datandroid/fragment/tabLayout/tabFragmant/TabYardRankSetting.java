@@ -17,9 +17,11 @@ public class TabYardRankSetting extends AbsTabFragment {
             CustomPagerAdapter settingPagerAdapter = new CustomPagerAdapter(requireActivity());
             settingPagerAdapter.addFragment(new YardServerSettingFragment(), "Server");
             settingPagerAdapter.addFragment(new YardSettingFragment(1), "Hạng B");
-            settingPagerAdapter.addFragment(new YardSettingFragment(2), "Hạng C");
-            settingPagerAdapter.addFragment(new YardSettingFragment(3), "Hạng D");
-            settingPagerAdapter.addFragment(new YardSettingFragment(4), "Hạng E");
+            settingPagerAdapter.addFragment(new YardSettingFragment(2), "Hạng C1");
+            settingPagerAdapter.addFragment(new YardSettingFragment(3), "Hạng C");
+            settingPagerAdapter.addFragment(new YardSettingFragment(4), "Hạng D1");
+            settingPagerAdapter.addFragment(new YardSettingFragment(5), "Hạng D2");
+            settingPagerAdapter.addFragment(new YardSettingFragment(6), "Hạng D");
             return settingPagerAdapter;
         });
     }

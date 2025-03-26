@@ -30,8 +30,9 @@ public class XuatPhat extends AbsSaHinhContest {
 
     @Override
     protected boolean loop() {
-        if (this.carModel.getDistance() > 0.1 && this.firstCheck) {
+        if (this.carModel.isT1() && firstCheck) {
             firstCheck = false;
+            this.carModel.resetDistance();
             this.timeOut20s.setPass();
             this.timeOut30s.setPass();
             this.timeOut20s.stop();
@@ -46,7 +47,7 @@ public class XuatPhat extends AbsSaHinhContest {
                 this.addErrorCode(ConstKey.ERR.PARKING_BRAKE_NOT_RELEASED);
             }
         }
-        if (this.carModel.getDistance() >= 5) {
+        if (this.carModel.getDistance() >= 5 && !firstCheck) {
             if (this.carModel.isNt()) {
                 this.addErrorCode(ConstKey.ERR.SIGNAL_KEPT_ON_OVER_5M);
             }
@@ -58,12 +59,7 @@ public class XuatPhat extends AbsSaHinhContest {
 
     @Override
     protected boolean isIntoContest() {
-        if (isSignal(this.carModel::isT1)) {
-            firstCheck = true;
-            this.carModel.resetDistance();
-            return true;
-        }
-        return false;
+        return true;
     }
 
     @Override

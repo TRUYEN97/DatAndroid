@@ -28,7 +28,7 @@ import java.util.Random;
 public class SH_B_MODE<V  extends AbsModeViewFragment> extends AbsSaHinhMode<V> {
 
     public SH_B_MODE(V hinhView, boolean isOnline) {
-        super(hinhView, 24, 1080, MODEL_RANK_NAME.RANK_B, List.of("B1", "B2"), isOnline);
+        super(hinhView, 24, 1080, MODEL_RANK_NAME.RANK_B, List.of("B"), isOnline);
     }
 
     @Override

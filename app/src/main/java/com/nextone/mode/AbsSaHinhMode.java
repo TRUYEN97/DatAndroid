@@ -30,8 +30,8 @@ import java.util.Map;
  */
 public abstract class AbsSaHinhMode<V extends AbsModeViewFragment> extends AbsTestMode<V> {
 
-    protected static enum MODEL_RANK_NAME {
-        RANK_B, RANK_C, RANK_D, RANK_E
+    protected enum MODEL_RANK_NAME {
+        RANK_B, RANK_C1, RANK_C, RANK_D1, RANK_D2, RANK_D
     }
 
     ;
@@ -52,16 +52,24 @@ public abstract class AbsSaHinhMode<V extends AbsModeViewFragment> extends AbsTe
         this.yardModelHandle = YardModelHandle.getInstance();
         YardConfigModel yardConfig = YardConfig.getInstance().getYardConfigModel();
         switch (modelRank) {
+            case RANK_C1:
+                this.yardRankConfig = yardConfig.getC1();
+                this.yardRankModel = this.yardModelHandle.getYardModel().getRankC();
+                break;
             case RANK_C:
                 this.yardRankConfig = yardConfig.getC();
                 this.yardRankModel = this.yardModelHandle.getYardModel().getRankC();
                 break;
-            case RANK_D:
-                this.yardRankConfig = yardConfig.getD();
+            case RANK_D1:
+                this.yardRankConfig = yardConfig.getD1();
                 this.yardRankModel = this.yardModelHandle.getYardModel().getRankD();
                 break;
-            case RANK_E:
-                this.yardRankConfig = yardConfig.getE();
+            case RANK_D2:
+                this.yardRankConfig = yardConfig.getD2();
+                this.yardRankModel = this.yardModelHandle.getYardModel().getRankD();
+                break;
+            case RANK_D:
+                this.yardRankConfig = yardConfig.getD();
                 this.yardRankModel = this.yardModelHandle.getYardModel().getRankE();
                 break;
             default:

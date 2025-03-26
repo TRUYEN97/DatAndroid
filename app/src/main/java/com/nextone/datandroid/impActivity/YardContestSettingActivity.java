@@ -76,9 +76,11 @@ public class YardContestSettingActivity extends MyActivity {
     private static ContestConfig getContestConfig(int rank, int index) {
         YardConfigModel configModel = YardConfig.getInstance().getYardConfigModel();
         YardRankConfig rankModel = switch (rank) {
-            case 2 -> configModel.getC();
-            case 3 -> configModel.getD();
-            case 4 -> configModel.getE();
+            case 2 -> configModel.getC1();
+            case 3 -> configModel.getC();
+            case 4 -> configModel.getD1();
+            case 5 -> configModel.getD2();
+            case 6 -> configModel.getD();
             default -> configModel.getB();
         };
         return switch (index) {

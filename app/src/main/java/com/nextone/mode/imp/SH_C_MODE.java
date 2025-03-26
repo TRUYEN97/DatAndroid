@@ -4,7 +4,7 @@
  */
 package com.nextone.mode.imp;
 
-import com.nextone.contest.impContest.shB2.DoXeDoc;
+import com.nextone.contest.impContest.shB2.DoXeNgang;
 import com.nextone.contest.impContest.shB2.DungXe;
 import com.nextone.contest.impContest.shB2.DungXeNgangDoc;
 import com.nextone.contest.impContest.shB2.DuongS;
@@ -48,7 +48,7 @@ public class SH_C_MODE<V  extends AbsModeViewFragment> extends AbsSaHinhMode<V> 
         contests.add(new DuongS(yardRankModel, yardRankConfig.getDuongS(), speedLimit));
         contests.add(new NgaTu(2, yardModelHandle.getYardModel(),
                 yardRankConfig.getNgaTu2(), speedLimit));
-        contests.add(new DoXeDoc(yardRankModel, yardRankConfig.getDoXeDoc(), speedLimit));
+        contests.add(new DoXeNgang(yardRankModel, yardRankConfig.getDoXeNgang(), speedLimit));
         contests.add(new NgaTu(3, yardModelHandle.getYardModel(),
                 yardRankConfig.getNgaTu3(), speedLimit));
         if (rd == 1) {

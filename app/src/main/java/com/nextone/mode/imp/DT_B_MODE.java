@@ -24,7 +24,7 @@ import java.util.Map;
 public class DT_B_MODE<V extends AbsModeViewFragment> extends AbsDuongTruongMode<V> {
 
     public DT_B_MODE(V truongView, boolean isOnline) {
-        this(truongView, ConstKey.MODE_NAME.DUONG_TRUONG, List.of("B1", "B2", "C", "D", "E"), isOnline);
+        this(truongView, ConstKey.MODE_NAME.DUONG_TRUONG, List.of( "B", "C1", "C", "D1", "D2", "D"), isOnline);
     }
 
     public DT_B_MODE(V truongView, String name, List<String> ranks, boolean isOnline) {

@@ -7,20 +7,14 @@ import android.view.View;
 import androidx.annotation.LayoutRes;
 
 import com.nextone.datandroid.fragment.AbsFragment;
+import com.nextone.datandroid.fragment.ShadowDialogFragment;
 import com.nextone.datandroid.fragment.modeView.interfaces.IStart;
 import com.nextone.model.modelView.ShareModelView;
-
-import lombok.Getter;
-import lombok.Setter;
 
 public abstract class AbsModeViewFragment extends AbsFragment implements IStart {
     private final Handler handler;
     private int intervalMs = 1000;
     private boolean running;
-
-    @Getter
-    @Setter
-    protected String currentModeName;
 
     private Runnable runnable;
 
@@ -57,9 +51,20 @@ public abstract class AbsModeViewFragment extends AbsFragment implements IStart 
         if (this.running) return;
         this.handler.postDelayed(runnable, intervalMs);
         new Handler(Looper.getMainLooper()).post(() -> {
-            ShareModelView.getInstance().getCarModelMutableLiveData().observe(this, carModel -> {
+            ShareModelView shareModelView = ShareModelView.getInstance();
+            shareModelView.getCarModelMutableLiveData().observe(this, carModel -> {
                 if (getView() != null) {
                     this.updateUI();
+                }
+            });
+            shareModelView.getUserInfo().observe(this, userInfo -> {
+                if(userInfo != null){
+                    String mess = userInfo.getMessage();
+                    if(mess != null && !mess.isBlank()){
+                        ShadowDialogFragment shadowDialogFragment = new ShadowDialogFragment();
+                        shadowDialogFragment.showMessage(requireActivity().getSupportFragmentManager(),
+                                mess);
+                    }
                 }
             });
         });
@@ -69,7 +74,9 @@ public abstract class AbsModeViewFragment extends AbsFragment implements IStart 
     @Override
     public void stop() {
         new Handler(Looper.getMainLooper()).post(() -> {
-            ShareModelView.getInstance().getCarModelMutableLiveData().removeObservers(this);
+            ShareModelView shareModelView = ShareModelView.getInstance();
+            shareModelView.getCarModelMutableLiveData().removeObservers(this);
+            shareModelView.getUserInfo().removeObservers(this);
         });
         this.handler.removeCallbacks(runnable);
         this.running = false;

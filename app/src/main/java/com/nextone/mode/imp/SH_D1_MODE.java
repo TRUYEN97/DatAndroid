@@ -25,10 +25,10 @@ import java.util.Random;
  *
  * @author Admin
  */
-public class SH_D_MODE<V  extends AbsModeViewFragment> extends AbsSaHinhMode<V> {
+public class SH_D1_MODE<V  extends AbsModeViewFragment> extends AbsSaHinhMode<V> {
 
-    public SH_D_MODE(V hinhView, boolean isOnline) {
-        super(hinhView, 20, 1200, MODEL_RANK_NAME.RANK_D, List.of("D"), isOnline);
+    public SH_D1_MODE(V hinhView, boolean isOnline) {
+        super(hinhView, 24, 900, MODEL_RANK_NAME.RANK_D1, List.of("D1"), isOnline);
     }
     @Override
     protected void createContestList() {

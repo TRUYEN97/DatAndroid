@@ -20,13 +20,13 @@ import java.util.Map;
  *
  * @author Admin
  */
-public class DT_B1_AUTO_MODE<V extends AbsModeViewFragment> extends AbsDuongTruongMode<V> {
+public class DT_B_AUTO_MODE<V extends AbsModeViewFragment> extends AbsDuongTruongMode<V> {
 
-    public DT_B1_AUTO_MODE(V truongView, boolean isOnline) {
-        this(truongView, ConstKey.MODE_NAME.DUONG_TRUONG, List.of("B1"), isOnline);
+    public DT_B_AUTO_MODE(V truongView, boolean isOnline) {
+        this(truongView, ConstKey.MODE_NAME.DUONG_TRUONG, List.of("B01"), isOnline);
     }
 
-    public DT_B1_AUTO_MODE(V truongView, String name, List<String> ranks, boolean isOnline) {
+    public DT_B_AUTO_MODE(V truongView, String name, List<String> ranks, boolean isOnline) {
         super(truongView, name, ranks, isOnline);
     }
 
